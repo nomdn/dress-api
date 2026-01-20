@@ -15,13 +15,16 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
 
-if os.environ.get("ARK_API_KEY"):
+if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get("PROXY"):
     API_KEY = os.environ.get("ARK_API_KEY")
     ports = os.environ.get("PORTS")
+    proxy= os.environ.get("PROXY")
 elif os.path.exists(".env"):
     load_dotenv()  # 先加载 .env（如果存在）
     API_KEY = os.environ.get("ARK_API_KEY")
     ports = os.environ.get("PORTS")
+    proxy = os.environ.get("PROXY")
+
 else:
     if os.path.exists("/.dockerenv"):
         raise RuntimeError("Docker 环境下必须通过 -e ARK_API_KEY=xxx 设置密钥")
@@ -201,13 +204,13 @@ async def sync_dress_repo(
         "message": "Sync started in background",
         "note": "Check server logs for result"
     }
-
+# 克隆仓库
 if not os.path.exists("Dress"):
     print("您还没有克隆dress仓库，正在为你克隆")
     for i in range(10):
         try:
             print(f"第 {i} 次尝试")
-            subprocess.run(["git","clone","--single-branch","--branch master","https://github.com/Cute-Dress/Dress.git"], check=True, text=True, capture_output=True)
+            subprocess.run(["git","clone","--single-branch","--branch master",f"{proxy}https://github.com/Cute-Dress/Dress.git"], check=True, text=True, capture_output=True)
             print("克隆成功！")
             break
         except subprocess.CalledProcessError as e:
@@ -256,7 +259,7 @@ if __name__ == "__main__":
 ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝      ╚═╝  ╚═╝╚═╝     ╚═╝
     Attribution-NonCommercial-ShareAlike 4.0 International
                 GitHub:Cute-Dress/Dress
-                GitHub(Dress-api):nomdn/dress-api）                                       
+                GitHub(Dress-api):nomdn/dress-api                                    
     """)
     print(Style.RESET_ALL+"")
 
