@@ -9,4 +9,5 @@
 3. 运行main.py
 ## 注意事项
 本项目还未完善，不建议自己部署使用.  
-如果你觉得我侵犯了您的权利，请在issues交流
+如果你觉得我侵犯了您的权利，请在issues交流  
+如果你想搭建完整版API请在项目根目录克隆[Dress](https://github.com/Cute-Dress/Dress)

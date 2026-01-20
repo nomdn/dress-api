@@ -3,8 +3,9 @@ from pathlib import Path
 import subprocess
 import random
 import json
-
+import httpx
 import colorama
+
 from colorama import Fore, Style
 import uvicorn
 from dotenv import load_dotenv
@@ -15,6 +16,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
 
+from httpx import TimeoutException
+
+http_client = httpx.AsyncClient()
 if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get("PROXY"):
     API_KEY = os.environ.get("ARK_API_KEY")
     ports = os.environ.get("PORTS")
@@ -36,6 +40,40 @@ else:
 BASE_DIR = Path(__file__).resolve().parent
 # 支持的图片扩展名（可按需增减）
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'}
+minimum_mode =False
+
+if not os.path.exists("Dress"):
+    print("未在当前目录发现Dress仓库，将以最小化API运行")
+    minimum_mode = True
+    try:
+        # 使用同步 httpx.get() —— 但必须在模块顶层（非 async 函数内）调用
+        response = httpx.get(
+            url="https://cdn.jsdelivr.net/gh/nomdn/dress-api@main/public/index_0.json",
+            timeout=10.0
+        )
+        response.raise_for_status()
+        data = response.json()
+    except (httpx.TimeoutException, httpx.RequestError, httpx.HTTPStatusError):
+        print("获取远端索引数据超时，正在重试...")
+        # 修正 CDN 域名拼写（jsdelivr.net，不是 jsdeliver.net）
+        for i in [
+            "https://cdn.jsdelivr.net/",
+            "https://fastly.jsdelivr.net/",
+            "https://gcore.jsdelivr.net/",
+            "https://testingcf.jsdelivr.net/"
+        ]:
+            try:
+                response = httpx.get(
+                    url=f"{i}gh/nomdn/dress-api@main/public/index_0.json",
+                    timeout=10.0
+                )
+                response.raise_for_status()
+                data = response.json()
+                break
+            except (httpx.TimeoutException, httpx.RequestError, httpx.HTTPStatusError):
+                continue
+        else:
+            raise RuntimeError("获取远端数据失败！")
 app = FastAPI(title="Dress-API：面向可爱男孩子的一个API",
               terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/",
               description="“本服务所使用的图片来自 Cute-Dress/Dress，遵循 CC BY-NC-SA 4.0 许可。”"
@@ -175,79 +213,80 @@ async def random_setu(request:Request):
     """
     你 GET 一下就行了
     """
+    global data
     base_url =request.base_url
-    with open("public/index_0.json","r",encoding="utf-8") as f:
-        data = json.loads(f.read())
-    max_count = len(data.keys())
+    if not minimum_mode:
+        with open("public/index_0.json","r",encoding="utf-8") as f:
+            local_data = json.loads(f.read())
+            img_data = local_data
+    else:
+
+       img_data =data
+    max_count = len(img_data.keys())
     img_key = random.randint(a=1,b=max_count)
-    img= data[f"{img_key}"][0]
-    author_names = [item[0] for item in data[f"{img_key}"][1] if item]
-    return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","notice":"“本服务所使用的图片来自 Cute-Dress/Dress，遵循 CC BY-NC-SA 4.0 许可。”"}
+    img= img_data[f"{img_key}"][0]
+    author_names = [item[0] for item in img_data[f"{img_key}"][1] if item]
+    if minimum_mode:
+        return {"img_url": f"https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}", "img_author": f"{author_names}",
+                "notice": "“本服务所使用的图片来自 Cute-Dress/Dress，遵循 CC BY-NC-SA 4.0 许可。”"}
+    else:
+        return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","notice":"“本服务所使用的图片来自 Cute-Dress/Dress，遵循 CC BY-NC-SA 4.0 许可。”"}
 @app.post("/dresses/v1/sync", summary="同步远程 Dress 仓库")
 async def sync_dress_repo(
     background_tasks: BackgroundTasks,
     rebuild_index: bool = Query(...),  # 默认重建索引
     x_api_key: str = Header(None, alias="X-API-Key")  # 必须提供 Header
 ):
-    if x_api_key != API_KEY:
-        raise HTTPException(status_code=403, detail="Invalid API key")
-
     """
     触发服务器拉取 Dress 仓库的最新提交，并重建索引（可选）
     """
-    background_tasks.add_task(run_git_pull)
-    if rebuild_index:
-        background_tasks.add_task(build_index_by_author,repo)
-        background_tasks.add_task(build_index,repo)
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API key")
+    if minimum_mode:
+        raise HTTPException(status_code=500, detail="最小化运行，不支持仓库同步")
 
-    return {
-        "message": "Sync started in background",
-        "note": "Check server logs for result"
-    }
-# 克隆仓库
-if not os.path.exists("Dress"):
-    print("您还没有克隆dress仓库，正在为你克隆")
-    for i in range(10):
-        try:
-            print(f"第 {i} 次尝试")
-            subprocess.run(["git","clone","--single-branch","--branch master",f"{proxy}https://github.com/Cute-Dress/Dress.git"], check=True, text=True, capture_output=True)
-            print("克隆成功！")
-            break
-        except subprocess.CalledProcessError as e:
-            print(f"命令执行异常！错误: {e}")
-            print("开始执行重试")
-        except Exception as e:
-            print(f"未知错误！{e}")
-            print("开始执行重试")
     else:
-        raise RuntimeError("克隆仓库失败，请检查网络或 Git 配置")
-app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
+
+        background_tasks.add_task(run_git_pull)
+        if rebuild_index:
+            background_tasks.add_task(build_index_by_author,repo)
+            background_tasks.add_task(build_index,repo)
+
+        return {
+            "message": "Sync started in background",
+            "note": "Check server logs for result"
+        }
+# 克隆仓库
+
+
+if not minimum_mode:
+    app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")
 if __name__ == "__main__":
 
+    if not minimum_mode:
+        repo = Repo("Dress")
+        print("正在检查索引...")
+        if not(os.path.exists("public/index_0.json") and os.path.exists("public/index_1.json")):
 
-    repo = Repo("Dress")
-    print("正在检查索引...")
-    if not(os.path.exists("public/index_0.json") and os.path.exists("public/index_1.json")):
-
-        index = build_index(repo)
-        index = escape_hash_in_index(index,"url")
-        index_by_author = build_index_by_author(repo)
-        index_by_author = escape_hash_in_index(index_by_author,"author")
-        with open("public/index_0.json", "w", encoding="utf-8") as f:
-            json.dump(index,f,ensure_ascii=False,indent=4)
-        with open("public/index_1.json", "w", encoding="utf-8") as f:
-            json.dump(index_by_author, f, ensure_ascii=False, indent=4)
-    elif not os.path.exists("public/index_0.json"):
-        index = build_index(repo)
-        index = escape_hash_in_index(index,"url")
-        with open("public/index_0.json", "w", encoding="utf-8") as f:
-            json.dump(index, f, ensure_ascii=False, indent=4)
-    elif not os.path.exists("public/index_1.json"):
-        index = build_index_by_author(repo)
-        index = escape_hash_in_index(index,"author")
-        with open("public/index_1.json", "w", encoding="utf-8") as f:
-            json.dump(index, f, ensure_ascii=False, indent=4)
+            index = build_index(repo)
+            index = escape_hash_in_index(index,"url")
+            index_by_author = build_index_by_author(repo)
+            index_by_author = escape_hash_in_index(index_by_author,"author")
+            with open("public/index_0.json", "w", encoding="utf-8") as f:
+                json.dump(index,f,ensure_ascii=False,indent=4)
+            with open("public/index_1.json", "w", encoding="utf-8") as f:
+                json.dump(index_by_author, f, ensure_ascii=False, indent=4)
+        elif not os.path.exists("public/index_0.json"):
+            index = build_index(repo)
+            index = escape_hash_in_index(index,"url")
+            with open("public/index_0.json", "w", encoding="utf-8") as f:
+                json.dump(index, f, ensure_ascii=False, indent=4)
+        elif not os.path.exists("public/index_1.json"):
+            index = build_index_by_author(repo)
+            index = escape_hash_in_index(index,"author")
+            with open("public/index_1.json", "w", encoding="utf-8") as f:
+                json.dump(index, f, ensure_ascii=False, indent=4)
     colorama.init(autoreset=True)
     print(f"🚀 启动服务: http://0.0.0.0:{ports}")
     print(Fore.LIGHTBLUE_EX+"""
@@ -259,7 +298,7 @@ if __name__ == "__main__":
 ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝      ╚═╝  ╚═╝╚═╝     ╚═╝
     Attribution-NonCommercial-ShareAlike 4.0 International
                 GitHub:Cute-Dress/Dress
-                GitHub(Dress-api):nomdn/dress-api                                    
+            GitHub(Dress-api):nomdn/dress-api                                    
     """)
     print(Style.RESET_ALL+"")
 
