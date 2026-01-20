@@ -202,26 +202,27 @@ async def sync_dress_repo(
         "note": "Check server logs for result"
     }
 
+if not os.path.exists("Dress"):
+    print("您还没有克隆dress仓库，正在为你克隆")
+    for i in range(10):
+        try:
+            print(f"第 {i} 次尝试")
+            subprocess.run(["git","clone","--single-branch","--branch master","https://github.com/Cute-Dress/Dress.git"], check=True, text=True, capture_output=True)
+            print("克隆成功！")
+            break
+        except subprocess.CalledProcessError as e:
+            print(f"命令执行异常！错误: {e}")
+            print("开始执行重试")
+        except Exception as e:
+            print(f"未知错误！{e}")
+            print("开始执行重试")
+    else:
+        raise RuntimeError("克隆仓库失败，请检查网络或 Git 配置")
 app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")
 if __name__ == "__main__":
 
-    if not os.path.exists("Dress"):
-        print("您还没有克隆dress仓库，正在为你克隆")
-        for i in range(10):
-            try:
-                print(f"第 {i} 次尝试")
-                subprocess.run(["git","clone","--single-branch","--branch master","https://github.com/Cute-Dress/Dress.git"], check=True, text=True, capture_output=True)
-                print("克隆成功！")
-                break
-            except subprocess.CalledProcessError as e:
-                print(f"命令执行异常！错误: {e}")
-                print("开始执行重试")
-            except Exception as e:
-                print(f"未知错误！{e}")
-                print("开始执行重试")
-        else:
-            raise RuntimeError("克隆仓库失败，请检查网络或 Git 配置")
+
     repo = Repo("Dress")
     print("正在检查索引...")
     if not(os.path.exists("public/index_0.json") and os.path.exists("public/index_1.json")):
