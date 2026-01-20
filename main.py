@@ -17,6 +17,7 @@ from urllib.parse import urljoin, urlparse
 
 load_dotenv()  # 先加载 .env（如果存在）
 API_KEY = os.environ.get("ARK_API_KEY")
+ports = os.environ.get("PORTS")
 
 if not API_KEY:
     if os.path.exists("/.dockerenv"):
@@ -28,7 +29,8 @@ BASE_DIR = Path(__file__).resolve().parent
 # 支持的图片扩展名（可按需增减）
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'}
 app = FastAPI(title="Dress-API：面向可爱男孩子的一个API",
-              terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+              terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/",
+              description="“本服务所使用的图片来自 Cute-Dress/Dress，遵循 CC BY-NC-SA 4.0 许可。”"
               )
 
 def run_git_pull():
@@ -172,7 +174,7 @@ async def random_setu(request:Request):
     img_key = random.randint(a=1,b=max_count)
     img= data[f"{img_key}"][0]
     author_names = [item[0] for item in data[f"{img_key}"][1] if item]
-    return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}"}
+    return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","notice":"“本服务所使用的图片来自 Cute-Dress/Dress，遵循 CC BY-NC-SA 4.0 许可。”"}
 @app.post("/dresses/v1/sync", summary="同步远程 Dress 仓库")
 async def sync_dress_repo(
     background_tasks: BackgroundTasks,
@@ -238,7 +240,7 @@ if __name__ == "__main__":
         with open("public/index_1.json", "w", encoding="utf-8") as f:
             json.dump(index, f, ensure_ascii=False, indent=4)
     colorama.init(autoreset=True)
-    print("🚀 启动服务: http://127.0.0.1:8001")
+    print(f"🚀 启动服务: http://0.0.0.0:{ports}")
     print(Fore.LIGHTBLUE_EX+"""
 ██████╗ ██████╗ ███████╗███████╗███████╗       █████╗ ██████╗ ██╗
 ██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝      ██╔══██╗██╔══██╗██║
@@ -248,8 +250,8 @@ if __name__ == "__main__":
 ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝      ╚═╝  ╚═╝╚═╝     ╚═╝
     Attribution-NonCommercial-ShareAlike 4.0 International
                 GitHub:Cute-Dress/Dress
-                代码还没开源（因为没许可）                                       
+                GitHub(Dress-api):nomdn/dress-api）                                       
     """)
     print(Style.RESET_ALL+"")
 
-    uvicorn.run(app, host="127.0.0.1", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=int(ports))
