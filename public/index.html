@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Cute Dress 图片库</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: auto; }
+        h1, h2 { color: #333; }
+        ul { list-style-type: none; padding: 0; }
+        li { background-color: #f9f9f9; margin: 5px 0; padding: 10px; border-radius: 4px; }
+        pre { background-color: #eee; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Cute Dress 图片库</h1>
+    <p>欢迎来到 Cute Dress 图片库！这里收集了来自社区成员分享的各种美丽腿的照片。</p>
+
+    <h2>所有图片列表 (按ID排序)</h2>
+    <button onclick="loadIndex('index_0.json')">加载图片列表</button>
+    <div id="indexContent"></div>
+
+    <h2>按作者分类的图片列表</h2>
+    <button onclick="loadIndex('index_1.json')">加载按作者分类的图片列表</button>
+    <div id="authorIndexContent"></div>
+</div>
+
+<script>
+async function loadIndex(fileName) {
+    const response = await fetch(fileName);
+    if (!response.ok) {
+        document.getElementById('indexContent').innerHTML = `<pre>无法加载 ${fileName}</pre>`;
+        return;
+    }
+    const indexData = await response.json();
+    displayIndex(indexData, fileName === 'index_1.json');
+}
+
+function displayIndex(data, isAuthorIndex) {
+    let contentDiv = document.getElementById(isAuthorIndex ? 'authorIndexContent' : 'indexContent');
+    contentDiv.innerHTML = ''; // 清空之前的显示内容
+
+    for (let key in data) {
+        let item = data[key];
+        let listItem = document.createElement('li');
+        if (isAuthorIndex) {
+            listItem.textContent = `${key}: `;
+            let ul = document.createElement('ul');
+            item.forEach(path => {
+                let li = document.createElement('li');
+                li.textContent = path;
+                ul.appendChild(li);
+            });
+            listItem.appendChild(ul);
+        } else {
+            listItem.textContent = `[${key}] 路径: ${item[0]}, 提交者: ${JSON.stringify(item[1])}`;
+        }
+        contentDiv.appendChild(listItem);
+    }
+}
+</script>
+</body>
+</html>
