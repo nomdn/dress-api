@@ -15,15 +15,20 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
 
-load_dotenv()  # 先加载 .env（如果存在）
-API_KEY = os.environ.get("ARK_API_KEY")
-ports = os.environ.get("PORTS")
-
-if not API_KEY:
+if os.environ.get("ARK_API_KEY"):
+    API_KEY = os.environ.get("ARK_API_KEY")
+    ports = os.environ.get("PORTS")
+elif os.path.exists(".env"):
+    load_dotenv()  # 先加载 .env（如果存在）
+    API_KEY = os.environ.get("ARK_API_KEY")
+    ports = os.environ.get("PORTS")
+else:
     if os.path.exists("/.dockerenv"):
         raise RuntimeError("Docker 环境下必须通过 -e ARK_API_KEY=xxx 设置密钥")
     else:
         raise RuntimeError("请在 .env 文件中设置 ARK_API_KEY")
+
+
 # 挂载整个目录，支持 index.html 自动路由
 BASE_DIR = Path(__file__).resolve().parent
 # 支持的图片扩展名（可按需增减）
