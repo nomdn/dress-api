@@ -1,6 +1,8 @@
 # Dress API 面向可爱的蓝孩子 (/ω＼) 的 随机图片API
 
-这是一个基于[Dress](https://github.com/Cute-Dress/Dress)的随机图片API
+这是一个基于[Dress](https://github.com/Cute-Dress/Dress)的随机图片API  
+演示API：https://dress.wsmdn.top  
+文档：https://dress.wsmdn.top/docs
 ## 部署指南
 最低Python版本：python3.8  
 推荐Python版本：python3.12  
