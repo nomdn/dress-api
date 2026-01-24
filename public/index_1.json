@@ -1244,7 +1244,6 @@
         "L/LF112/LF112_Dress%232019_1.jpg",
         "L/LKI/irisviel.jpg",
         "L/LY/1-1.webp",
-        "L/LY/1-2.webp",
         "L/Lacszer/6B15BF22B0EC114D81042E7076B942CD.png",
         "L/Lacszer/6C7ED5BF7D75D48C0BE87B1EEDC062BD.png",
         "L/Lacszer/91E77FF5890FF414EFB36C9DDD3AD29F.png",
@@ -2560,6 +2559,9 @@
         "L/LLbuxudong/1744557749040.jpg",
         "L/LLbuxudong/1744557749042.jpg"
     ],
+    "LY": [
+        "L/LY/1-2.webp"
+    ],
     "LoongLy": [
         "L/LoongLy/Shenzhen_Gameshow_2024.jpg",
         "L/LoongLy/Shenzhen_Gameshow_2025.jpg"
@@ -2945,7 +2947,17 @@
         "Y/Yueosa/2025-12/BA520E958031F59475E4FA49B60B7B7C.jpg",
         "Y/Yueosa/2025-12/E465B5DC4B5BD4D54D8A53A0CC1C18EB.jpg",
         "Y/Yueosa/2025-12/F9BA81797CC0DEDEC8D6CAFB0706D49D.jpg",
-        "Y/Yueosa/2025-12/FEDBE27BCF241D03A76941A35D61EC69.jpg"
+        "Y/Yueosa/2025-12/FEDBE27BCF241D03A76941A35D61EC69.jpg",
+        "Y/Yueosa/2026-1/lian_01.jpg",
+        "Y/Yueosa/2026-1/lian_02.jpg",
+        "Y/Yueosa/2026-1/lian_03.jpg",
+        "Y/Yueosa/2026-1/lian_04.jpg",
+        "Y/Yueosa/2026-1/lian_05.jpg",
+        "Y/Yueosa/2026-1/lian_06.jpg",
+        "Y/Yueosa/2026-1/lian_07.jpg",
+        "Y/Yueosa/2026-1/lian_08.jpg",
+        "Y/Yueosa/2026-1/lian_09.jpg",
+        "Y/Yueosa/2026-1/lian_10.jpg"
     ],
     "YukiChan": [
         "Y/YukiChan/Nya_20250307_01.jpg",
