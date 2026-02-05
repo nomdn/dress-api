@@ -1,0 +1,9 @@
+body {
+    background-color: #000000;
+    color: white;
+}
+
+#app {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
