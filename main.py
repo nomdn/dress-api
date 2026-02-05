@@ -45,12 +45,13 @@ if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get(
     
 elif os.path.exists(".env"):
     load_dotenv()  # 先加载 .env（如果存在）
-    API_KEY = os.environ.get("ARK_API_KEY")
-    ports = os.environ.get("PORTS")
-    log_level = os.environ.get("LOG_LEVEL")
-    auto_sync_enabled = os.environ.get("AUTO_SYNC")
-    auto_sync_time = os.environ.get("AUTO_SYNC_TIME")
-    minimum_mode = os.environ.get("FORCE_MINING")
+    # 加载 .env 后，使用默认值或环境变量值
+    API_KEY = os.environ.get("ARK_API_KEY") or API_KEY
+    ports = os.environ.get("PORTS") or ports
+    log_level = os.environ.get("LOG_LEVEL") or log_level
+    auto_sync_enabled = os.environ.get("AUTO_SYNC") or auto_sync_enabled
+    auto_sync_time = os.environ.get("AUTO_SYNC_TIME") or auto_sync_time
+    minimum_mode = os.environ.get("FORCE_MINING") or minimum_mode  # 确保从 .env 加载的值被使用
 
 else:
     if os.path.exists("/.dockerenv"):
@@ -76,10 +77,17 @@ BASE_DIR = Path(__file__).resolve().parent
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'}
 
 
-if not os.path.exists("Dress"):
+if not os.path.exists("Dress") and minimum_mode != "true":
     logging.info("未在当前目录发现Dress仓库，将以最小化API运行")
     minimum_mode = "true"
-    data=asyncio.run(get_github_index())
+    data = asyncio.run(get_github_index())
+elif minimum_mode == "true":
+    # 即使存在Dress目录，如果用户强制设置为最小化模式，也要使用远程数据
+    logging.info("强制使用最小化API运行模式")
+    data = asyncio.run(get_github_index())
+else:
+    # 在非最小化模式下，也需要初始化data变量，以防万一需要使用
+    data = None
 
 app = FastAPI(title="Dress-API：面向可爱男孩子的一个API",
               terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/",
@@ -109,7 +117,7 @@ async def auto_sync():
                 logging.debug("本地Dress仓库同步完成")
             except Exception as e:
                 logging.error(f"自动同步时构建索引失败: {e}")
-        elif minimum_mode == "true":
+        else:
             global data
             logging.debug("开始执行远程数据同步...")
             try:
@@ -127,19 +135,26 @@ async def random_setu(request:Request):
     """
     global data
     base_url =request.base_url
-    if minimum_mode != "true":
+    if minimum_mode == "true":
+        img_data = data
+    else:
         with open("public/index_0.json","r",encoding="utf-8") as f:
             local_data = json.loads(f.read())
             img_data = local_data
-    else:
-
-       img_data =data
     max_count = len(img_data.keys())
     img_key = random.randint(a=1,b=max_count)
-    img= img_data[f"{img_key}"][0]
-    author_names = [item[0] for item in img_data[f"{img_key}"][1] if item]
-    upload_time = img_data[f"{img_key}"][2]
-    if minimum_mode == "true":
+    entry = img_data[f"{img_key}"]
+    
+    img = entry[0]
+    uploader_info = entry[1]
+    author_names = [item[0] for item in uploader_info if item]
+    
+    # 检查是否存在时间信息
+    upload_time = None
+    if len(entry) > 2:
+        upload_time = entry[2]
+    
+    if minimum_mode == "true":  # 修正：与"true"比较
         return {"img_url": f"https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}", "img_author": f"{author_names}",
                 "upload_time": upload_time, "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"}
     else:
