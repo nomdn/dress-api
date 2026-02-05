@@ -52,12 +52,12 @@ def get_commit_time(repo: Repo, file_path: str) -> Union[datetime, None]:
         logging.error(f"获取提交时间失败: {e}")
         return None
 
-async def get_github_index():
+async def get_github_index(index:str="index_0.json") -> Dict:
     """获取远端 GitHub 索引数据"""
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                url="https://cdn.jsdelivr.net/gh/nomdn/dress-api@main/public/index_0.json",
+                url=f"https://cdn.jsdelivr.net/gh/nomdn/dress-api@main/public/{index}",
                 timeout=10.0
             )
         response.raise_for_status()
@@ -75,7 +75,7 @@ async def get_github_index():
             try:
                 async with httpx.AsyncClient() as client:
                     response = await client.get(
-                        url=f"{i}gh/nomdn/dress-api@main/public/index_0.json",
+                        url=f"{i}gh/nomdn/dress-api@main/public/{index}",
                         timeout=10.0
                     )
                 response.raise_for_status()

@@ -17,6 +17,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
 from httpx import TimeoutException
+from contextlib import asynccontextmanager  # 添加这个导入
 from dress_tools import (
     build_index,
     build_index_by_author,
@@ -37,20 +38,20 @@ minimum_mode = "false"
 http_client = httpx.AsyncClient()
 if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get("LOG_LEVEL") and os.environ.get("AUTO_SYNC") and os.environ.get("AUTO_SYNC_TIME") and os.environ.get("FORCE_MINING"):
     API_KEY = os.environ.get("ARK_API_KEY")
-    ports = os.environ.get("PORTS")
+    ports = int(os.environ.get("PORTS"))  # 确保转换为整数
     log_level = os.environ.get("LOG_LEVEL")
     auto_sync_enabled = os.environ.get("AUTO_SYNC")
-    auto_sync_time = os.environ.get("AUTO_SYNC_TIME")
+    auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME"))  # 确保转换为整数
     minimum_mode = os.environ.get("FORCE_MINING")
     
 elif os.path.exists(".env"):
     load_dotenv()  # 先加载 .env（如果存在）
     # 加载 .env 后，使用默认值或环境变量值
     API_KEY = os.environ.get("ARK_API_KEY") or API_KEY
-    ports = os.environ.get("PORTS") or ports
+    ports = int(os.environ.get("PORTS") or ports)  # 确保转换为整数
     log_level = os.environ.get("LOG_LEVEL") or log_level
     auto_sync_enabled = os.environ.get("AUTO_SYNC") or auto_sync_enabled
-    auto_sync_time = os.environ.get("AUTO_SYNC_TIME") or auto_sync_time
+    auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME") or auto_sync_time)  # 确保转换为整数
     minimum_mode = os.environ.get("FORCE_MINING") or minimum_mode  # 确保从 .env 加载的值被使用
 
 else:
@@ -89,10 +90,24 @@ else:
     # 在非最小化模式下，也需要初始化data变量，以防万一需要使用
     data = None
 
-app = FastAPI(title="Dress-API：面向可爱男孩子的一个API",
-              terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/",
-              description="“本服务所使用的图片来自 [Cute-Dress/Dress](https://github.com/Cute-Dress/Dress)，遵循 CC BY-NC-SA 4.0 许可。”"
-              )
+@asynccontextmanager
+async def auto_sync_on_start(app: FastAPI):
+    # 启动自动同步任务
+    if auto_sync_enabled == "true":
+        logging.info(f"启动自动同步任务,同步间隔{auto_sync_time}秒")
+        sync_task = asyncio.create_task(auto_sync())
+        try:
+            yield
+        finally:
+            sync_task.cancel()
+    else:
+        yield
+app = FastAPI(
+    title="Dress-API：面向可爱男孩子的一个API",
+    terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    description="“本服务所使用的图片来自 [Cute-Dress/Dress](https://github.com/Cute-Dress/Dress)，遵循 CC BY-NC-SA 4.0 许可。”",
+    lifespan=auto_sync_on_start  # 添加生命周期管理器
+)
 
 async def auto_sync():
     """
@@ -121,12 +136,19 @@ async def auto_sync():
             global data
             logging.debug("开始执行远程数据同步...")
             try:
-                new_data = await get_github_index()
+                new_data = await get_github_index(index="index_0.json")
                 data = new_data  # 确保更新全局变量
+                index_1 = await get_github_index(index="index_1.json")
+                with open("public/index_0.json", "w", encoding="utf-8") as f:
+                    json.dump(new_data, f, ensure_ascii=False, indent=4)
+                with open("public/index_1.json", "w", encoding="utf-8") as f:
+                    json.dump(index_1, f, ensure_ascii=False, indent=4)
                 logging.debug(f"已从GitHub获取最新数据，共{len(new_data)}项数据)")
             except Exception as e:
                 logging.error(f"远程数据同步失败: {e}")
         await asyncio.sleep(auto_sync_time)  # 每10秒同步一次，便于观察
+
+
 
 @app.get("/dress/v1",summary="获取一张可爱男孩子的自拍")
 async def random_setu(request:Request):
@@ -265,15 +287,7 @@ if __name__ == "__main__":
     print(Style.RESET_ALL+"")
     
     # 创建事件循环并同时运行自动同步和web服务器
-    async def main():
-        # 启动自动同步任务
-        if auto_sync_enabled == "true":
-            logging.info(f"启动自动同步任务,同步间隔{auto_sync_time}秒")
-            sync_task = asyncio.create_task(auto_sync())
-        
+
         # 启动web服务器
-        config = uvicorn.Config(app, host="0.0.0.0", port=int(ports))
-        server = uvicorn.Server(config)
-        await server.serve()
+    uvicorn.run(app, host="0.0.0.0", port=ports)
     
-    asyncio.run(main())
