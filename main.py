@@ -191,6 +191,9 @@ async def sync_dress_repo(
         }
 # 克隆仓库
 
+@app.get("/health", summary="健康检查")
+async def health_check():
+    return {"status": "healthy"}
 
 if minimum_mode != "true":
     app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
