@@ -70,6 +70,15 @@ GET /dress/v1
   "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0"
 }
 ```
+最小化模式：
+```json
+{
+  "img_url": "https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/S/Satenruiko/IMG_20200302_231235.jpg",
+  "img_author": "['CuteDress']",
+  "upload_time": "2024-02-07T13:33:29+08:00",
+  "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
+}
+```
 
 ### 手动同步（需 API Key）
 ```http
