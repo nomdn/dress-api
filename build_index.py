@@ -2,7 +2,10 @@ import json
 from pathlib import Path
 from git import Repo
 from dress_tools import build_index, build_index_by_author, escape_hash_in_index
-
+import logging
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+                    )
 def build_and_save_indexes(repo_path: str, output_dir: str = "public"):
     """
     主入口函数：自动构建并保存 index_0.json 和 index_1.json
@@ -29,4 +32,4 @@ def build_and_save_indexes(repo_path: str, output_dir: str = "public"):
 
     print(f"✅ 索引已生成并保存至: {out_dir.absolute()}")
 if __name__ == "__main__":
-    build_and_save_indexes(repo_path="Dress")
+    build_and_save_indexes(repo_path="./Dress", output_dir="public")

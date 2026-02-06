@@ -1,8 +1,9 @@
 import os
-from pathlib import Path
+from pathlib import Path as p_pathlib
 import subprocess
 import random
 import json
+from typing import Annotated
 import httpx
 import colorama
 from colorama import Fore, Style
@@ -12,7 +13,7 @@ from dotenv import load_dotenv
 from git import Repo
 import asyncio
 import json
-from fastapi import FastAPI, Response, Request, BackgroundTasks, HTTPException, Header, Query
+from fastapi import FastAPI, Response, Request, BackgroundTasks, HTTPException, Header, Query,Path
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
@@ -73,7 +74,7 @@ logging.basicConfig(level=log_level_value,
                     )
 
 # 挂载整个目录，支持 index.html 自动路由
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = p_pathlib(__file__).resolve().parent
 # 支持的图片扩展名（可按需增减）
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'}
 
@@ -81,11 +82,19 @@ IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'}
 if not os.path.exists("Dress") and minimum_mode != "true":
     logging.info("未在当前目录发现Dress仓库，将以最小化API运行")
     minimum_mode = "true"
-    data = asyncio.run(get_github_index())
+    try:
+        data = asyncio.run(get_github_index())
+    except Exception as e:
+        logging.error(f"获取远端数据失败: {e}")
+        raise RuntimeError("无法连接到远程服务器获取数据")
 elif minimum_mode == "true":
     # 即使存在Dress目录，如果用户强制设置为最小化模式，也要使用远程数据
     logging.info("强制使用最小化API运行模式")
-    data = asyncio.run(get_github_index())
+    try:
+        data = asyncio.run(get_github_index())
+    except Exception as e:
+        logging.error(f"获取远端数据失败: {e}")
+        raise RuntimeError("无法连接到远程服务器获取数据")
 else:
     # 在非最小化模式下，也需要初始化data变量，以防万一需要使用
     data = None
@@ -118,8 +127,8 @@ async def auto_sync():
         if minimum_mode != "true":
             logging.info("开始执行本地Dress仓库同步...")
             await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
-            repo = Repo("Dress")
             try:
+                repo = Repo("Dress")
                 index = build_index(repo)
                 index = escape_hash_in_index(index, "url")
                 with open("public/index_0.json", "w", encoding="utf-8") as f:
@@ -130,6 +139,10 @@ async def auto_sync():
                 with open("public/index_1.json", "w", encoding="utf-8") as f:
                     json.dump(index_by_author, f, ensure_ascii=False, indent=4)
                 logging.debug("本地Dress仓库同步完成")
+            except FileNotFoundError as e:
+                logging.error(f"Dress目录不存在: {e}")
+            except PermissionError as e:
+                logging.error(f"权限不足: {e}")
             except Exception as e:
                 logging.error(f"自动同步时构建索引失败: {e}")
         else:
@@ -160,10 +173,24 @@ async def random_setu(request:Request):
     if minimum_mode == "true":
         img_data = data
     else:
-        with open("public/index_0.json","r",encoding="utf-8") as f:
-            local_data = json.loads(f.read())
-            img_data = local_data
+        try:
+            with open("public/index_0.json","r",encoding="utf-8") as f:
+                local_data = json.loads(f.read())
+                img_data = local_data
+        except FileNotFoundError:
+            raise HTTPException(status_code=500, detail="本地索引文件不存在")
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=500, detail="本地索引文件格式错误")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"读取本地索引文件时发生错误: {e}")
+    
+    if not img_data:
+        raise HTTPException(status_code=500, detail="图片数据为空")
+    
     max_count = len(img_data.keys())
+    if max_count == 0:
+        raise HTTPException(status_code=500, detail="图片索引为空")
+    
     img_key = random.randint(a=1,b=max_count)
     entry = img_data[f"{img_key}"]
     
@@ -218,6 +245,10 @@ async def sync_dress_repo(
                     index_by_author = escape_hash_in_index(index_by_author, "author")
                     with open("public/index_1.json", "w", encoding="utf-8") as f:
                         json.dump(index_by_author, f, ensure_ascii=False, indent=4)
+            except FileNotFoundError as e:
+                logging.error(f"Dress目录不存在: {e}")
+            except PermissionError as e:
+                logging.error(f"权限不足: {e}")
             except Exception as e:
                 logging.error(f"后台同步任务失败: {e}")
 
@@ -230,8 +261,56 @@ async def sync_dress_repo(
 
 @app.get("/health", summary="健康检查")
 async def health_check():
-    return {"status": "healthy"}
+    connectivity_to_gitHub: bool = True
+    connectivity_to_jsdelivr: bool = True
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get("https://api.github.com", timeout=10.0)
+            if response.status_code != 200:
+                connectivity_to_gitHub = False
+        except httpx.RequestError:
+            connectivity_to_gitHub = False
+        try:
+            response = await client.get("https://cdn.jsdelivr.net", timeout=10.0)
+            if response.status_code != 200:
+                connectivity_to_jsdelivr = False
+        except httpx.RequestError:
+            connectivity_to_jsdelivr = False
+    return {"status": "healthy", "minimum_mode": minimum_mode , "auto_sync_enabled": auto_sync_enabled,"auto_sync_time": auto_sync_time, "connectivity_to_gitHub": connectivity_to_gitHub, "connectivity_to_jsdelivr": connectivity_to_jsdelivr}
 
+@app.get("/dress/v1/index/{name}", summary="获取指定索引文件内容")
+async def return_index(
+    name: Annotated[str, Path(description="索引名称，支持 index_0.json 和 index_1.json")]
+):
+    """
+    获取指定索引文件内容
+    """
+    if name not in ["index_0.json", "index_1.json"]:
+        raise HTTPException(status_code=400, detail="Invalid index name")
+    try:
+        with open(f"public/{name}", "r", encoding="utf-8") as f:
+            index_data = json.load(f)
+        return index_data
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Index file not found")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Index file is corrupted")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error reading index file: {e}")
+@app.get("/dress/v1/author/{author}", summary="获取指定作者的图片信息")
+async def return_author_info(author: Annotated[str, Path(description="作者名称")]):
+    """
+    获取指定作者的图片信息
+    """
+    try:
+        with open(f"public/index_1.json", "r", encoding="utf-8") as f:
+            index_authors_data = json.load(f)
+        author_data = index_authors_data[author]
+        return {author: author_data}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Author info not found")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Author info is corrupted")
 if minimum_mode != "true":
     app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")
@@ -278,7 +357,7 @@ if __name__ == "__main__":
 ██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝      ██╔══██╗██╔══██╗██║
 ██║  ██║██████╔╝█████╗  ███████╗███████╗█████╗███████║██████╔╝██║
 ██║  ██║██╔══██╗██╔══╝  ╚════██║╚════██║╚════╝██╔══██║██╔═══╝ ██║
-██████╔╝██║  ██║███████╗███████╗███████║      ██║  ██║██║     ██║
+██████╔╝██║  ██║███████╗███████╗███████╗      ██║  ██║██║     ██║
 ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝      ╚═╝  ╚═╝╚═╝     ╚═╝
     Attribution-NonCommercial-ShareAlike 4.0 International
                 GitHub:Cute-Dress/Dress
