@@ -123,44 +123,48 @@ async def auto_sync():
     """
     启动时自动同步 Dress 仓库（仅非最小化模式）
     """
-    while True: 
-         # 使用无限循环替代单次sleep
-        if minimum_mode != "true":
-            logging.info("开始执行本地Dress仓库同步...")
-            await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
-            try:
-                repo = Repo("Dress")
-                index = build_index(repo)
-                index = escape_hash_in_index(index, "url")
-                with open("public/index_0.json", "w", encoding="utf-8") as f:
-                    json.dump(index, f, ensure_ascii=False, indent=4)
-                
-                index_by_author = build_index_by_author(repo)
-                index_by_author = escape_hash_in_index(index_by_author, "author")
-                with open("public/index_1.json", "w", encoding="utf-8") as f:
-                    json.dump(index_by_author, f, ensure_ascii=False, indent=4)
-                logging.debug("本地Dress仓库同步完成")
-            except FileNotFoundError as e:
-                logging.error(f"Dress目录不存在: {e}")
-            except PermissionError as e:
-                logging.error(f"权限不足: {e}")
-            except Exception as e:
-                logging.error(f"自动同步时构建索引失败: {e}")
-        else:
-            global data
-            logging.debug("开始执行远程数据同步...")
-            try:
-                new_data = await get_github_index(index="index_0.json")
-                data = new_data  # 确保更新全局变量
-                index_1 = await get_github_index(index="index_1.json")
-                with open("public/index_0.json", "w", encoding="utf-8") as f:
-                    json.dump(new_data, f, ensure_ascii=False, indent=4)
-                with open("public/index_1.json", "w", encoding="utf-8") as f:
-                    json.dump(index_1, f, ensure_ascii=False, indent=4)
-                logging.debug(f"已从GitHub获取最新数据，共{len(new_data)}项数据)")
-            except Exception as e:
-                logging.error(f"远程数据同步失败: {e}")
-        await asyncio.sleep(auto_sync_time)  # 每10秒同步一次，便于观察
+    if auto_sync_enabled != "true":
+        while True: 
+            # 使用无限循环替代单次sleep
+            
+            if minimum_mode != "true":
+                logging.info("开始执行本地Dress仓库同步...")
+                await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
+                try:
+                    repo = Repo("Dress")
+                    index = build_index(repo)
+                    index = escape_hash_in_index(index, "url")
+                    with open("public/index_0.json", "w", encoding="utf-8") as f:
+                        json.dump(index, f, ensure_ascii=False, indent=4)
+                    
+                    index_by_author = build_index_by_author(repo)
+                    index_by_author = escape_hash_in_index(index_by_author, "author")
+                    with open("public/index_1.json", "w", encoding="utf-8") as f:
+                        json.dump(index_by_author, f, ensure_ascii=False, indent=4)
+                    logging.debug("本地Dress仓库同步完成")
+                except FileNotFoundError as e:
+                    logging.error(f"Dress目录不存在: {e}")
+                except PermissionError as e:
+                    logging.error(f"权限不足: {e}")
+                except Exception as e:
+                    logging.error(f"自动同步时构建索引失败: {e}")
+            elif minimum_mode == "true":
+                global data
+                logging.debug("开始执行远程数据同步...")
+                try:
+                    new_data = await get_github_index(index="index_0.json")
+                    data = new_data  # 确保更新全局变量
+                    index_1 = await get_github_index(index="index_1.json")
+                    with open("public/index_0.json", "w", encoding="utf-8") as f:
+                        json.dump(new_data, f, ensure_ascii=False, indent=4)
+                    with open("public/index_1.json", "w", encoding="utf-8") as f:
+                        json.dump(index_1, f, ensure_ascii=False, indent=4)
+                    logging.debug(f"已从GitHub获取最新数据，共{len(new_data)}项数据)")
+                except Exception as e:
+                    logging.error(f"远程数据同步失败: {e}")
+            await asyncio.sleep(auto_sync_time)  # 每10秒同步一次，便于观察
+    else:
+        pass  
 
 
 
@@ -210,7 +214,7 @@ async def random_setu(request:Request):
     else:
         return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","upload_time": upload_time,"notice":"Cute-Dress/Dress CC BY-NC-SA 4.0"}
 
-@app.post("/dresses/v1/sync", summary="同步远程 Dress 仓库")
+@app.post("/dress/v1/sync", summary="同步远程 Dress 仓库")
 async def sync_dress_repo(
     background_tasks: BackgroundTasks,
     rebuild_index: bool = Query(...),  # 默认重建索引
@@ -272,7 +276,18 @@ async def health_check():
         except httpx.RequestError:
             connectivity_to_gitHub = False
         try:
-            response = await client.get("https://cdn.jsdelivr.net", timeout=10.0)
+            with httpx.AsyncClient() as client:
+                for url in [
+            "https://cdn.jsdelivr.net/",
+            "https://fastly.jsdelivr.net/",
+            "https://gcore.jsdelivr.net/",
+            "https://testingcf.jsdelivr.net/"
+        ]:
+                    response = await client.get(url, timeout=10.0)
+                    if response.status_code == 200 or response.status_code == 301:
+                        break  # 只要有一个成功就行
+                else:
+                    connectivity_to_jsdelivr = False
             if response.status_code != 200:
                 connectivity_to_jsdelivr = False
         except httpx.RequestError:
