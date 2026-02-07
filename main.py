@@ -38,13 +38,14 @@ auto_sync_enabled = "true"
 auto_sync_time = 86400  # 默认24小时
 minimum_mode = "false"
 http_client = httpx.AsyncClient()
-if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get("LOG_LEVEL") and os.environ.get("AUTO_SYNC") and os.environ.get("AUTO_SYNC_TIME") and os.environ.get("FORCE_MINING"):
+if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get("LOG_LEVEL") and os.environ.get("AUTO_SYNC") and os.environ.get("AUTO_SYNC_TIME") and os.environ.get("FORCE_MINING") and os.environ.get("FORCE_REMOTE"):
     API_KEY = os.environ.get("ARK_API_KEY")
     ports = int(os.environ.get("PORTS"))  # 确保转换为整数
     log_level = os.environ.get("LOG_LEVEL")
     auto_sync_enabled = os.environ.get("AUTO_SYNC")
     auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME"))  # 确保转换为整数
     minimum_mode = os.environ.get("FORCE_MINING")
+    force_remote_index = os.environ.get("FORCE_REMOTE")
     
 elif os.path.exists(".env"):
     load_dotenv()  # 先加载 .env（如果存在）
@@ -55,6 +56,7 @@ elif os.path.exists(".env"):
     auto_sync_enabled = os.environ.get("AUTO_SYNC") or auto_sync_enabled
     auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME") or auto_sync_time)  # 确保转换为整数
     minimum_mode = os.environ.get("FORCE_MINING") or minimum_mode  # 确保从 .env 加载的值被使用
+    force_remote_index = os.environ.get("FORCE_REMOTE")
 
 else:
     if os.path.exists("/.dockerenv"):
@@ -123,32 +125,40 @@ async def auto_sync():
     """
     启动时自动同步 Dress 仓库（仅非最小化模式）
     """
-    if auto_sync_enabled != "true":
+    if auto_sync_enabled == "true":
         while True: 
             # 使用无限循环替代单次sleep
             
             if minimum_mode != "true":
                 logging.info("开始执行本地Dress仓库同步...")
                 await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
-                try:
-                    repo = Repo("Dress")
-                    index = build_index(repo)
-                    index = escape_hash_in_index(index, "url")
+                if force_remote_index == "true":
+                    index_id = await get_github_index("index_0.json")
+                    index_author = await get_github_index("index_1.json")
                     with open("public/index_0.json", "w", encoding="utf-8") as f:
-                        json.dump(index, f, ensure_ascii=False, indent=4)
-                    
-                    index_by_author = build_index_by_author(repo)
-                    index_by_author = escape_hash_in_index(index_by_author, "author")
+                        json.dump(index_id, f, ensure_ascii=False, indent=4)
                     with open("public/index_1.json", "w", encoding="utf-8") as f:
-                        json.dump(index_by_author, f, ensure_ascii=False, indent=4)
-                    logging.debug("本地Dress仓库同步完成")
-                except FileNotFoundError as e:
-                    logging.error(f"Dress目录不存在: {e}")
-                except PermissionError as e:
-                    logging.error(f"权限不足: {e}")
-                except Exception as e:
-                    logging.error(f"自动同步时构建索引失败: {e}")
-            elif minimum_mode == "true":
+                        json.dump(index_author, f, ensure_ascii=False, indent=4)
+                else:
+                    try:
+                        repo = Repo("Dress")
+                        index = build_index(repo)
+                        index = escape_hash_in_index(index, "url")
+                        with open("public/index_0.json", "w", encoding="utf-8") as f:
+                            json.dump(index, f, ensure_ascii=False, indent=4)
+                        
+                        index_by_author = convert_index_id_to_index_author(index)
+                        index_by_author = escape_hash_in_index(index_by_author, "author")
+                        with open("public/index_1.json", "w", encoding="utf-8") as f:
+                            json.dump(index_by_author, f, ensure_ascii=False, indent=4)
+                        logging.debug("本地Dress仓库同步完成")
+                    except FileNotFoundError as e:
+                        logging.error(f"Dress目录不存在: {e}")
+                    except PermissionError as e:
+                        logging.error(f"权限不足: {e}")
+                    except Exception as e:
+                        logging.error(f"自动同步时构建索引失败: {e}")
+            else:
                 global data
                 logging.debug("开始执行远程数据同步...")
                 try:
@@ -256,8 +266,24 @@ async def sync_dress_repo(
                 logging.error(f"权限不足: {e}")
             except Exception as e:
                 logging.error(f"后台同步任务失败: {e}")
-
-        background_tasks.add_task(sync_task)
+        if force_remote_index == "true":
+            async def remote_sync_task():
+                global data
+                logging.debug("开始执行远程数据同步...")
+                try:
+                    new_data = await get_github_index(index="index_0.json")
+                    data = new_data  # 确保更新全局变量
+                    index_1 = await get_github_index(index="index_1.json")
+                    with open("public/index_0.json", "w", encoding="utf-8") as f:
+                        json.dump(new_data, f, ensure_ascii=False, indent=4)
+                    with open("public/index_1.json", "w", encoding="utf-8") as f:
+                        json.dump(index_1, f, ensure_ascii=False, indent=4)
+                    logging.debug(f"已从GitHub获取最新数据，共{len(new_data)}项数据)")
+                except Exception as e:
+                    logging.error(f"远程数据同步失败: {e}")
+            background_tasks.add_task(remote_sync_task)
+        else:  
+            background_tasks.add_task(sync_task)
         return {
             "message": "Sync started in background",
             "note": "Check server logs for result"
@@ -335,37 +361,49 @@ if __name__ == "__main__":
     if minimum_mode != "true":
         repo = Repo("Dress")
         print("正在检查索引...")
-        try:
-            if not(os.path.exists("public/index_0.json") and os.path.exists("public/index_1.json")):
-                index = build_index(repo)
-                index = escape_hash_in_index(index,"url")
-                
-                index_by_author = convert_index_id_to_index_author(index)
-                index_by_author = escape_hash_in_index(index_by_author,"author")
-                
+        if force_remote_index == "true":
+            try:
+                index_id = asyncio.run(get_github_index("index_0.json"))
+                index_author = asyncio.run(get_github_index("index_1.json"))
                 with open("public/index_0.json", "w", encoding="utf-8") as f:
-                    json.dump(index,f,ensure_ascii=False,indent=4)
+                    json.dump(index_id, f, ensure_ascii=False, indent=4)
                 with open("public/index_1.json", "w", encoding="utf-8") as f:
-                    json.dump(index_by_author, f, ensure_ascii=False, indent=4)
-            elif not os.path.exists("public/index_0.json"):
-                index = build_index(repo)
-                index = escape_hash_in_index(index,"url")
-                with open("public/index_0.json", "w", encoding="utf-8") as f:
-                    json.dump(index, f, ensure_ascii=False, indent=4)
-            elif not os.path.exists("public/index_1.json"):
-                index = build_index_by_author(repo)
-                index = escape_hash_in_index(index,"author")
-                with open("public/index_1.json", "w", encoding="utf-8") as f:
-                    json.dump(index, f, ensure_ascii=False, indent=4)
-        except FileNotFoundError as e:
-            print(f"文件未找到: {e}")
-            exit(1)
-        except PermissionError as e:
-            print(f"权限不足: {e}")
-            exit(1)
-        except Exception as e:
-            print(f"构建索引时发生错误: {e}")
-            exit(1)
+                    json.dump(index_author, f, ensure_ascii=False, indent=4)
+            except Exception as e:
+                logging.error(f"获取远端数据失败: {e}")
+                raise RuntimeError("无法连接到远程服务器获取数据")
+        else:
+            try:
+                if not(os.path.exists("public/index_0.json") and os.path.exists("public/index_1.json")):
+                    index = build_index(repo)
+                    index = escape_hash_in_index(index,"url")
+                    
+                    index_by_author = convert_index_id_to_index_author(index)
+                    index_by_author = escape_hash_in_index(index_by_author,"author")
+                    
+                    with open("public/index_0.json", "w", encoding="utf-8") as f:
+                        json.dump(index,f,ensure_ascii=False,indent=4)
+                    with open("public/index_1.json", "w", encoding="utf-8") as f:
+                        json.dump(index_by_author, f, ensure_ascii=False, indent=4)
+                elif not os.path.exists("public/index_0.json"):
+                    index = build_index(repo)
+                    index = escape_hash_in_index(index,"url")
+                    with open("public/index_0.json", "w", encoding="utf-8") as f:
+                        json.dump(index, f, ensure_ascii=False, indent=4)
+                elif not os.path.exists("public/index_1.json"):
+                    index = build_index_by_author(repo)
+                    index = escape_hash_in_index(index,"author")
+                    with open("public/index_1.json", "w", encoding="utf-8") as f:
+                        json.dump(index, f, ensure_ascii=False, indent=4)
+            except FileNotFoundError as e:
+                print(f"文件未找到: {e}")
+                exit(1)
+            except PermissionError as e:
+                print(f"权限不足: {e}")
+                exit(1)
+            except Exception as e:
+                print(f"构建索引时发生错误: {e}")
+                exit(1)
     colorama.init(autoreset=True)
     print(f"🚀 启动服务: http://0.0.0.0:{ports}")
     print(Fore.LIGHTBLUE_EX+"""
