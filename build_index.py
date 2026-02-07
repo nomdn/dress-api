@@ -2,9 +2,11 @@ import json
 from pathlib import Path
 import sys
 from git import Repo
+from tqdm import tqdm
 import colorama
 from dress_tools import escape_hash_in_index,build_index,convert_index_id_to_index_author
 import logging
+
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
                     )

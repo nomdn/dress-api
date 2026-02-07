@@ -16,6 +16,8 @@ from colorama import Fore, Style
 import uvicorn
 from dotenv import load_dotenv
 from git import Repo
+from tqdm import trange
+from tqdm.contrib.logging import logging_redirect_tqdm  
 
 # 配置日志
 
@@ -198,15 +200,15 @@ async def build_index(repo: Repo) -> Dict[int, List]:
     try:
         paths = get_dress_image_paths()
         logging.info(f"共找到 {len(paths)} 张图片")
-
-        for c, i in enumerate(tqdm(paths, desc="构建索引",file=sys.stdout), start=1):
-            uploader_data,latest_commit_time = await get_all_committers(repo, i)
-            if not uploader_data:
-                logging.warning(f"⚠️ 警告: {i} 无提交记录，跳过")
-                continue
-            logging.debug(f"处理图片 {c}: {i}, 上传者: {uploader_data}, 最新提交时间: {latest_commit_time}")
-            # 包含时间信息
-            index[c] = [i, uploader_data, latest_commit_time]
+        with logging_redirect_tqdm():
+            for c, i in enumerate(tqdm(paths, desc="构建索引",file=sys.stdout), start=1):
+                uploader_data,latest_commit_time = await get_all_committers(repo, i)
+                if not uploader_data:
+                    logging.warning(f"⚠️ 警告: {i} 无提交记录，跳过")
+                    continue
+                logging.debug(f"处理图片 {c}: {i}, 上传者: {uploader_data}, 最新提交时间: {latest_commit_time}")
+                # 包含时间信息
+                index[c] = [i, uploader_data, latest_commit_time]
 
         return index
 
