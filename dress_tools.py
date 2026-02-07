@@ -1,3 +1,6 @@
+import asyncio
+import sys
+from tqdm import tqdm
 import os
 from pathlib import Path
 import subprocess
@@ -25,15 +28,14 @@ def normalize_url(path: str) -> str:
     return path.replace("#", "%23")
 
 
-
-
-def _run_git_log_follow(repo: Repo, file_path: str) -> List[List[str]]:
+async def _run_git_log_follow(repo: Repo, file_path: str) -> List[List[str]]:
     """
     执行 git log --follow --format="%H|%an|%ae|%cI" -- <file>
     使用 repo.working_dir 作为 cwd
     返回 [[commit_hash, author_name, author_email, committed_iso_time], ...]
     """
     try:
+        # 修复：使用 subprocess.run 而不是 asyncio.subprocess.run
         result = subprocess.run(
             [
                 "git", "log", "--follow",
@@ -61,17 +63,30 @@ def _run_git_log_follow(repo: Repo, file_path: str) -> List[List[str]]:
         logging.error(f"执行 git log --follow 出错 ({file_path}): {e}")
         return []
 
-def get_all_committers(repo: Repo, file_path: str) -> List[Tuple[str, str]]:
+async def get_all_committers(repo: Repo, file_path: str) -> Tuple[List[Tuple[str, str]], Optional[datetime]]:
     """获取指定文件所有历史提交的作者（去重），使用 --follow 追踪重命名"""
-    commits = _run_git_log_follow(repo, file_path)
-    authors = set()
+    commits = await _run_git_log_follow(repo, file_path)
+    seen = set()
+    authors = []
     for _, author_name, author_email, _ in commits:
-        authors.add((author_name, author_email))
-    return list(authors)
+        if (author_name, author_email) not in seen:
+            seen.add((author_name, author_email))
+            authors.append((author_name, author_email))
+    # 获取最新提交时间
+    latest_time = None
+    if commits:
+        iso_time = commits[0][3]  # 最新 commit
+        try:
+            latest_time = datetime.fromisoformat(iso_time.replace('Z', '+00:00'))
+        except ValueError as e:
+            logging.warning(f"时间解析失败 ({iso_time}): {e}")
+            latest_time = None
 
-def get_commit_time(repo: Repo, file_path: str) -> Union[datetime, None]:
+    return list(authors), latest_time
+
+async def get_commit_time(repo: Repo, file_path: str) -> Optional[datetime]:
     """获取指定文件最新提交时间"""
-    commits = _run_git_log_follow(repo, file_path)
+    commits = await _run_git_log_follow(repo, file_path)
     if commits:
         iso_time = commits[0][3]  # 最新 commit
         try:
@@ -79,10 +94,9 @@ def get_commit_time(repo: Repo, file_path: str) -> Union[datetime, None]:
         except ValueError as e:
             logging.warning(f"时间解析失败 ({iso_time}): {e}")
     return None
-
-def get_first_commit_author(repo: Repo, file_path: str) -> Optional[Tuple[str, str]]:
+async def get_first_commit_author(repo: Repo, file_path: str) -> Optional[Tuple[str, str]]:
     """获取文件首次添加的作者（用于贡献统计）"""
-    commits = _run_git_log_follow(repo, file_path)
+    commits = await _run_git_log_follow(repo, file_path)
     if commits:
         first_commit = commits[-1]  # 最早的 commit
         return (first_commit[1], first_commit[2])
@@ -164,7 +178,7 @@ def get_dress_image_paths(IMG_EXTENSIONS: set = {'.jpg', '.jpeg', '.png', '.gif'
 
     return sorted(image_paths)
 
-def build_index(repo: Repo) -> Dict[int, List]:
+async def build_index(repo: Repo) -> Dict[int, List]:
     """
     构建图片索引字典，键为序号，值为 [相对路径, 提交者列表, 最新提交时间]
     
@@ -185,9 +199,8 @@ def build_index(repo: Repo) -> Dict[int, List]:
         paths = get_dress_image_paths()
         logging.info(f"共找到 {len(paths)} 张图片")
 
-        for c, i in enumerate(paths, start=1):
-            uploader_data = get_all_committers(repo, i)
-            latest_commit_time = get_commit_time(repo, i)
+        for c, i in enumerate(tqdm(paths, desc="构建索引",file=sys.stdout), start=1):
+            uploader_data,latest_commit_time = await get_all_committers(repo, i)
             if not uploader_data:
                 logging.warning(f"⚠️ 警告: {i} 无提交记录，跳过")
                 continue
@@ -206,7 +219,7 @@ def build_index(repo: Repo) -> Dict[int, List]:
         raise
 
 
-def build_index_by_author(repo: Repo) -> Dict[str, List[Dict]]:
+async def build_index_by_author(repo: Repo) -> Dict[str, List[Dict]]:
     """
     构建按**首次提交作者**分组的图片索引
     """
@@ -215,8 +228,8 @@ def build_index_by_author(repo: Repo) -> Dict[str, List[Dict]]:
     logging.info(f"共找到 {len(paths)} 张图片")
 
     for i in paths:
-        first_author = get_first_commit_author(repo, i)  # 👈 使用新函数
-        latest_time = get_commit_time(repo, i)
+        first_author = await get_first_commit_author(repo, i)  # 👈 使用新函数
+        latest_time = await get_commit_time(repo, i)
         
         if not first_author:
             logging.warning(f"⚠️ 警告: {i} 无法追踪首次作者，跳过")
@@ -233,7 +246,34 @@ def build_index_by_author(repo: Repo) -> Dict[str, List[Dict]]:
 
     return index_name
 
+async def convert_index_id_to_index_author(index_0: dict) -> dict:
+    """
+    从 index_0 构建 index_1（按首次作者分组）
+    首次作者 = uploader_list[-1]（因为 build_index 中去重顺序是“最新→最早”）
+    """
+    index_1 = {}
+    for entry in index_0.values():
+        path = entry[0]
+        uploader_list = entry[1]      # [(name, email), ...]，最新在前，最早在后
+        latest_time = entry[2]
+        first_author_name = uploader_list[-1][0]  # 👈 首次作者一般是列表最后一个
+        if not uploader_list:
+            continue
 
+        # 首次作者是列表最后一个
+        for name in uploader_list:
+            if name[0] =="CuteDress":
+                logging.debug(f"发现 CuteDress 作为提交者，路径: {path}")  
+            else:
+                first_author_name = name[0]
+                logging.debug(f"已追踪到正确作者: {first_author_name}，路径: {path}")
+        if first_author_name not in index_1:
+            index_1[first_author_name] = []
+        index_1[first_author_name].append({
+            "path": path,
+            "latest_commit_time": latest_time
+        })
+    return index_1
 def escape_hash_in_index(index_data: Dict, index_type: str) -> Dict:
     """
     将路径中的 '#' 替换为 '%23'

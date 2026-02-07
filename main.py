@@ -22,6 +22,7 @@ from contextlib import asynccontextmanager  # 添加这个导入
 from dress_tools import (
     build_index,
     build_index_by_author,
+    convert_index_id_to_index_author,
     escape_hash_in_index,
     normalize_url,
     get_all_committers,
@@ -241,7 +242,7 @@ async def sync_dress_repo(
                     with open("public/index_0.json", "w", encoding="utf-8") as f:
                         json.dump(index, f, ensure_ascii=False, indent=4)
                     
-                    index_by_author = build_index_by_author(repo)
+                    index_by_author = convert_index_id_to_index_author(index)
                     index_by_author = escape_hash_in_index(index_by_author, "author")
                     with open("public/index_1.json", "w", encoding="utf-8") as f:
                         json.dump(index_by_author, f, ensure_ascii=False, indent=4)
@@ -324,7 +325,7 @@ if __name__ == "__main__":
                 index = build_index(repo)
                 index = escape_hash_in_index(index,"url")
                 
-                index_by_author = build_index_by_author(repo)
+                index_by_author = convert_index_id_to_index_author(index)
                 index_by_author = escape_hash_in_index(index_by_author,"author")
                 
                 with open("public/index_0.json", "w", encoding="utf-8") as f:

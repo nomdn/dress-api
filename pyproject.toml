@@ -10,5 +10,6 @@ dependencies = [
     "gitpython==3.1.46",
     "httpx>=0.28.1",
     "python-dotenv==1.2.1",
+    "tqdm>=4.67.3",
     "uvicorn==0.40.0",
 ]
