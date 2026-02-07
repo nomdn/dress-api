@@ -292,33 +292,39 @@ async def sync_dress_repo(
 
 @app.get("/health", summary="健康检查")
 async def health_check():
-    connectivity_to_gitHub: bool = True
-    connectivity_to_jsdelivr: bool = True
     async with httpx.AsyncClient() as client:
+        # Check GitHub
         try:
-            response = await client.get("https://api.github.com", timeout=10.0)
-            if response.status_code != 200:
-                connectivity_to_gitHub = False
+            resp = await client.get("https://api.github.com", timeout=10.0)
+            github_ok = resp.status_code == 200
         except httpx.RequestError:
-            connectivity_to_gitHub = False
-        try:
-            with httpx.AsyncClient() as client:
-                for url in [
+            github_ok = False
+
+        # Check jsDelivr
+        jsdelivr_ok = False
+        jsdelivr_urls = [
             "https://cdn.jsdelivr.net/",
             "https://fastly.jsdelivr.net/",
             "https://gcore.jsdelivr.net/",
             "https://testingcf.jsdelivr.net/"
-        ]:
-                    response = await client.get(url, timeout=10.0)
-                    if response.status_code == 200 or response.status_code == 301:
-                        break  # 只要有一个成功就行
-                else:
-                    connectivity_to_jsdelivr = False
-            if response.status_code != 200:
-                connectivity_to_jsdelivr = False
-        except httpx.RequestError:
-            connectivity_to_jsdelivr = False
-    return {"status": "healthy", "minimum_mode": minimum_mode , "auto_sync_enabled": auto_sync_enabled,"auto_sync_time": auto_sync_time, "connectivity_to_gitHub": connectivity_to_gitHub, "connectivity_to_jsdelivr": connectivity_to_jsdelivr}
+        ]
+        for url in jsdelivr_urls:
+            try:
+                resp = await client.get(url, timeout=10.0)
+                if resp.status_code in (200, 301):
+                    jsdelivr_ok = True
+                    break
+            except httpx.RequestError:
+                continue  # Try next URL
+
+    return {
+        "status": "healthy",
+        "minimum_mode": minimum_mode,
+        "auto_sync_enabled": auto_sync_enabled,
+        "auto_sync_time": auto_sync_time,
+        "connectivity_to_gitHub": github_ok,
+        "connectivity_to_jsdelivr": jsdelivr_ok
+    }
 
 @app.get("/dress/v1/index/{name}", summary="获取指定索引文件内容")
 async def return_index(
