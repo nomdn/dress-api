@@ -28,17 +28,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Clone Dress submodule (if needed)
-        run: |
-          if [ ! -d "Dress" ]; then
-            echo "Cloning Dress repository..."
-            git clone https://github.com/Cute-Dress/Dress.git
-          else
-            echo "Dress directory already exists, pulling latest..."
-            cd Dress && git pull
-          fi
-
       - name: Run index builder
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}   # 👈 从 Secret 注入 PAT
+          TARGET_OWNER: Cute-Dress
+          TARGET_REPO: Dress
         run: python build_index.py
 
       - name: Check for changes in public/
