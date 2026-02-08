@@ -84,7 +84,7 @@
       <div v-if="expandedAuthors[authorName]" class="image-grid">
         <div v-for="(image, idx) in author" :key="idx" class="image-card">
           <img 
-            :src="'https://fastly.jsdelivr.net/gh/Cute-Dress/Dress@master/' + image.path" 
+            :src="imgBaseURL + image.path" 
             :alt="image.path"
             @error="handleImageError"
             class="image-preview"
@@ -114,7 +114,7 @@
         const title = ref("Dress API - 随机图片");
         const groupedImages = ref({});
         /* 这取决于你部署的API地址 */
-        const remoteAPI = ref('https://dress.wsmdn.top/')
+        const remoteAPI = ref('https://dress.wsmdn.top/');
         const imgBaseURL = ref('https://fastly.jsdelivr.net/gh/Cute-Dress/Dress@master/');
         // 记录哪些作者被展开 { "Alice": true, "Bob": false }
         const expandedAuthors = reactive({});
@@ -157,6 +157,7 @@
             const data = res.data;
             console.log('远程API JSON数据:', data);
             if (data.minimum_mode == "false"){
+              console.log('远程API正常，使用远程API地址加载图片');
               imgBaseURL.value = remoteAPI.value+"img/";
             }else{
               const cdnURLs = [
@@ -193,7 +194,8 @@
           expandedAuthors,
           toggleExpand,
           formatDate,
-          handleImageError
+          handleImageError,
+          imgBaseURL
         };
       }
     });
