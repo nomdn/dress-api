@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.8.0/dist/index.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.8.0/theme-chalk/dark/css-vars.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     #app {
       max-width: 1000px;
@@ -111,6 +113,9 @@
       setup() {
         const title = ref("Dress API - 随机图片");
         const groupedImages = ref({});
+        /* 这取决于你部署的API地址 */
+        const remoteAPI = ref('https://dress.wsmdn.top/')
+        const imgBaseURL = ref('https://fastly.jsdelivr.net/gh/Cute-Dress/Dress@master/');
         // 记录哪些作者被展开 { "Alice": true, "Bob": false }
         const expandedAuthors = reactive({});
 
@@ -144,6 +149,39 @@
         const handleImageError = (e) => {
           e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23000000"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="%23F8F8FF">图片无法加载</text></svg>';
         };
+
+        axios.get(remoteAPI.value+"health")
+          .then(res => {
+            console.log('远程API响应:', res.data);
+            // 注意：axios自动解析JSON，不需要手动调用res.json()
+            const data = res.data;
+            console.log('远程API JSON数据:', data);
+            if (data.minimum_mode == "false"){
+              imgBaseURL.value = remoteAPI.value+"img/";
+            }else{
+              const cdnURLs = [
+                "https://cdn.jsdelivr.net/",
+                "https://fastly.jsdelivr.net/",
+                "https://gcore.jsdelivr.net/",
+                "https://testingcf.jsdelivr.net/"
+              ];
+              for (const cdn of cdnURLs) {
+                const testURL = cdn + "gh/Cute-Dress/Dress@master/README.md";
+                axios.get(testURL)
+                  .then(() => {
+                    imgBaseURL.value = cdn + "gh/Cute-Dress/Dress@master/";
+                    console.log('使用CDN:', imgBaseURL.value);
+                  })
+                  .catch(() => {
+                    console.warn('CDN不可用:', cdn);
+                  });
+              }
+            }
+          })
+          .catch(err => {
+            console.error('远程API请求失败:', err);
+          });
+        
 
         onMounted(() => {
           loadJsonData();
