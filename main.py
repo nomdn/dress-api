@@ -38,8 +38,8 @@ auto_sync_enabled = "true"
 auto_sync_time = 86400  # 默认24小时
 minimum_mode = "false"
 http_client = httpx.AsyncClient()
-if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get("LOG_LEVEL") and os.environ.get("AUTO_SYNC") and os.environ.get("AUTO_SYNC_TIME") and os.environ.get("FORCE_MINING") and os.environ.get("FORCE_REMOTE"):
-    API_KEY = os.environ.get("ARK_API_KEY")
+if os.environ.get("API_KEY") and os.environ.get("PORTS") and os.environ.get("LOG_LEVEL") and os.environ.get("AUTO_SYNC") and os.environ.get("AUTO_SYNC_TIME") and os.environ.get("FORCE_MINING") and os.environ.get("FORCE_REMOTE"):
+    API_KEY = os.environ.get("API_KEY")
     ports = int(os.environ.get("PORTS"))  # 确保转换为整数
     log_level = os.environ.get("LOG_LEVEL")
     auto_sync_enabled = os.environ.get("AUTO_SYNC")
@@ -50,7 +50,7 @@ if os.environ.get("ARK_API_KEY") and os.environ.get("PORTS") and os.environ.get(
 elif os.path.exists(".env"):
     load_dotenv()  # 先加载 .env（如果存在）
     # 加载 .env 后，使用默认值或环境变量值
-    API_KEY = os.environ.get("ARK_API_KEY") or API_KEY
+    API_KEY = os.environ.get("API_KEY") or API_KEY
     ports = int(os.environ.get("PORTS") or ports)  # 确保转换为整数
     log_level = os.environ.get("LOG_LEVEL") or log_level
     auto_sync_enabled = os.environ.get("AUTO_SYNC") or auto_sync_enabled
@@ -60,9 +60,9 @@ elif os.path.exists(".env"):
 
 else:
     if os.path.exists("/.dockerenv"):
-        raise RuntimeError("Docker 环境下必须通过 -e ARK_API_KEY=xxx 设置密钥")
+        raise RuntimeError("Docker 环境下必须通过 -e API_KEY=xxx 设置密钥")
     else:
-        raise RuntimeError("请在 .env 文件中设置 ARK_API_KEY")
+        raise RuntimeError("请在 .env 文件中设置 API_KEY")
 
 # 安全地设置日志级别，处理None值和无效值
 if log_level is None:

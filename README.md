@@ -40,13 +40,31 @@
 
 4. 配置环境变量（创建 .env 文件）
    ```ini
-   ARK_API_KEY=your_secret_key
+   API_KEY=your_secret_key
    PORTS=8092
    LOG_LEVEL=INFO
    AUTO_SYNC=true
    AUTO_SYNC_TIME=86400
    FORCE_MINING=false
+   AUTO_MINING_TIME=86400
+   FORCE_REMOTE=false
    ```
+   
+  其中：
+   
+   **API_KEY**（必需）：API访问密钥，用于保护敏感操作如手动同步索引等
+   
+   **PORTS**：服务监听端口，默认8092
+   
+   **LOG_LEVEL**：日志级别，可选DEBUG/INFO/WARNING/ERROR，默认INFO
+   
+   **AUTO_SYNC**：是否启用自动同步功能，默认true
+   
+   **AUTO_SYNC_TIME**：自动同步间隔（秒），默认86400（24小时）
+   
+   **FORCE_MINING**：强制使用最小化模式（从CDN获取数据），默认false
+   
+   **FORCE_REMOTE**：强制使用远程预构建索引，默认false
 
 5. 启动服务
    ```bash
