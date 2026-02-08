@@ -355,6 +355,8 @@ async def return_author_info(author: Annotated[str, Path(description="作者名�
             index_authors_data = json.load(f)
         author_data = index_authors_data[author]
         return {author: author_data}
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Author not found")
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Author info not found")
     except json.JSONDecodeError:
