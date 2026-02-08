@@ -11,7 +11,21 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.8.0/theme-chalk/dark/css-vars.css" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/MiSans-Regular.min.css" /> 
   <style>
+    a{
+      color: #409eff;
+      text-decoration: none;
+    }
+    h1 {
+      font-family: "MiSans";
+    }
+    el-card {
+      font-family: "MiSans";
+    }
+    el-empty {
+      font-family: "MiSans";
+    }
     #app {
       max-width: 1000px;
       margin: 0 auto;
@@ -57,6 +71,7 @@
   <div id="app">
     
     <h1>{{ title }}</h1>
+    <h3>本项目图片资源来自<a href="https://github.com/Cute-Dress/Dress">Cute-Dress/Dress</a>,使用请遵守<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>协议！</h3>
 
     <!-- 按作者分组的可折叠卡片 -->
     <el-card 
