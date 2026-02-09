@@ -37,6 +37,7 @@ log_level = "INFO"
 auto_sync_enabled = "true"
 auto_sync_time = 86400  # 默认24小时
 minimum_mode = "false"
+force_remote_index = "false"
 http_client = httpx.AsyncClient()
 if os.environ.get("API_KEY") and os.environ.get("PORTS") and os.environ.get("LOG_LEVEL") and os.environ.get("AUTO_SYNC") and os.environ.get("AUTO_SYNC_TIME") and os.environ.get("FORCE_MINING") and os.environ.get("FORCE_REMOTE"):
     API_KEY = os.environ.get("API_KEY")
@@ -178,7 +179,7 @@ async def auto_sync():
 
 
 
-@app.get("/dress/v1",summary="获取一张可爱男孩子的自拍")
+@app.get("/v1/dress",summary="获取一张可爱男孩子的自拍")
 async def random_setu(request:Request):
     """
     你 GET 一下就行了
@@ -224,7 +225,7 @@ async def random_setu(request:Request):
     else:
         return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","upload_time": upload_time,"notice":"Cute-Dress/Dress CC BY-NC-SA 4.0"}
 
-@app.post("/dress/v1/sync", summary="同步远程 Dress 仓库")
+@app.post("/v1/dress/sync", summary="同步远程 Dress 仓库")
 async def sync_dress_repo(
     background_tasks: BackgroundTasks,
     rebuild_index: bool = Query(...),  # 默认重建索引
@@ -290,7 +291,7 @@ async def sync_dress_repo(
         }
 # 克隆仓库
 
-@app.get("/health", summary="健康检查")
+@app.get("/v1/health", summary="健康检查")
 async def health_check():
     async with httpx.AsyncClient() as client:
         # Check GitHub
@@ -326,7 +327,7 @@ async def health_check():
         "connectivity_to_jsdelivr": jsdelivr_ok
     }
 
-@app.get("/dress/v1/index/{name}", summary="获取指定索引文件内容")
+@app.get("/v1/dress/index/{name}", summary="获取指定索引文件内容")
 async def return_index(
     name: Annotated[str, Path(description="索引名称，支持 index_0.json 和 index_1.json")]
 ):
@@ -345,7 +346,7 @@ async def return_index(
         raise HTTPException(status_code=500, detail="Index file is corrupted")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading index file: {e}")
-@app.get("/dress/v1/author/{author}", summary="获取指定作者的图片信息")
+@app.get("/v1/dress/author/{author}", summary="获取指定作者的图片信息")
 async def return_author_info(author: Annotated[str, Path(description="作者名称")]):
     """
     获取指定作者的图片信息
