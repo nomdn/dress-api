@@ -4,4 +4,5 @@ __pycache__/
 .idea/
 Pipfile
 Pipfile.lock
-uv.lock
+dress-api-website/node_modules/
+dress-api-website/.vscode/
