@@ -18,6 +18,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
 from httpx import TimeoutException
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager  # 添加这个导入
 from dress_tools import (
     build_index,
@@ -119,8 +120,11 @@ app = FastAPI(
     title="Dress-API：面向可爱男孩子的一个API",
     terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/",
     description="“本服务所使用的图片来自 [Cute-Dress/Dress](https://github.com/Cute-Dress/Dress)，遵循 CC BY-NC-SA 4.0 许可。”",
-    lifespan=auto_sync_on_start  # 添加生命周期管理器
+    lifespan=auto_sync_on_start,# 添加生命周期管理器
+
 )
+app.add_middleware(CORSMiddleware,allow_origins=["*"])
+
 
 async def auto_sync():
     """

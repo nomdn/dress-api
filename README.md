@@ -10,8 +10,8 @@
 ## 部署指南
 
 最低Python版本：python3.8  
-
 推荐Python版本：python3.12  
+Node.js推荐版本 : v22.18
 
 ## 快速开始
 
@@ -66,6 +66,12 @@
    
    **FORCE_REMOTE**：强制使用远程预构建索引，默认false
 
+5. 编译前端页面  
+   ````bash
+   cd dress-api-website
+   npm i
+   npm run build
+   ````
 5. 启动服务
    ```bash
    python main.py
@@ -76,7 +82,7 @@
 
 ### 获取随机图片
 ```http
-GET /dress/v1
+GET /v1/dress
 ```
 
 响应示例：
@@ -100,19 +106,19 @@ GET /dress/v1
 
 ### 手动同步（需 API Key）
 ```http
-POST /dresses/v1/sync?rebuild_index=true
+POST /v1/dress/sync?rebuild_index=true
 Header: X-API-Key: your_secret_key
 ```
 
 ### 健康检查
 ```http
-GET /health
+GET /v1/health
 ```
 
 ## 部署建议
 - 生产环境：建议使用 `FORCE_MINING=true` + CDN 缓存
-- Docker 支持：需通过 `-e ARK_API_KEY=xxx` 传入密钥
-- 反向代理：可通过 Nginx/Apache 暴露 `/dress/v1` 路径
+- Docker 支持：需通过 `-e API_KEY=xxx` 传入密钥
+- 反向代理：可通过 Nginx/Apache 暴露 `/v1` 路径
 
 ## 注意事项
 本项目还未完善，不建议自己部署使用.  

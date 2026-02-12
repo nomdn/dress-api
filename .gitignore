@@ -6,3 +6,4 @@ Pipfile
 Pipfile.lock
 dress-api-website/node_modules/
 dress-api-website/.vscode/
+dress-api-website/dist/
