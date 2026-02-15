@@ -3,5 +3,11 @@ import './style.css'
 import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import VueLazyLoad from 'vue3-lazyload'
 import 'element-plus/theme-chalk/dark/css-vars.css'
-createApp(App).use(ElementPlus).mount('#app')
+createApp(App).use(VueLazyLoad, {
+  // options...;
+  loading: '/loading.svg',
+  error:'',
+
+}).use(ElementPlus).mount('#app')

@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "@giscus/vue": "^3.1.1",
     "@vueuse/core": "^14.2.1",
     "axios": "^1.13.5",
     "element-plus": "^2.13.2",
-    "vue": "^3.5.25"
+    "vue": "^3.5.25",
+    "vue3-lazyload": "^0.3.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.2",

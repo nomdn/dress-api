@@ -129,6 +129,21 @@ button:focus-visible {
   /* 内容文本居中（适用于标题、按钮等） */
   text-align: center;
 }
+.giscus-area {
+  display: flex;
+  flex-direction: column;
+  /* 最大宽度限制，避免在超宽屏上内容拉伸过宽 */
+  max-width: 990px;
+  width: 70%;
+  /* 水平居中 */
+  margin: 0 auto;
+  
+  /* 上下左右内边距 */
+  padding: 2rem;
+  
+  /* 内容文本居中（适用于标题、按钮等） */
+  text-align: center;
+}
 
 /* ========================
    亮色主题媒体查询

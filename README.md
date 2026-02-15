@@ -2,6 +2,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-green)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.128+-red)
+[![Build and Commit Index](https://github.com/nomdn/dress-api/actions/workflows/build_index.yml/badge.svg)](https://github.com/nomdn/dress-api/actions/workflows/build_index.yml)
 
 这是一个基于[Dress](https://github.com/Cute-Dress/Dress)的随机图片API  
 演示API：https://dress.wsmdn.top  
