@@ -7,7 +7,7 @@ import VueLazyLoad from 'vue3-lazyload'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 createApp(App).use(VueLazyLoad, {
   // options...;
-  loading: '/loading.svg',
-  error:'',
+  loading: '/lh_easy.png',
+  error:'error.svg',
 
 }).use(ElementPlus).mount('#app')
