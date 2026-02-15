@@ -229,7 +229,7 @@
     <img src="https://travel.moe/images/icon/icon64.png" style="width:24px;height:24px">异次元之旅
   </a>
 
-  <footer ><a href="https://github.com/nomdn/dress-api/">Dress-API</a> | <a href="https://github.com/Cute-Dress">Dress</a> | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a> | <a href="https://icp.gov.moe/?keyword=20260039" target="_blank">萌ICP备20260039号</a></footer>
+  <footer ><a href="https://github.com/nomdn/dress-api/">Dress-API</a> | <a href="https://github.com/Cute-Dress">Dress</a> | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a> | <a href="https://icp.gov.moe/?keyword=20260527" target="_blank">萌ICP备20260527号</a></footer>
   </div>
 </template>
 
