@@ -197,6 +197,7 @@
       description="暂无数据"
       style="margin-top: 40px;"
     />
+  <div style="width: 80%;max-width: 1000px;">
     <el-pagination
   v-model:page-size="pageSize"
   @size-change="handleSizeChange"
@@ -207,7 +208,7 @@
   layout="total, sizes, prev, pager, next, jumper"
   :total="totalAuthors">
   </el-pagination>
-
+  </div>
   <div class="giscus-area">
     <Giscus
       id="comments"
