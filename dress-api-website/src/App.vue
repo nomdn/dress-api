@@ -4,7 +4,8 @@
         import Giscus from '@giscus/vue';
         import { Sunny, Moon, ArrowUp, ArrowDown } from '@element-plus/icons-vue';
         import { useDark, useToggle } from '@vueuse/core';
-        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem } from 'element-plus';
+        import Vue3MarkdownIt from 'vue3-markdown-it';
+        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem,ElAvatar,ElDivider } from 'element-plus';
         import { el } from 'element-plus/es/locales.mjs';
 
         const isDark = useDark();
@@ -119,6 +120,7 @@
                                 axios.get(testURL)
                                         .then(() => {
                                                 imgBaseURL.value = cdn + "gh/Cute-Dress/Dress@master/";
+                                                remoteAPI.value=cdn+"gh/nomdn/dress-api@main/";
                                                 console.log('使用CDN:', imgBaseURL.value);
                                         })
                                         .catch(() => {
@@ -126,6 +128,16 @@
                                         });
                         }
                 });
+        const fetchMarkdown = async (url) => {
+                try {
+                                const response = await axios.get(imgBaseURL+url);
+                                return response.data; // 直接就是字符串
+                } catch (err) {
+                                console.error('加载失败:', err);
+                                return '';
+                }
+                };
+
 
         onMounted(() => {
                 loadJsonData();
@@ -163,8 +175,16 @@
     >
       <template #header>
         <div class="card-header" @click="toggleExpand(authorName)">
+        <a v-if="author.github_username" :href="'https://github.com/'+author.github_username" target="_blank">
+                <el-avatar shape="circle" size="large" fit="fill" :src="author.avatar_url"></el-avatar>
+        </a>
+        <a v-else href="https://github.com/404">
+                <el-avatar shape="circle" size="large" fit="fill" src="/lh.webp"></el-avatar>
+
+        </a>
+        
           <span style="font-weight: bold; font-size: 18px;">
-            {{ authorName }} ({{ author.length }} 张图片)
+            {{ authorName }} ({{ author.contribution.length }} 次贡献)
           </span>
           <el-button 
             link 
@@ -178,7 +198,7 @@
 
       <!-- 只在展开时渲染图片（懒加载） -->
       <div v-if="expandedAuthors[authorName]" class="image-grid">
-        <div v-for="(image, idx) in author" :key="idx" class="image-card">
+        <div v-for="(image, idx) in author.contribution" :key="idx" class="image-card">
           <img 
             v-lazy="imgBaseURL + image.path" 
             :alt="image.path"
@@ -186,10 +206,15 @@
             class="image-preview"
           />
           <div class="image-info">
-            {{ formatDate(image.latest_commit_time) }}
+            {{ formatDate(image.time) }}
           </div>
         </div>
+
       </div>
+        <el-divider />
+        
+        
+
     </el-card>
 
     <el-empty 

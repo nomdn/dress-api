@@ -14,8 +14,10 @@
     "@vueuse/core": "^14.2.1",
     "axios": "^1.13.5",
     "element-plus": "^2.13.2",
+    "express": "^5.2.1",
     "vue": "^3.5.25",
-    "vue3-lazyload": "^0.3.8"
+    "vue3-lazyload": "^0.3.8",
+    "vue3-markdown-it": "^1.0.10"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.2",

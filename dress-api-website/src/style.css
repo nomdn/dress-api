@@ -324,8 +324,11 @@ card-content {
   
   justify-content: center;
 }
-.el-pagination {
+:deep(.el-pagination) {
+  display: flex;
+  text-align: center;
   justify-content: center;
+
 }
 .el-button {
   background-color: #409eff;
