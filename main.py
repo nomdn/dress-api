@@ -21,17 +21,15 @@ from httpx import TimeoutException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager  # 添加这个导入
 from dress_tools import (
-    build_index,
-    build_index_by_author,
-    convert_index_id_to_index_author,
-    escape_hash_in_index,
-    normalize_url,
-    get_all_committers,
-    get_dress_image_paths,
     run_git_pull,
     get_github_index
 )
+from tools_v2 import build_index_by_author,convert_index_author_to_index_id
 
+index_author ={}
+index_id={}
+jsdelivr_ok=False
+github_ok=False
 API_KEY = "admin"
 ports = 8092
 log_level = "INFO"
@@ -39,32 +37,16 @@ auto_sync_enabled = "true"
 auto_sync_time = 86400  # 默认24小时
 minimum_mode = "false"
 force_remote_index = "false"
-http_client = httpx.AsyncClient()
-if os.environ.get("API_KEY") and os.environ.get("PORTS") and os.environ.get("LOG_LEVEL") and os.environ.get("AUTO_SYNC") and os.environ.get("AUTO_SYNC_TIME") and os.environ.get("FORCE_MINING") and os.environ.get("FORCE_REMOTE"):
-    API_KEY = os.environ.get("API_KEY")
-    ports = int(os.environ.get("PORTS"))  # 确保转换为整数
-    log_level = os.environ.get("LOG_LEVEL")
-    auto_sync_enabled = os.environ.get("AUTO_SYNC")
-    auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME"))  # 确保转换为整数
-    minimum_mode = os.environ.get("FORCE_MINING")
-    force_remote_index = os.environ.get("FORCE_REMOTE")
-    
-elif os.path.exists(".env"):
-    load_dotenv()  # 先加载 .env（如果存在）
-    # 加载 .env 后，使用默认值或环境变量值
-    API_KEY = os.environ.get("API_KEY") or API_KEY
-    ports = int(os.environ.get("PORTS") or ports)  # 确保转换为整数
-    log_level = os.environ.get("LOG_LEVEL") or log_level
-    auto_sync_enabled = os.environ.get("AUTO_SYNC") or auto_sync_enabled
-    auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME") or auto_sync_time)  # 确保转换为整数
-    minimum_mode = os.environ.get("FORCE_MINING") or minimum_mode  # 确保从 .env 加载的值被使用
-    force_remote_index = os.environ.get("FORCE_REMOTE")
+# 统一加载逻辑
+load_dotenv()  # 先加载 .env
 
-else:
-    if os.path.exists("/.dockerenv"):
-        raise RuntimeError("Docker 环境下必须通过 -e API_KEY=xxx 设置密钥")
-    else:
-        raise RuntimeError("请在 .env 文件中设置 API_KEY")
+API_KEY = os.environ.get("API_KEY") or API_KEY
+ports = int(os.environ.get("PORTS") or ports)
+log_level = os.environ.get("LOG_LEVEL") or log_level
+auto_sync_enabled = os.environ.get("AUTO_SYNC") or auto_sync_enabled
+auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME") or auto_sync_time)
+minimum_mode = os.environ.get("FORCE_MINING") or minimum_mode
+force_remote_index = os.environ.get("FORCE_REMOTE") or force_remote_index
 
 # 安全地设置日志级别，处理None值和无效值
 if log_level is None:
@@ -88,7 +70,8 @@ if not os.path.exists("Dress") and minimum_mode != "true":
     logging.info("未在当前目录发现Dress仓库，将以最小化API运行")
     minimum_mode = "true"
     try:
-        data = asyncio.run(get_github_index())
+        index_id = asyncio.run(get_github_index())
+        index_author = asyncio.run(get_github_index("index_1.json"))
     except Exception as e:
         logging.error(f"获取远端数据失败: {e}")
         raise RuntimeError("无法连接到远程服务器获取数据")
@@ -96,7 +79,8 @@ elif minimum_mode == "true":
     # 即使存在Dress目录，如果用户强制设置为最小化模式，也要使用远程数据
     logging.info("强制使用最小化API运行模式")
     try:
-        data = asyncio.run(get_github_index())
+        index_id = asyncio.run(get_github_index())
+        index_author = asyncio.run(get_github_index())
     except Exception as e:
         logging.error(f"获取远端数据失败: {e}")
         raise RuntimeError("无法连接到远程服务器获取数据")
@@ -130,8 +114,33 @@ async def auto_sync():
     """
     启动时自动同步 Dress 仓库（仅非最小化模式）
     """
+    global index_author, index_id,jsdelivr_ok,github_ok
     if auto_sync_enabled == "true":
-        while True: 
+        while True:
+            async with httpx.AsyncClient() as client:
+                # Check GitHub
+                try:
+                    resp = await client.get("https://github.com", timeout=10.0)
+                    github_ok = resp.status_code == 200
+                except httpx.RequestError:
+                    github_ok = False
+
+                # Check jsDelivr
+                jsdelivr_ok = False
+                jsdelivr_urls = [
+                    "https://cdn.jsdelivr.net/",
+                    "https://fastly.jsdelivr.net/",
+                    "https://gcore.jsdelivr.net/",
+                    "https://testingcf.jsdelivr.net/"
+                ]
+                for url in jsdelivr_urls:
+                    try:
+                        resp = await client.get(url, timeout=10.0)
+                        if resp.status_code in (200, 301):
+                            jsdelivr_ok = True
+                            break
+                    except httpx.RequestError:
+                        continue  # Try next URL
             # 使用无限循环替代单次sleep
             
             if minimum_mode != "true":
@@ -147,15 +156,15 @@ async def auto_sync():
                 else:
                     try:
                         repo = Repo("Dress")
-                        index = build_index(repo)
-                        index = escape_hash_in_index(index, "url")
-                        with open("public/index_0.json", "w", encoding="utf-8") as f:
-                            json.dump(index, f, ensure_ascii=False, indent=4)
+                        index = build_index_by_author(repo)
+                        index_author = index
+
                         
-                        index_by_author = convert_index_id_to_index_author(index)
-                        index_by_author = escape_hash_in_index(index_by_author, "author")
+                        index_id = convert_index_author_to_index_id(index)
                         with open("public/index_1.json", "w", encoding="utf-8") as f:
-                            json.dump(index_by_author, f, ensure_ascii=False, indent=4)
+                            json.dump(index_author, f, ensure_ascii=False, indent=4)
+                        with open("public/index_0.json", "w", encoding="utf-8") as f:
+                            json.dump(index_id, f, ensure_ascii=False, indent=4)
                         logging.debug("本地Dress仓库同步完成")
                     except FileNotFoundError as e:
                         logging.error(f"Dress目录不存在: {e}")
@@ -164,143 +173,51 @@ async def auto_sync():
                     except Exception as e:
                         logging.error(f"自动同步时构建索引失败: {e}")
             else:
-                global data
                 logging.debug("开始执行远程数据同步...")
                 try:
-                    new_data = await get_github_index(index="index_0.json")
-                    data = new_data  # 确保更新全局变量
-                    index_1 = await get_github_index(index="index_1.json")
+                    index_id = await get_github_index(index="index_0.json")
+                    index_author = await get_github_index(index="index_1.json")
                     with open("public/index_0.json", "w", encoding="utf-8") as f:
-                        json.dump(new_data, f, ensure_ascii=False, indent=4)
+                        json.dump(index_id, f, ensure_ascii=False, indent=4)
                     with open("public/index_1.json", "w", encoding="utf-8") as f:
-                        json.dump(index_1, f, ensure_ascii=False, indent=4)
-                    logging.debug(f"已从GitHub获取最新数据，共{len(new_data)}项数据)")
+                        json.dump(index_author, f, ensure_ascii=False, indent=4)
+                    logging.debug(f"已从GitHub获取最新数据，共{len(index_id)}项数据)")
                 except Exception as e:
                     logging.error(f"远程数据同步失败: {e}")
             await asyncio.sleep(auto_sync_time)  # 每10秒同步一次，便于观察
     else:
-        pass  
-
-
-
-@app.get("/v1/dress",summary="获取一张可爱男孩子的自拍")
-async def random_setu(request:Request):
-    """
-    你 GET 一下就行了
-    """
-    global data
-    base_url =request.base_url
-    if minimum_mode == "true":
-        img_data = data
-    else:
-        try:
-            with open("public/index_0.json","r",encoding="utf-8") as f:
-                local_data = json.loads(f.read())
-                img_data = local_data
-        except FileNotFoundError:
-            raise HTTPException(status_code=500, detail="本地索引文件不存在")
-        except json.JSONDecodeError:
-            raise HTTPException(status_code=500, detail="本地索引文件格式错误")
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"读取本地索引文件时发生错误: {e}")
-    
-    if not img_data:
-        raise HTTPException(status_code=500, detail="图片数据为空")
-    
-    max_count = len(img_data.keys())
-    if max_count == 0:
-        raise HTTPException(status_code=500, detail="图片索引为空")
-    
-    img_key = random.randint(a=1,b=max_count)
-    entry = img_data[f"{img_key}"]
-    
-    img = entry[0]
-    uploader_info = entry[1]
-    author_names = [item[0] for item in uploader_info if item]
-    
-    # 检查是否存在时间信息
-    upload_time = None
-    if len(entry) > 2:
-        upload_time = entry[2]
-    
-    if minimum_mode == "true":  # 修正：与"true"比较
-        return {"img_url": f"https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}", "img_author": f"{author_names}",
-                "upload_time": upload_time, "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"}
-    else:
-        return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","upload_time": upload_time,"notice":"Cute-Dress/Dress CC BY-NC-SA 4.0"}
-
-@app.post("/v1/dress/sync", summary="同步远程 Dress 仓库")
-async def sync_dress_repo(
-    background_tasks: BackgroundTasks,
-    rebuild_index: bool = Query(...),  # 默认重建索引
-    x_api_key: str = Header(None, alias="X-API-Key")  # 必须提供 Header
-):
-    """
-    触发服务器拉取 Dress 仓库的最新提交，并重建索引（可选）
-    """
-    if x_api_key != API_KEY:
-        raise HTTPException(status_code=403, detail="Invalid API key")
-    if minimum_mode == "true":
-        try:
-            data = await get_github_index()
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"获取远端数据失败: {e}")
-        return {
-            "message": "successfully synced",
-        }
-
-    else:
-        # 在后台任务中创建repo实例
-        def sync_task():
+        async with httpx.AsyncClient() as client:
+            # Check GitHub
             try:
-                run_git_pull()
-                repo = Repo("Dress")
-                if rebuild_index:
-                    index = build_index(repo)
-                    index = escape_hash_in_index(index, "url")
-                    with open("public/index_0.json", "w", encoding="utf-8") as f:
-                        json.dump(index, f, ensure_ascii=False, indent=4)
-                    
-                    index_by_author = convert_index_id_to_index_author(index)
-                    index_by_author = escape_hash_in_index(index_by_author, "author")
-                    with open("public/index_1.json", "w", encoding="utf-8") as f:
-                        json.dump(index_by_author, f, ensure_ascii=False, indent=4)
-            except FileNotFoundError as e:
-                logging.error(f"Dress目录不存在: {e}")
-            except PermissionError as e:
-                logging.error(f"权限不足: {e}")
-            except Exception as e:
-                logging.error(f"后台同步任务失败: {e}")
-        if force_remote_index == "true":
-            async def remote_sync_task():
-                global data
-                logging.debug("开始执行远程数据同步...")
-                try:
-                    new_data = await get_github_index(index="index_0.json")
-                    data = new_data  # 确保更新全局变量
-                    index_1 = await get_github_index(index="index_1.json")
-                    with open("public/index_0.json", "w", encoding="utf-8") as f:
-                        json.dump(new_data, f, ensure_ascii=False, indent=4)
-                    with open("public/index_1.json", "w", encoding="utf-8") as f:
-                        json.dump(index_1, f, ensure_ascii=False, indent=4)
-                    logging.debug(f"已从GitHub获取最新数据，共{len(new_data)}项数据)")
-                except Exception as e:
-                    logging.error(f"远程数据同步失败: {e}")
-            background_tasks.add_task(remote_sync_task)
-        else:  
-            background_tasks.add_task(sync_task)
-        return {
-            "message": "Sync started in background",
-            "note": "Check server logs for result"
-        }
-# 克隆仓库
+                resp = await client.get("https://github.com", timeout=10.0)
+                github_ok = resp.status_code == 200
+            except httpx.RequestError:
+                github_ok = False
 
-@app.get("/v1/health", summary="健康检查")
-async def health_check():
+            # Check jsDelivr
+            jsdelivr_ok = False
+            jsdelivr_urls = [
+                "https://cdn.jsdelivr.net/",
+                "https://fastly.jsdelivr.net/",
+                "https://gcore.jsdelivr.net/",
+                "https://testingcf.jsdelivr.net/"
+            ]
+            for url in jsdelivr_urls:
+                try:
+                    resp = await client.get(url, timeout=10.0)
+                    if resp.status_code in (200, 301):
+                        jsdelivr_ok = True
+                        break
+                except httpx.RequestError:
+                    continue  # Try next URL
+        pass
+
+async def run_one_sync():
+    global index_author, index_id, jsdelivr_ok, github_ok
     async with httpx.AsyncClient() as client:
         # Check GitHub
         try:
-            resp = await client.get("https://api.github.com", timeout=10.0)
+            resp = await client.get("https://github.com", timeout=10.0)
             github_ok = resp.status_code == 200
         except httpx.RequestError:
             github_ok = False
@@ -321,6 +238,92 @@ async def health_check():
                     break
             except httpx.RequestError:
                 continue  # Try next URL
+    # 使用无限循环替代单次sleep
+
+    if minimum_mode != "true":
+        logging.info("开始执行本地Dress仓库同步...")
+        await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
+        if force_remote_index == "true":
+            index_id = await get_github_index("index_0.json")
+            index_author = await get_github_index("index_1.json")
+            with open("public/index_0.json", "w", encoding="utf-8") as f:
+                json.dump(index_id, f, ensure_ascii=False, indent=4)
+            with open("public/index_1.json", "w", encoding="utf-8") as f:
+                json.dump(index_author, f, ensure_ascii=False, indent=4)
+        else:
+            try:
+                repo = Repo("Dress")
+                index = build_index_by_author(repo)
+                index_author = index
+
+                index_id = convert_index_author_to_index_id(index)
+                with open("public/index_1.json", "w", encoding="utf-8") as f:
+                    json.dump(index_author, f, ensure_ascii=False, indent=4)
+                with open("public/index_0.json", "w", encoding="utf-8") as f:
+                    json.dump(index_id, f, ensure_ascii=False, indent=4)
+                logging.debug("本地Dress仓库同步完成")
+            except FileNotFoundError as e:
+                logging.error(f"Dress目录不存在: {e}")
+            except PermissionError as e:
+                logging.error(f"权限不足: {e}")
+            except Exception as e:
+                logging.error(f"自动同步时构建索引失败: {e}")
+    else:
+        logging.debug("开始执行远程数据同步...")
+        try:
+            index_id = await get_github_index(index="index_0.json")
+            index_author = await get_github_index(index="index_1.json")
+            with open("public/index_0.json", "w", encoding="utf-8") as f:
+                json.dump(index_id, f, ensure_ascii=False, indent=4)
+            with open("public/index_1.json", "w", encoding="utf-8") as f:
+                json.dump(index_author, f, ensure_ascii=False, indent=4)
+            logging.debug(f"已从GitHub获取最新数据，共{len(index_id)}项数据)")
+        except Exception as e:
+            logging.error(f"远程数据同步失败: {e}") # 每10秒同步一次，便于观察
+
+
+@app.get("/v1/dress",summary="获取一张可爱男孩子的自拍")
+async def random_setu(request:Request):
+    """
+    你 GET 一下就行了
+    """
+    base_url = request.base_url
+    global index_id
+    
+    max_count = len(index_id.keys())
+    if max_count == 0:
+        raise HTTPException(status_code=500, detail="图片索引为空")
+    
+    img_key = random.randint(a=1,b=max_count)
+    entry = index_id[f"{img_key}"]
+    
+    img = entry["path"]
+    author_names = entry["author"]
+    upload_time = entry["time"]
+    
+    if minimum_mode == "true":  # 修正：与"true"比较
+        return {"img_url": f"https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}", "img_author": f"{author_names}",
+                "upload_time": upload_time, "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"}
+    else:
+        return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","upload_time": upload_time,"notice":"Cute-Dress/Dress CC BY-NC-SA 4.0"}
+
+@app.post("/v1/dress/sync", summary="同步远程 Dress 仓库")
+async def sync_dress_repo(
+    background_tasks: BackgroundTasks,
+    rebuild_index: bool = Query(...),  # 默认重建索引
+    x_api_key: str = Header(None, alias="X-API-Key")  # 必须提供 Header
+):
+    """
+    触发服务器拉取 Dress 仓库的最新提交，并重建索引
+    """
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API key")
+    asyncio.create_task(run_one_sync())
+    return {"code":200,"message":"Sync started in background,please wait..."}
+# 克隆仓库
+
+@app.get("/v1/health", summary="健康检查")
+async def health_check():
 
     return {
         "status": "healthy",
@@ -370,53 +373,6 @@ if minimum_mode != "true":
     app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")
 if __name__ == "__main__":
-
-    if minimum_mode != "true":
-        repo = Repo("Dress")
-        print("正在检查索引...")
-        if force_remote_index == "true":
-            try:
-                index_id = asyncio.run(get_github_index("index_0.json"))
-                index_author = asyncio.run(get_github_index("index_1.json"))
-                with open("public/index_0.json", "w", encoding="utf-8") as f:
-                    json.dump(index_id, f, ensure_ascii=False, indent=4)
-                with open("public/index_1.json", "w", encoding="utf-8") as f:
-                    json.dump(index_author, f, ensure_ascii=False, indent=4)
-            except Exception as e:
-                logging.error(f"获取远端数据失败: {e}")
-                raise RuntimeError("无法连接到远程服务器获取数据")
-        else:
-            try:
-                if not(os.path.exists("public/index_0.json") and os.path.exists("public/index_1.json")):
-                    index = build_index(repo)
-                    index = escape_hash_in_index(index,"url")
-                    
-                    index_by_author = convert_index_id_to_index_author(index)
-                    index_by_author = escape_hash_in_index(index_by_author,"author")
-                    
-                    with open("public/index_0.json", "w", encoding="utf-8") as f:
-                        json.dump(index,f,ensure_ascii=False,indent=4)
-                    with open("public/index_1.json", "w", encoding="utf-8") as f:
-                        json.dump(index_by_author, f, ensure_ascii=False, indent=4)
-                elif not os.path.exists("public/index_0.json"):
-                    index = build_index(repo)
-                    index = escape_hash_in_index(index,"url")
-                    with open("public/index_0.json", "w", encoding="utf-8") as f:
-                        json.dump(index, f, ensure_ascii=False, indent=4)
-                elif not os.path.exists("public/index_1.json"):
-                    index = build_index_by_author(repo)
-                    index = escape_hash_in_index(index,"author")
-                    with open("public/index_1.json", "w", encoding="utf-8") as f:
-                        json.dump(index, f, ensure_ascii=False, indent=4)
-            except FileNotFoundError as e:
-                print(f"文件未找到: {e}")
-                exit(1)
-            except PermissionError as e:
-                print(f"权限不足: {e}")
-                exit(1)
-            except Exception as e:
-                print(f"构建索引时发生错误: {e}")
-                exit(1)
     colorama.init(autoreset=True)
     print(f"🚀 启动服务: http://0.0.0.0:{ports}")
     print(Fore.LIGHTBLUE_EX+"""
