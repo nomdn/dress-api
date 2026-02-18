@@ -11,7 +11,7 @@
         const isDark = useDark();
         const activeIndex = ref('1');
         const toggleDark = useToggle(isDark);
-
+        const markdownText = reactive({});
         const title = ref("Dress API");
         const groupedImages = ref({});
         /* 这取决于你部署的API地址 */
@@ -36,8 +36,18 @@
                 }
         };
 
-        const toggleExpand = (authorName) => {
+        const toggleExpand = async (authorName) => {
                 expandedAuthors[authorName] = !expandedAuthors[authorName];
+                if (authorName in markdownText && markdownText[authorName] !== '') {
+                        return; // 已经加载过了，不需要重复加载
+                }else{
+                        const url = groupedImages.value[authorName].readme;
+                        if(url){
+                                markdownText[authorName] = await fetchMarkdown(url);
+                        }else{
+                                markdownText[authorName] = null;
+                        }
+                }
         };
 
         const formatDate = (dateString) => {
@@ -130,7 +140,7 @@
                 });
         const fetchMarkdown = async (url) => {
                 try {
-                                const response = await axios.get(imgBaseURL+url);
+                                const response = await axios.get("https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/"+url);
                                 return response.data; // 直接就是字符串
                 } catch (err) {
                                 console.error('加载失败:', err);
@@ -213,9 +223,16 @@
         </div>
 
       </div>
-        <el-divider />
-        
-        
+<!-- 修改后 -->
+        <el-divider v-if="expandedAuthors[authorName] && author.readme" />
+        <vue3-markdown-it 
+        v-if="expandedAuthors[authorName] && author.readme && markdownText[authorName]" 
+        :source="markdownText[authorName]" 
+        />
+        <div v-if="expandedAuthors[authorName] && author.readme && !markdownText[authorName]" style="text-align:center;padding:10px;">
+        加载中...
+        </div>
+                
 
     </el-card>
 
