@@ -26,6 +26,10 @@ from dress_tools import (
 )
 from tools_v2 import build_index_by_author,convert_index_author_to_index_id
 
+# 禁用httpx的DEBUG日志，避免网络请求产生过多调试信息
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+
 index_author ={}
 index_id={}
 jsdelivr_ok=False
@@ -302,7 +306,7 @@ async def random_setu(request:Request):
     upload_time = entry["time"]
     
     if minimum_mode == "true":  # 修正：与"true"比较
-        return {"img_url": f"https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}", "img_author": f"{author_names}",
+        return {"img_url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}", "img_author": f"{author_names}",
                 "upload_time": upload_time, "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"}
     else:
         return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","upload_time": upload_time,"notice":"Cute-Dress/Dress CC BY-NC-SA 4.0"}
@@ -392,4 +396,3 @@ if __name__ == "__main__":
 
         # 启动web服务器
     uvicorn.run(app, host="0.0.0.0", port=ports)
-    

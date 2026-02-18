@@ -9,6 +9,10 @@ from pathlib import Path
 from git import Repo
 from typing import List, Tuple
 
+# 禁用httpx的DEBUG日志，避免网络请求产生过多调试信息
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
                     )

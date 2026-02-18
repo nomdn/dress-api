@@ -19,6 +19,10 @@ from git import Repo
 from tqdm import trange
 from tqdm.contrib.logging import logging_redirect_tqdm  
 
+# 禁用httpx的DEBUG日志，避免网络请求产生过多调试信息
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+
 # 配置日志
 
 

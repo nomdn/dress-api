@@ -5,7 +5,7 @@
         import { Sunny, Moon, ArrowUp, ArrowDown } from '@element-plus/icons-vue';
         import { useDark, useToggle } from '@vueuse/core';
         import Vue3MarkdownIt from 'vue3-markdown-it';
-        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem,ElAvatar,ElDivider } from 'element-plus';
+        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem,ElAvatar,ElDivider,ElImage} from 'element-plus';
         import { el } from 'element-plus/es/locales.mjs';
 
         const isDark = useDark();
@@ -176,10 +176,12 @@
       <template #header>
         <div class="card-header" @click="toggleExpand(authorName)">
         <a v-if="author.github_username" :href="'https://github.com/'+author.github_username" target="_blank">
-                <el-avatar shape="circle" size="large" fit="fill" :src="author.avatar_url"></el-avatar>
+                <el-avatar shape="circle" size="large" fit="fill">
+                        <el-image :src="author.avatar_url" fit="fill" lazy></el-image>
+                </el-avatar>
         </a>
         <a v-else href="https://github.com/404">
-                <el-avatar shape="circle" size="large" fit="fill" src="/lh.webp"></el-avatar>
+                <el-avatar shape="circle" size="large" fit="fill" src="/lh.webp" loading="lazy"></el-avatar>
 
         </a>
         
