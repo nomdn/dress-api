@@ -200,10 +200,70 @@ async def build_index_by_author(repo:Repo):
                     logging.warning(f"发生错误:{e}")
                     index_author[author]["avatar_url"] = None
                     index_author[author]["github_username"] = None
+    logging.info("处理重复贡献者中...")
+
+    # 先转为列表，避免遍历字典时修改的问题
+    author_list = list(index_author.values())
+
+    # 用于记录已合并的 github_username
+    merged_usernames = set()
+
+    for i, author in enumerate(author_list):
+        if not author or not isinstance(author, dict):
+            continue
+
+        author_github = author.get("github_username")
+        if not author_github:
+            continue
+
+        # 跳过已合并的
+        if author_github in merged_usernames:
+            continue
+
+        for j, another_author in enumerate(author_list):
+            if i == j:
+                continue  # 跳过自己
+
+            if not another_author or not isinstance(another_author, dict):
+                continue
+
+            another_github = another_author.get("github_username")
+            if not another_github:
+                continue
+
+            if author_github == another_github:
+                # 合并贡献列表
+                for item in another_author.get("contribution", []):
+                    if item and item.get("path"):
+                        author["contribution"].append(item)
+
+                # 标记为已合并，清空原数据
+                merged_usernames.add(author_github)
+                another_author["contribution"] = []
+
+    # 最后清洗：去重、过滤null
+    for author in author_list:
+        if not author or not isinstance(author, dict):
+            continue
+
+        seen_paths = set()
+        clean_list = []
+        for item in author.get("contribution", []):
+            if item is None:
+                continue
+            path = item.get("path")
+            if not path or path in seen_paths:
+                continue
+            seen_paths.add(path)
+            clean_list.append(item)
+        author["contribution"] = clean_list
     logging.info("处理 URL 编码...")
     for author, data in index_author.items():  # ✅ 修复：正确遍历
         for url in data.get("contribution", []):
             url["path"] = url["path"].replace("#", "%23")
+        if data.get("readme","") != "":
+            data["readme"] = data["readme"].replace("#", "%23")
+
 
 
     return index_author

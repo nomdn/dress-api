@@ -16,7 +16,7 @@
         const groupedImages = ref({});
         /* 这取决于你部署的API地址 */
         const remoteAPI = ref('https://dress.wsmdn.top/');
-        const imgBaseURL = ref('https://fastly.jsdelivr.net/gh/Cute-Dress/Dress@master/');
+        const imgBaseURL = ref('https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/');
         // 记录哪些作者被展开 { "Alice": true, "Bob": false }
         const expandedAuthors = reactive({});
 
@@ -211,9 +211,11 @@
       <!-- 只在展开时渲染图片（懒加载） -->
       <div v-if="expandedAuthors[authorName]" class="image-grid">
         <div v-for="(image, idx) in author.contribution" :key="idx" class="image-card">
-          <img 
-            v-lazy="imgBaseURL + image.path" 
+          <el-image 
+            :src="imgBaseURL + image.path" 
             :alt="image.path"
+            lazy
+            fit="contain"
             @error="handleImageError"
             class="image-preview"
           />
