@@ -202,13 +202,13 @@ async def build_index_by_author(repo:Repo):
                     index_author[author]["github_username"] = None
     logging.info("处理重复贡献者中...")
 
-    # 先转为列表，避免遍历字典时修改的问题
-    author_list = list(index_author.values())
+    # 用于记录要删除的 git 用户名（字典的 key）
+    authors_to_delete = set()
 
-    # 用于记录已合并的 github_username
-    merged_usernames = set()
+    # 转为列表遍历（避免遍历字典时修改）
+    author_items = list(index_author.items())
 
-    for i, author in enumerate(author_list):
+    for i, (git_username, author) in enumerate(author_items):
         if not author or not isinstance(author, dict):
             continue
 
@@ -216,15 +216,19 @@ async def build_index_by_author(repo:Repo):
         if not author_github:
             continue
 
-        # 跳过已合并的
-        if author_github in merged_usernames:
+        # 跳过已被标记删除的
+        if git_username in authors_to_delete:
             continue
 
-        for j, another_author in enumerate(author_list):
+        for j, (another_git_username, another_author) in enumerate(author_items):
             if i == j:
                 continue  # 跳过自己
 
             if not another_author or not isinstance(another_author, dict):
+                continue
+
+            # 跳过已被标记删除的
+            if another_git_username in authors_to_delete:
                 continue
 
             another_github = another_author.get("github_username")
@@ -237,12 +241,20 @@ async def build_index_by_author(repo:Repo):
                     if item and item.get("path"):
                         author["contribution"].append(item)
 
-                # 标记为已合并，清空原数据
-                merged_usernames.add(author_github)
-                another_author["contribution"] = []
+                # 标记为待删除（记录 git 用户名 key）
+                authors_to_delete.add(another_git_username)
+                logging.debug(f"标记删除: {another_git_username} (合并到 {git_username})")
 
-    # 最后清洗：去重、过滤null
-    for author in author_list:
+    # 真正从字典中删除
+    for git_username in authors_to_delete:
+        if git_username in index_author:
+            del index_author[git_username]
+            logging.debug(f"已删除: {git_username}")
+
+    logging.info(f"合并完成: 删除 {len(authors_to_delete)} 个重复作者")
+
+    # 最后清洗：去重、过滤 null
+    for author in index_author.values():
         if not author or not isinstance(author, dict):
             continue
 
