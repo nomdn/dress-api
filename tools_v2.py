@@ -240,7 +240,8 @@ async def build_index_by_author(repo:Repo):
                 for item in another_author.get("contribution", []):
                     if item and item.get("path"):
                         author["contribution"].append(item)
-
+                if another_author.get("readme"):
+                    author["readme"] = another_author["readme"]
                 # 标记为待删除（记录 git 用户名 key）
                 authors_to_delete.add(another_git_username)
                 logging.debug(f"标记删除: {another_git_username} (合并到 {git_username})")
