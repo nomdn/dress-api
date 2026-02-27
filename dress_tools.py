@@ -2,6 +2,7 @@ import asyncio
 import sys
 from tqdm import tqdm
 import os
+import time
 from pathlib import Path
 import subprocess
 import random
@@ -15,9 +16,7 @@ from typing import List, Tuple, Union, Optional, Dict
 from colorama import Fore, Style
 import uvicorn
 from dotenv import load_dotenv
-from git import Repo
-from tqdm import trange
-from tqdm.contrib.logging import logging_redirect_tqdm  
+
 
 # 禁用httpx的DEBUG日志，避免网络请求产生过多调试信息
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -25,13 +24,17 @@ logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 # 配置日志
 
-async def get_github_index(index:str="index_0.json") -> Dict:
+
+async def get_github_index(index: str = "index_0.json") -> Dict:
     """获取远端 GitHub 索引数据"""
+    
+
+    cache_buster = int(time.time())
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                url=f"https://cdn.jsdelivr.net/gh/nomdn/dress-api@main/public/{index}",
-                timeout=10.0
+                url=f"https://cdn.jsdelivr.net/gh/nomdn/dress-api@main/public/{index}?v={cache_buster}",
+                timeout=10.0,
             )
         response.raise_for_status()
         data = response.json()
@@ -43,13 +46,13 @@ async def get_github_index(index:str="index_0.json") -> Dict:
             "https://cdn.jsdelivr.net/",
             "https://fastly.jsdelivr.net/",
             "https://gcore.jsdelivr.net/",
-            "https://testingcf.jsdelivr.net/"
+            "https://testingcf.jsdelivr.net/",
         ]:
             try:
                 async with httpx.AsyncClient() as client:
                     response = await client.get(
-                        url=f"{i}gh/nomdn/dress-api@main/public/{index}",
-                        timeout=10.0
+                        url=f"{i}gh/nomdn/dress-api@main/public/{index}?v={cache_buster}",
+                        timeout=10.0,
                     )
                 response.raise_for_status()
                 data = response.json()
@@ -59,6 +62,7 @@ async def get_github_index(index:str="index_0.json") -> Dict:
         else:
             raise RuntimeError("获取远端数据失败！")
 
+
 def run_git_pull():
     """在后台执行 git pull"""
     try:
@@ -67,7 +71,7 @@ def run_git_pull():
             cwd="Dress",  # 👈 替换为你的本地仓库路径
             capture_output=True,
             text=True,
-            timeout=30
+            timeout=30,
         )
         if result.returncode != 0:
             logging.error(f"Git pull failed: {result.stderr}")

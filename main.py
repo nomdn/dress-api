@@ -32,9 +32,7 @@ from contextlib import asynccontextmanager  # 添加这个导入
 from dress_tools import run_git_pull, get_github_index
 from tools_v2 import build_index_by_author, convert_index_author_to_index_id
 
-# 禁用httpx的DEBUG日志，避免网络请求产生过多调试信息
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logging.getLogger("httpcore").setLevel(logging.WARNING)
+
 
 index_author = {}
 index_id = {}
@@ -168,8 +166,10 @@ async def auto_sync():
                     index_author = await get_github_index("index_1.json")
                     with open("public/index_0.json", "w", encoding="utf-8") as f:
                         json.dump(index_id, f, ensure_ascii=False, indent=4)
+                        logging.info("作者索引已写入")
                     with open("public/index_1.json", "w", encoding="utf-8") as f:
                         json.dump(index_author, f, ensure_ascii=False, indent=4)
+                        logging.info("id索引已写入")
                 else:
                     try:
                         repo = Repo("Dress")
