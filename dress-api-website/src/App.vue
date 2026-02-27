@@ -1,11 +1,11 @@
 <script setup>
-        import { ref, reactive, onMounted, computed } from 'vue';
+        import { ref, reactive, onMounted, computed, watch } from 'vue';
         import axios from 'axios';
         import Giscus from '@giscus/vue';
-        import { Sunny, Moon, ArrowUp, ArrowDown } from '@element-plus/icons-vue';
+        import { Sunny, Moon, ArrowUp, ArrowDown, Search } from '@element-plus/icons-vue';
         import { useDark, useToggle } from '@vueuse/core';
         import Vue3MarkdownIt from 'vue3-markdown-it';
-        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem,ElAvatar,ElDivider,ElImage} from 'element-plus';
+        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem,ElAvatar,ElDivider,ElImage, ElInput} from 'element-plus';
         import { el } from 'element-plus/es/locales.mjs';
 
         const isDark = useDark();
@@ -19,6 +19,9 @@
         const imgBaseURL = ref('https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/');
         // 记录哪些作者被展开 { "Alice": true, "Bob": false }
         const expandedAuthors = reactive({});
+
+        // 搜索框关键词，用于过滤作者列表
+        const searchQuery = ref('');
 
         const loadJsonData = async () => {
                 try {
@@ -65,9 +68,22 @@
         const pageSize = ref(10);
 
         // 计算总作者数（用于分页 total）
-        const totalAuthors = computed(() => Object.keys(groupedImages.value).length);
+        const totalAuthors = computed(() => filteredAuthors.value.length);
 
-        // 新增：判断当前作者是否在当前页
+        // 过滤后的作者列表，根据搜索关键词进行模糊匹配
+        const filteredAuthors = computed(() => {
+                const query = searchQuery.value.trim().toLowerCase();
+                if (!query) {
+                        // 无搜索关键词时返回全部作者
+                        return Object.keys(groupedImages.value);
+                }
+                // 模糊匹配：忽略大小写，包含即匹配
+                return Object.keys(groupedImages.value).filter(authorName => 
+                        authorName.toLowerCase().includes(query)
+                );
+        });
+
+        // 分页显示判断：根据当前页和每页数量判断该作者是否应该显示
         const shouldShowAuthor = (index) => {
                 const start = (currentPage.value - 1) * pageSize.value;
                 const end = start + pageSize.value;
@@ -86,6 +102,14 @@
         const handleSelect = (key, keyPath) => {
                 console.log('菜单选择:', key, keyPath);
         };
+        
+        // 调用函数
+        
+
+        // 监听搜索关键词变化，重置分页
+        watch(searchQuery, () => {
+                currentPage.value = 1;
+        });
 
         axios.get(remoteAPI.value + "v1/health")
                 .then(res => {
@@ -175,9 +199,24 @@
     <h1>{{ title }}</h1>
     <h3>本项目图片资源来自<a href="https://github.com/Cute-Dress/Dress">Cute-Dress/Dress</a>,使用请遵守<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>协议！</h3>
 
+    <!-- 搜索作者输入框 -->
+    <div class="search-box">
+      <el-input
+        v-model="searchQuery"
+        placeholder="搜索作者..."
+        clearable
+        size="large"
+        :prefix-icon="Search"
+        style="max-width: 400px;"
+      />
+      <span v-if="searchQuery" style="margin-left: 10px;">
+        找到 {{ filteredAuthors.length }} 位作者
+      </span>
+    </div>
+
     <!-- 按作者分组的可折叠卡片 -->
     <el-card 
-      v-for="(author, authorName, index) in groupedImages" 
+      v-for="(authorName, index) in filteredAuthors" 
       :key="authorName"
       class="author-card"
       shadow="hover"
@@ -185,9 +224,9 @@
     >
       <template #header>
         <div class="card-header" @click="toggleExpand(authorName)">
-        <a v-if="author.github_username" :href="'https://github.com/'+author.github_username" target="_blank">
+        <a v-if="groupedImages[authorName].github_username" :href="'https://github.com/'+groupedImages[authorName].github_username" target="_blank">
                 <el-avatar shape="circle" size="large" fit="fill">
-                        <el-image :src="author.avatar_url" fit="fill" lazy></el-image>
+                        <el-image :src="groupedImages[authorName].avatar_url" fit="fill" lazy></el-image>
                 </el-avatar>
         </a>
         <a v-else href="https://github.com/404">
@@ -196,7 +235,7 @@
         </a>
         
           <span style="font-weight: bold; font-size: 18px;">
-            {{ authorName }} ({{ author.contribution.length }} 次贡献)
+            {{ authorName }} ({{ groupedImages[authorName].contribution.length }} 次贡献)
           </span>
           <el-button 
             link 
@@ -210,7 +249,7 @@
 
       <!-- 只在展开时渲染图片（懒加载） -->
       <div v-if="expandedAuthors[authorName]" class="image-grid">
-        <div v-for="(image, idx) in author.contribution" :key="idx" class="image-card">
+        <div v-for="(image, idx) in groupedImages[authorName].contribution" :key="idx" class="image-card">
           <el-image 
             :src="imgBaseURL + image.path" 
             :alt="image.path"
@@ -226,12 +265,12 @@
 
       </div>
 <!-- 修改后 -->
-        <el-divider v-if="expandedAuthors[authorName] && author.readme" />
+        <el-divider v-if="expandedAuthors[authorName] && groupedImages[authorName].readme" />
         <vue3-markdown-it 
-        v-if="expandedAuthors[authorName] && author.readme && markdownText[authorName]" 
+        v-if="expandedAuthors[authorName] && groupedImages[authorName].readme && markdownText[authorName]" 
         :source="markdownText[authorName]" 
         />
-        <div v-if="expandedAuthors[authorName] && author.readme && !markdownText[authorName]" style="text-align:center;padding:10px;">
+        <div v-if="expandedAuthors[authorName] && groupedImages[authorName].readme && !markdownText[authorName]" style="text-align:center;padding:10px;">
         加载中...
         </div>
                 
@@ -287,6 +326,13 @@
 }
 .el-menu--horizontal > .el-menu-item:nth-child(1) {
   margin-right: auto;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
 }
 
 </style>

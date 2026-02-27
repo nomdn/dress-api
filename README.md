@@ -89,9 +89,9 @@ GET /v1/dress
 响应示例：
 ```json
 {
-  "img_url": "http://localhost:8092/img/001.jpg",
-  "img_author": ["作者A", "作者B"],
-  "upload_time": "2024-02-07T13:33:29+08:00",
+  "img_url": "https://dress.wsmdn.top/img/X/Xiaoli_404/leg2.jpg",
+  "img_author": "小离",
+  "upload_time": "2019-03-30T19:30:34+08:00",
   "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0"
 }
 ```
@@ -99,7 +99,7 @@ GET /v1/dress
 ```json
 {
   "img_url": "https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/S/Satenruiko/IMG_20200302_231235.jpg",
-  "img_author": "['CuteDress']",
+  "img_author": "CuteDress",
   "upload_time": "2024-02-07T13:33:29+08:00",
   "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
 }

@@ -10,3 +10,4 @@ dress-api-website/dist
 public/index.html
 public/assets/
 fuck-u-code-windows-amd64.exe
+.ruff_cache/

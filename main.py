@@ -13,27 +13,33 @@ from dotenv import load_dotenv
 from git import Repo
 import asyncio
 import json
-from fastapi import FastAPI, Response, Request, BackgroundTasks, HTTPException, Header, Query,Path
+from fastapi import (
+    FastAPI,
+    Response,
+    Request,
+    BackgroundTasks,
+    HTTPException,
+    Header,
+    Query,
+    Path,
+)
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
 from httpx import TimeoutException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager  # 添加这个导入
-from dress_tools import (
-    run_git_pull,
-    get_github_index
-)
-from tools_v2 import build_index_by_author,convert_index_author_to_index_id
+from dress_tools import run_git_pull, get_github_index
+from tools_v2 import build_index_by_author, convert_index_author_to_index_id
 
 # 禁用httpx的DEBUG日志，避免网络请求产生过多调试信息
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
 
-index_author ={}
-index_id={}
-jsdelivr_ok=False
-github_ok=False
+index_author = {}
+index_id = {}
+jsdelivr_ok = False
+github_ok = False
 API_KEY = "admin"
 ports = 8092
 log_level = "INFO"
@@ -60,14 +66,19 @@ try:
 except AttributeError:
     log_level_value = logging.INFO
 
-logging.basicConfig(level=log_level_value,
-                    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-                    )
+logging.basicConfig(
+    level=log_level_value,
+    format="[%(asctime)s] %(levelname)s in %(module)s: %(message)s",
+)
+
+# 确保 uvicorn 的日志级别与应用一致
+logging.getLogger("uvicorn.access").setLevel(log_level_value)
+logging.getLogger("uvicorn.error").setLevel(log_level_value)
 
 # 挂载整个目录，支持 index.html 自动路由
 BASE_DIR = p_pathlib(__file__).resolve().parent
 # 支持的图片扩展名（可按需增减）
-IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'}
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"}
 
 
 if not os.path.exists("Dress") and minimum_mode != "true":
@@ -92,6 +103,7 @@ else:
     # 在非最小化模式下，也需要初始化data变量，以防万一需要使用
     data = None
 
+
 @asynccontextmanager
 async def auto_sync_on_start(app: FastAPI):
     # 启动自动同步任务
@@ -104,21 +116,22 @@ async def auto_sync_on_start(app: FastAPI):
             sync_task.cancel()
     else:
         yield
+
+
 app = FastAPI(
     title="Dress-API：面向可爱男孩子的一个API",
     terms_of_service="https://creativecommons.org/licenses/by-nc-sa/4.0/",
     description="“本服务所使用的图片来自 [Cute-Dress/Dress](https://github.com/Cute-Dress/Dress)，遵循 CC BY-NC-SA 4.0 许可。”",
-    lifespan=auto_sync_on_start,# 添加生命周期管理器
-
+    lifespan=auto_sync_on_start,  # 添加生命周期管理器
 )
-app.add_middleware(CORSMiddleware,allow_origins=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 
 async def auto_sync():
     """
     启动时自动同步 Dress 仓库（仅非最小化模式）
     """
-    global index_author, index_id,jsdelivr_ok,github_ok
+    global index_author, index_id, jsdelivr_ok, github_ok
     if auto_sync_enabled == "true":
         while True:
             async with httpx.AsyncClient() as client:
@@ -135,7 +148,7 @@ async def auto_sync():
                     "https://cdn.jsdelivr.net/",
                     "https://fastly.jsdelivr.net/",
                     "https://gcore.jsdelivr.net/",
-                    "https://testingcf.jsdelivr.net/"
+                    "https://testingcf.jsdelivr.net/",
                 ]
                 for url in jsdelivr_urls:
                     try:
@@ -146,7 +159,7 @@ async def auto_sync():
                     except httpx.RequestError:
                         continue  # Try next URL
             # 使用无限循环替代单次sleep
-            
+
             if minimum_mode != "true":
                 logging.info("开始执行本地Dress仓库同步...")
                 await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
@@ -163,7 +176,6 @@ async def auto_sync():
                         index = build_index_by_author(repo)
                         index_author = index
 
-                        
                         index_id = convert_index_author_to_index_id(index)
                         with open("public/index_1.json", "w", encoding="utf-8") as f:
                             json.dump(index_author, f, ensure_ascii=False, indent=4)
@@ -204,7 +216,7 @@ async def auto_sync():
                 "https://cdn.jsdelivr.net/",
                 "https://fastly.jsdelivr.net/",
                 "https://gcore.jsdelivr.net/",
-                "https://testingcf.jsdelivr.net/"
+                "https://testingcf.jsdelivr.net/",
             ]
             for url in jsdelivr_urls:
                 try:
@@ -215,6 +227,7 @@ async def auto_sync():
                 except httpx.RequestError:
                     continue  # Try next URL
         pass
+
 
 async def run_one_sync():
     global index_author, index_id, jsdelivr_ok, github_ok
@@ -232,7 +245,7 @@ async def run_one_sync():
             "https://cdn.jsdelivr.net/",
             "https://fastly.jsdelivr.net/",
             "https://gcore.jsdelivr.net/",
-            "https://testingcf.jsdelivr.net/"
+            "https://testingcf.jsdelivr.net/",
         ]
         for url in jsdelivr_urls:
             try:
@@ -283,39 +296,49 @@ async def run_one_sync():
                 json.dump(index_author, f, ensure_ascii=False, indent=4)
             logging.debug(f"已从GitHub获取最新数据，共{len(index_id)}项数据)")
         except Exception as e:
-            logging.error(f"远程数据同步失败: {e}") # 每10秒同步一次，便于观察
+            logging.error(f"远程数据同步失败: {e}")  # 每10秒同步一次，便于观察
 
 
-@app.get("/v1/dress",summary="获取一张可爱男孩子的自拍")
-async def random_setu(request:Request):
+@app.get("/v1/dress", summary="获取一张可爱男孩子的自拍")
+async def random_setu(request: Request):
     """
     你 GET 一下就行了
     """
     base_url = request.base_url
     global index_id
-    
+
     max_count = len(index_id.keys())
     if max_count == 0:
         raise HTTPException(status_code=500, detail="图片索引为空")
-    
-    img_key = random.randint(a=1,b=max_count)
+
+    img_key = random.randint(a=1, b=max_count)
     entry = index_id[f"{img_key}"]
-    
+
     img = entry["path"]
     author_names = entry["author"]
     upload_time = entry["time"]
-    
+
     if minimum_mode == "true":  # 修正：与"true"比较
-        return {"img_url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}", "img_author": f"{author_names}",
-                "upload_time": upload_time, "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"}
+        return {
+            "img_url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
+            "img_author": f"{author_names}",
+            "upload_time": upload_time,
+            "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0",
+        }
     else:
-        return {"img_url":f"{base_url}img/{img}","img_author":f"{author_names}","upload_time": upload_time,"notice":"Cute-Dress/Dress CC BY-NC-SA 4.0"}
+        return {
+            "img_url": f"{base_url}img/{img}",
+            "img_author": f"{author_names}",
+            "upload_time": upload_time,
+            "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0",
+        }
+
 
 @app.post("/v1/dress/sync", summary="同步远程 Dress 仓库")
 async def sync_dress_repo(
     background_tasks: BackgroundTasks,
     rebuild_index: bool = Query(...),  # 默认重建索引
-    x_api_key: str = Header(None, alias="X-API-Key")  # 必须提供 Header
+    x_api_key: str = Header(None, alias="X-API-Key"),  # 必须提供 Header
 ):
     """
     触发服务器拉取 Dress 仓库的最新提交，并重建索引
@@ -323,8 +346,11 @@ async def sync_dress_repo(
     if x_api_key != API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API key")
     asyncio.create_task(run_one_sync())
-    return {"code":200,"message":"Sync started in background,please wait..."}
+    return {"code": 200, "message": "Sync started in background,please wait..."}
+
+
 # 克隆仓库
+
 
 @app.get("/v1/health", summary="健康检查")
 async def health_check():
@@ -335,12 +361,15 @@ async def health_check():
         "auto_sync_enabled": auto_sync_enabled,
         "auto_sync_time": auto_sync_time,
         "connectivity_to_gitHub": github_ok,
-        "connectivity_to_jsdelivr": jsdelivr_ok
+        "connectivity_to_jsdelivr": jsdelivr_ok,
     }
+
 
 @app.get("/v1/dress/index/{name}", summary="获取指定索引文件内容")
 async def return_index(
-    name: Annotated[str, Path(description="索引名称，支持 index_0.json 和 index_1.json")]
+    name: Annotated[
+        str, Path(description="索引名称，支持 index_0.json 和 index_1.json")
+    ],
 ):
     """
     获取指定索引文件内容
@@ -357,6 +386,8 @@ async def return_index(
         raise HTTPException(status_code=500, detail="Index file is corrupted")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading index file: {e}")
+
+
 @app.get("/v1/dress/author/{author}", summary="获取指定作者的图片信息")
 async def return_author_info(author: Annotated[str, Path(description="作者名称")]):
     """
@@ -373,13 +404,17 @@ async def return_author_info(author: Annotated[str, Path(description="作者名�
         raise HTTPException(status_code=404, detail="Author info not found")
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Author info is corrupted")
+
+
 if minimum_mode != "true":
     app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")
 if __name__ == "__main__":
     colorama.init(autoreset=True)
     print(f"🚀 启动服务: http://0.0.0.0:{ports}")
-    print(Fore.LIGHTBLUE_EX+"""
+    print(
+        Fore.LIGHTBLUE_EX
+        + """
 ██████╗ ██████╗ ███████╗███████╗███████╗       █████╗ ██████╗ ██╗
 ██╔══██╗██╔══██╗██╔════╝██╔════╝██╔════╝      ██╔══██╗██╔══██╗██║
 ██║  ██║██████╔╝█████╗  ███████╗███████╗█████╗███████║██████╔╝██║
@@ -389,10 +424,11 @@ if __name__ == "__main__":
     Attribution-NonCommercial-ShareAlike 4.0 International
                 GitHub:Cute-Dress/Dress
             GitHub(Dress-api):nomdn/dress-api                                    
-    """)
-    print(Style.RESET_ALL+"")
-    
+    """
+    )
+    print(Style.RESET_ALL + "")
+
     # 创建事件循环并同时运行自动同步和web服务器
 
-        # 启动web服务器
-    uvicorn.run(app, host="0.0.0.0", port=ports)
+    # 启动web服务器
+    uvicorn.run(app, host="0.0.0.0", port=ports, log_level=log_level.lower())
