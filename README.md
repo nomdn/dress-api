@@ -3,6 +3,9 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-green)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.128+-red)
 [![Build and Commit Index](https://github.com/nomdn/dress-api/actions/workflows/build_index.yml/badge.svg)](https://github.com/nomdn/dress-api/actions/workflows/build_index.yml)
+![Node.js](https://img.shields.io/badge/Node.js-22.18+-brightgreen)
+![Vue](https://img.shields.io/badge/Vue-3.5.25-4FC08D?logo=vue.js)
+
 
 这是一个基于[Dress](https://github.com/Cute-Dress/Dress)的随机图片API  
 演示API：https://dress.wsmdn.top  
