@@ -4,6 +4,8 @@ __pycache__/
 .idea/
 Pipfile
 Pipfile.lock
+node_modules/
+.vscode/
 dress-api-website/node_modules/
 dress-api-website/.vscode/
 dress-api-website/dist
@@ -11,3 +13,5 @@ public/index.html
 public/assets/
 fuck-u-code-windows-amd64.exe
 .ruff_cache/
+dress-api-docs/docs/.vitepress/cache/
+dress-api-docs/docs/.vitepress/dist/

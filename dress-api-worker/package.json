@@ -1,0 +1,20 @@
+{
+	"name": "dress-api-worker",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.12.4",
+		"vitepress": "^2.0.0-alpha.16",
+		"vitest": "~3.2.0",
+		"wrangler": "^4.71.0"
+	},
+	"dependencies": {
+		"hono": "^4.12.5"
+	}
+}

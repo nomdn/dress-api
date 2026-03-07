@@ -11,6 +11,7 @@
 演示API：https://dress.wsmdn.top  
 文档：https://dress.wsmdn.top/docs
 
+## 注意以下文档多已过时请移步[新文档](https://docs.wsmdn.top)
 ## 部署指南
 
 最低Python版本：python3.8  
