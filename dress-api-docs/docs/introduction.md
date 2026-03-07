@@ -92,7 +92,7 @@ Node.js推荐版本 : v22.18
    ```bash
    python main.py
    ```
-   默认地址：http://localhost:8092
+   默认地址：`http://localhost:8092`
 
 ## API 使用
 
