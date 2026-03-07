@@ -2,8 +2,7 @@ name: Build and Deploy to Netlify
 
 on:
   push:
-    branches:
-      - 'main'      
+    branches: ['main']
     paths:
       - 'dress-api-docs/**'
   workflow_dispatch:
@@ -11,28 +10,26 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./dress-api-docs
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Nodejs
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
 
-      - name: Install Dependencies
-        run: |
-          npm install
-
+      # 进入子目录并构建
       - name: Build VitePress Site
-        run: npm run docs:build
+        run: |
+          cd dress-api-docs
+          npm install
+          npm run docs:build
+
+      # 部署时指定相对于仓库根目录的完整路径
       - name: Deploy to EdgeOne Pages
         uses: TencentEdgeOne/edgeone-pages-action@v1
         with:
           token: ${{ secrets.EDGEONE_API_TOKEN }}
           project-name: "dress-api-docs"
-          build-path: "docs/.vitepress/dist"
+          build-path: "dress-api-docs/docs/.vitepress/dist"  # 👈 关键：从根目录开始的路径
