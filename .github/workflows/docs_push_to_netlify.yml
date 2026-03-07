@@ -28,12 +28,11 @@ jobs:
         run: |
           npm install
 
-      - name: Build MkDocs Site
+      - name: Build VitePress Site
         run: npm run docs:build
-      - name: Deploy to netlify
-        uses: South-Paw/action-netlify-cli@2.0.0
+      - name: Deploy to EdgeOne Pages
+        uses: TencentEdgeOne/edgeone-pages-action@v1
         with:
-          args: deploy --dir=docs/.vitepress/dist --prod
-        env:
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          token: ${{ secrets.EDGEONE_API_TOKEN }}
+          project-name: "dress-api-docs"
+          build-path: "docs/.vitepress/dist"
