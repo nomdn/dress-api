@@ -36,4 +36,4 @@ jobs:
         with:
           token: ${{ secrets.EDGEONE_API_TOKEN }}
           project-name: "dress-api-docs"
-          build-path: "dress-api-docs/docs/.vitepress/dist"  # 👈 关键：从根目录开始的路径
+          build-path: "./dress-api-docs/docs/.vitepress/dist"  # 👈 关键：从根目录开始的路径
