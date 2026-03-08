@@ -17,7 +17,9 @@ Dress API 是一个基于Dress的随机图片API，提供**随机图片、图片
 
 演示站点：  
 [前端+v1后端](https://dress.wsmdn.top)  
-[v2后端](https://api.wsmdn.top/v2/health)
+[v2后端](https://api.wsmdn.top/v2/health)  
+# 请关注[柠檬博客](https://blog.wsmdn.dpdns.org)来获取服务变动信息！
+https://blog.wsmdn.dpdns.org
 ## 快速开始
 
 该项目有v1和v2两个版本  
