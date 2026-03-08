@@ -58,7 +58,7 @@ GET /v1/dress
 响应示例：
 ```json
 {
-  "img_url": "https://dress.wsmdn.top/img/X/Xiaoli_404/leg2.jpg",
+  "img_url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/X/Xiaoli_404/leg2.jpg",
   "img_author": "小离",
   "upload_time": "2019-03-30T19:30:34+08:00",
   "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0"
@@ -67,7 +67,7 @@ GET /v1/dress
 最小化模式：
 ```json
 {
-  "img_url": "https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/S/Satenruiko/IMG_20200302_231235.jpg",
+  "img_url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/S/Satenruiko/IMG_20200302_231235.jpg",
   "img_author": "CuteDress",
   "upload_time": "2024-02-07T13:33:29+08:00",
   "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
@@ -86,13 +86,13 @@ GET /v2/health
 ### 获取指定index
 
 ```http
-GET /v2/dress/index/{index_file}
+GET /v2/index/{index_file}
 ```
 index_file为索引文件名，如index_0.json和index_1.json    
 
 调用示例：
 ```http
-GET https://api.wsmdn.top/v2/dress/index/index_1.json
+GET https://api.wsmdn.top/v2/index/index_1.json
 ```
 返回示例：
 ```json
