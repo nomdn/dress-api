@@ -13,6 +13,9 @@
   
 ![一位好像在做慈善的公司的ceo](/cloudflare.webp)
 
+点我一键部署：  
+
+[![Deploy with Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/nomdn/dress-api/tree/main/dress-api-worker)
 ---
 Node.js推荐版本 : v22.18  
 1. 克隆本项目
