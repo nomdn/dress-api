@@ -74,11 +74,12 @@ function getRandomIntInclusive(min, max) {
 const app = new Hono();
 app.use('*', cors());
 
-app.get('/', (c) => c.redirect('https://dress.wsmdn.top/', 301));
+app.get('/', (c) => c.redirect('https://dress.wsmdn.top/', 302));
 
 app.get('/v2/dress', async (c) => {
 	try {
 		const { env } = c
+		const urlPrefix = env.URL_PREFIX || 'https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/';
 		var { indexID, indexAuthor } = await getCachedIndex(env);
 		indexID = Object.values(indexID);
 		const idLength = indexID.length;
@@ -94,7 +95,7 @@ app.get('/v2/dress', async (c) => {
 		const time = data['time'] || '';
 		const pathVal = data['path'] || '';
 
-		const path = `https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/${pathVal}`;
+		const path = `${urlPrefix}${pathVal}`;
 
 		return c.json({
 		author: author,

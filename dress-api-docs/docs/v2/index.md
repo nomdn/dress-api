@@ -48,32 +48,27 @@ Node.js推荐版本 : v22.18
     ```bash
     npx wrangler deploy --minify
     ```
+7. 设置环境变量（可选）
+  在Cloudflare Workers控制台的设置页面中设置环境变量。
+  ```` env
+  URL_PREFIX: # url的前缀，索引中的图片path一般是"%23/447f.Misaka/obsolute/cthulhu.jpg" 要在前面加上图床链接如https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/ (末尾加"/"!)
+  ````
 ## 调用示例
 
 ### 获取随机图片
 ```http
-GET /v1/dress
+GET /v2/dress
 ```
 
 响应示例：
 ```json
 {
-  "img_url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/X/Xiaoli_404/leg2.jpg",
-  "img_author": "小离",
-  "upload_time": "2019-03-30T19:30:34+08:00",
-  "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0"
+  "author": "Mauve",
+  "hash": "ae9f8020ff1bac84a2cb8953a8a1a6b8a1268bbb",
+  "time": "2022-04-26T16:31:39+08:00",
+  "path": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/M/Mauve/1st/3.jpeg"
 }
 ```
-最小化模式：
-```json
-{
-  "img_url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/S/Satenruiko/IMG_20200302_231235.jpg",
-  "img_author": "CuteDress",
-  "upload_time": "2024-02-07T13:33:29+08:00",
-  "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
-}
-```
-s
 
 ### 健康检查
 ```http
@@ -88,11 +83,11 @@ GET /v2/health
 ```http
 GET /v2/index/{index_file}
 ```
-index_file为索引文件名，如index_0.json和index_1.json    
+index_file为索引代号，如id和author    
 
 调用示例：
 ```http
-GET https://api.wsmdn.top/v2/index/index_1.json
+GET https://api.wsmdn.top/v2/index/author
 ```
 返回示例：
 ```json
