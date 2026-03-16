@@ -17,3 +17,10 @@
 演示站点极不稳定，建议自己部署   
 如果你觉得我侵犯了您的权利，请在issues交流  
 如果你想搭建完整版API请在项目根目录克隆[Dress](https://github.com/Cute-Dress/Dress)
+
+## 友链
+以下是一些基于dress-api的优秀项目  
+<br>
+[nonebot_plugin_simple_setu](https://github.com/nomdn/nonebot-plugin-simple-setu)  
+<br>
+欢迎所有使用dress-api的项目添加友链
