@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 jobs:
   deploy:
+    working-directory: ./dress-api-worker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,7 +22,8 @@ jobs:
       # 部署到 Cloudflare Workers
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@1.3.0
-        working-directory: ./dress-api-worker
+
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        
