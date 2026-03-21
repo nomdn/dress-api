@@ -320,16 +320,18 @@ async def random_setu(request: Request):
 
     if minimum_mode == "true":  # 修正：与"true"比较
         return {
-            "img_url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
-            "img_author": f"{author_names}",
-            "upload_time": upload_time,
+            "url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
+            "author": f"{author_names}",
+            "hash": entry["hash"],  # 添加 hash 字段"
+            "time": upload_time,
             "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0",
         }
     else:
         return {
-            "img_url": f"{base_url}img/{img}",
-            "img_author": f"{author_names}",
-            "upload_time": upload_time,
+            "url": f"{base_url}img/{img}",
+            "author": f"{author_names}",
+            "hash": entry["hash"],
+            "time": upload_time,
             "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0",
         }
 

@@ -101,7 +101,8 @@ app.get('/v2/dress', async (c) => {
 		author: author,
 		hash: hash,
 		time: time,
-		path: path
+		url: path,
+		notice: "Cute-Dress/Dress CC-BY-NC-SA 4.0",
 		});
 
 	} catch (err) {
