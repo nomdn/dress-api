@@ -269,6 +269,7 @@
         <vue3-markdown-it 
         v-if="expandedAuthors[authorName] && groupedImages[authorName].readme && markdownText[authorName]" 
         :source="markdownText[authorName]" 
+        style="text-align: left !important; margin-left: 20px; margin: auto;"
         />
                 
 

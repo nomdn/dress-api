@@ -129,6 +129,7 @@ button:focus-visible {
   /* 内容文本居中（适用于标题、按钮等） */
   text-align: center;
 }
+
 .giscus-area {
   display: flex;
   flex-direction: column;
