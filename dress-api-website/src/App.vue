@@ -5,8 +5,7 @@
         import { Sunny, Moon, ArrowUp, ArrowDown, Search } from '@element-plus/icons-vue';
         import { useDark, useToggle } from '@vueuse/core';
         import Vue3MarkdownIt from 'vue3-markdown-it';
-        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem,ElAvatar,ElDivider,ElImage, ElInput} from 'element-plus';
-        import { el } from 'element-plus/es/locales.mjs';
+        import { ElCard, ElEmpty, ElButton, ElPagination, ElMenu, ElMenuItem,ElAvatar,ElDivider,ElImage, ElInput,ElSkeleton} from 'element-plus';
 
         const isDark = useDark();
         const activeIndex = ref('1');
@@ -122,10 +121,11 @@
                                 imgBaseURL.value = remoteAPI.value + "img/";
                         } else {
                                 const cdnURLs = [
+                                        "https://testingcf.jsdelivr.net/",
                                         "https://cdn.jsdelivr.net/",
                                         "https://fastly.jsdelivr.net/",
                                         "https://gcore.jsdelivr.net/",
-                                        "https://testingcf.jsdelivr.net/"
+                                        
                                 ];
                                 for (const cdn of cdnURLs) {
                                         const testURL = cdn + "gh/Cute-Dress/Dress@master/README.md";
@@ -270,9 +270,6 @@
         v-if="expandedAuthors[authorName] && groupedImages[authorName].readme && markdownText[authorName]" 
         :source="markdownText[authorName]" 
         />
-        <div v-if="expandedAuthors[authorName] && groupedImages[authorName].readme && !markdownText[authorName]" style="text-align:center;padding:10px;">
-        加载中...
-        </div>
                 
 
     </el-card>
