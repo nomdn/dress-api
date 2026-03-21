@@ -69,7 +69,8 @@ GET /v2/dress
   "author": "Mauve",
   "hash": "ae9f8020ff1bac84a2cb8953a8a1a6b8a1268bbb",
   "time": "2022-04-26T16:31:39+08:00",
-  "path": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/M/Mauve/1st/3.jpeg"
+  "path": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/M/Mauve/1st/3.jpeg",
+  "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
 }
 ```
 

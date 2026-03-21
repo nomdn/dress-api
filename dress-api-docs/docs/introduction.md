@@ -108,18 +108,20 @@ GET /v1/dress
 响应示例：
 ```json
 {
-  "img_url": "https://dress.wsmdn.top/img/X/Xiaoli_404/leg2.jpg",
-  "img_author": "小离",
-  "upload_time": "2019-03-30T19:30:34+08:00",
-  "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0"
+  "url": "https://dress.wsmdn.top/img/L/LF112/LF112_Dress%232019_1.jpg",
+  "author": "“LF112”",
+  "hash": "2855ae71bd46bb84b2124577f941bb4c922587cc",
+  "time": "2019-03-15T23:18:48+08:00",
+  "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
 }
 ```
 最小化模式：
 ```json
 {
-  "img_url": "https://cdn.jsdelivr.net/gh/Cute-Dress/Dress@master/S/Satenruiko/IMG_20200302_231235.jpg",
-  "img_author": "CuteDress",
-  "upload_time": "2024-02-07T13:33:29+08:00",
+  "url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/L/LF112/LF112_Dress%232019_1.jpg",
+  "author": "“LF112”",
+  "hash": "2855ae71bd46bb84b2124577f941bb4c922587cc",
+  "time": "2019-03-15T23:18:48+08:00",
   "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
 }
 ```
