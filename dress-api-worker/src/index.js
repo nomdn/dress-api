@@ -6,25 +6,17 @@ import { cors } from 'hono/cors';
 
 // 全局变量（在 Isolate 生命周期内持久存在）
 const CACHE_TTL = 24 * 60 * 60; // 缓存 24 小时
-var globalIndexid = null;
-var globalIndexAuthor = null;
-var lastCacheTime = 0;
 async function getCachedIndex(env) {
 	try {
 		// 正确 await 异步 get
 		const cachedID = await env.DRESS_CACHE.get("indexID");
 		const cachedAuthor = await env.DRESS_CACHE.get("indexAuthor");
-		if (globalIndexAuthor && globalIndexid && Date.now() - lastCacheTime < CACHE_TTL*1000) {
-			return { indexID: globalIndexid, indexAuthor: globalIndexAuthor };
-		}
+
 		if (cachedID && cachedAuthor) {
-		// 尝试解析缓存数据
-		const indexID = JSON.parse(cachedID);
-		const indexAuthor = JSON.parse(cachedAuthor);
-		globalIndexid = indexID;
-		globalIndexAuthor = indexAuthor;
-		lastCacheTime = Date.now();
-		return { indexID, indexAuthor };
+			// 尝试解析缓存数据
+			const indexID = JSON.parse(cachedID);
+			const indexAuthor = JSON.parse(cachedAuthor);
+			return { indexID, indexAuthor };
 		}
 	} catch (e) {
 		
@@ -35,9 +27,6 @@ async function getCachedIndex(env) {
 	// 更新缓存（即使为空也缓存，避免频繁请求）
 	await env.DRESS_CACHE.put("indexID", JSON.stringify(indexID), { expirationTtl: CACHE_TTL });
 	await env.DRESS_CACHE.put("indexAuthor", JSON.stringify(indexAuthor), { expirationTtl: CACHE_TTL });
-	globalIndexid = indexID;
-	globalIndexAuthor = indexAuthor;
-	lastCacheTime = Date.now();
 
 	return { indexID, indexAuthor };
 
@@ -128,7 +117,7 @@ app.get('/v2/index/:index', async (c) => {
 app.get('/v2/author/:author', async (c) => {
 	const author = c.req.param('author'); 
 	const { indexID, indexAuthor } = await getCachedIndex(c.env)
-	return c.json(indexAuthor[author]);
+	return c.json({ [author]: indexAuthor[author] });
 
 });
 export default app;

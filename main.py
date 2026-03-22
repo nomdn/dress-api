@@ -309,7 +309,14 @@ async def random_setu(request: Request):
 
     max_count = len(index_id.keys())
     if max_count == 0:
-        raise HTTPException(status_code=500, detail="图片索引为空")
+        # 立即尝试读本地索引
+        try:
+            with open("public/index_0.json", "r", encoding="utf-8") as f:
+                index_id = json.load(f)
+                max_count = len(index_id.keys())
+        except:
+        # 本地索引读失败立即开始一次同步
+            await run_one_sync()
 
     img_key = random.randint(a=1, b=max_count)
     entry = index_id[f"{img_key}"]
@@ -396,16 +403,20 @@ async def return_author_info(author: Annotated[str, Path(description="作者名�
     获取指定作者的图片信息
     """
     try:
-        with open(f"public/index_1.json", "r", encoding="utf-8") as f:
-            index_authors_data = json.load(f)
-        author_data = index_authors_data[author]
+        global index_author
+        if len(index_author) == 0:  # 索引为空时立即尝试读本地索引
+            try:
+                with open("public/index_1.json", "r", encoding="utf-8") as f:
+                    index_author = json.load(f)
+            except Exception as e:
+                logging.warning(f"本地作者索引文件读取失败: {e}")
+                # 立即开始一次同步
+                await run_one_sync()
+
+        author_data = index_author[author]
         return {author: author_data}
     except KeyError:
         raise HTTPException(status_code=404, detail="Author not found")
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Author info not found")
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=500, detail="Author info is corrupted")
 
 
 if minimum_mode != "true":

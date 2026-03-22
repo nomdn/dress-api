@@ -3316,6 +3316,43 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/66453699?v=4?size=500",
         "github_username": "CHUXIN2233"
     },
+    "ctcakes": {
+        "email": "ctcake@outlook.com",
+        "contribution": [
+            {
+                "hash": "d504011f938dd2b229470f94d762101d40acb4bc",
+                "path": "C/CTCAKE/2026-03-15_04-07-28.jpg",
+                "time": "2026-03-15T10:01:25+08:00"
+            },
+            {
+                "path": "C/CTCAKE/2026-03-15_04-07-29.jpg",
+                "time": "2026-03-15T10:01:25+08:00",
+                "hash": "d504011f938dd2b229470f94d762101d40acb4bc"
+            },
+            {
+                "path": "C/CTCAKE/2026-03-15_04-07-31.jpg",
+                "time": "2026-03-15T10:01:25+08:00",
+                "hash": "d504011f938dd2b229470f94d762101d40acb4bc"
+            },
+            {
+                "path": "C/CTCAKE/2026-03-21_13-41-59.jpg",
+                "time": "2026-03-21T17:44:33+08:00",
+                "hash": "6dfde5c04b4062139621e0200188111bf939fef6"
+            },
+            {
+                "path": "C/CTCAKE/2026-03-21_13-42-00.jpg",
+                "time": "2026-03-21T17:44:33+08:00",
+                "hash": "6dfde5c04b4062139621e0200188111bf939fef6"
+            },
+            {
+                "path": "C/CTCAKE/2026-03-21_13-42-01.jpg",
+                "time": "2026-03-21T17:44:33+08:00",
+                "hash": "6dfde5c04b4062139621e0200188111bf939fef6"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/208276599?v=4?size=500",
+        "github_username": "ctcakes"
+    },
     "CanYingisme-Git": {
         "email": "3192799549@qq.com",
         "contribution": [
@@ -3544,6 +3581,28 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/9747443?v=4?size=500",
         "github_username": "zmq175"
+    },
+    "ChimeHsia": {
+        "email": "137911088+ChimeHsia@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "b54e88787613a6bc2184646f5c303355f83e91ea",
+                "path": "C/ChimeHsia/A.jpg",
+                "time": "2026-03-17T15:20:34+08:00"
+            },
+            {
+                "path": "C/ChimeHsia/B.jpg",
+                "time": "2026-03-17T15:20:34+08:00",
+                "hash": "b54e88787613a6bc2184646f5c303355f83e91ea"
+            },
+            {
+                "path": "C/ChimeHsia/C.jpg",
+                "time": "2026-03-17T15:20:34+08:00",
+                "hash": "b54e88787613a6bc2184646f5c303355f83e91ea"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/137911088?v=4?size=500",
+        "github_username": "ChimeHsia"
     },
     "Chr_": {
         "email": "chr@chrxw.com",
@@ -6191,6 +6250,24 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/36162655?v=4?size=500",
         "github_username": "nidbCN"
     },
+    "Wang Xiaomei": {
+        "email": "72686586+g2nnyS@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "157d36ce63874ead018b945511f9a8df83ca56c7",
+                "path": "G/Ganyu/2026-03-20 23.08.24.jpg",
+                "time": "2026-03-20T23:23:30+08:00"
+            },
+            {
+                "path": "G/Ganyu/2026-03-20 23.08.44.jpg",
+                "time": "2026-03-20T23:23:30+08:00",
+                "hash": "157d36ce63874ead018b945511f9a8df83ca56c7"
+            }
+        ],
+        "readme": "G/Ganyu/README.md",
+        "avatar_url": "https://avatars.githubusercontent.com/u/72686586?v=4?size=500",
+        "github_username": "g2nnyS"
+    },
     "Geaper327": {
         "email": "49384130+Geaper327@users.noreply.github.com",
         "contribution": [
@@ -7782,7 +7859,7 @@
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/31366626?v=4?size=500",
-        "github_username": "DavidLee-4032"
+        "github_username": "7140076-146"
     },
     "PlanC": {
         "email": "planc2333@outlook.com",
@@ -9812,8 +9889,14 @@
                 "hash": "eefcc2565e6d44d021ce6adc2304233cd6810ef3",
                 "path": "L/LeonMMcoset/0062BE1BD90444DAF3A3092917EF66C6.jpg",
                 "time": "2026-03-13T22:12:10+08:00"
+            },
+            {
+                "path": "L/LeonMMcoset/59890B4A632B6648B1DDF72BC9A70DC5.png",
+                "time": "2026-03-17T16:31:37+08:00",
+                "hash": "546676feb1287b878ecc06f17e18bfa89fea816e"
             }
         ],
+        "readme": "L/LeonMMcoset/README.md",
         "avatar_url": "https://avatars.githubusercontent.com/u/152147508?v=4?size=500",
         "github_username": "Leonmmcoset"
     },
@@ -10352,6 +10435,18 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/44517641?v=4?size=500",
         "github_username": "lupus117"
+    },
+    "捞捞": {
+        "email": "2716949788@qq.com",
+        "contribution": [
+            {
+                "hash": "8de88db5c9aba9c245b2ccd31191bcb0c6393348",
+                "path": "L/laolao11223/凑阿库娅.jpg",
+                "time": "2026-03-17T15:19:16+08:00"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/268684409?v=4?size=500",
+        "github_username": "laolao11223"
     },
     "LeavesyoungIsSaltyfish": {
         "email": "34901747+SaltyfishLeavesyoung@users.noreply.github.com",
