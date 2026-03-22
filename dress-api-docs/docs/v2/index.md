@@ -138,7 +138,7 @@ GET https://api.wsmdn.top/v2/index/author
     "readme": "S/SnowyFox/README.md",
     "avatar_url": "https://avatars.githubusercontent.com/u/35415088?v=4?size=500",
     "github_username": "Vssblt"
-  },
+  }
 }
 ```
 
@@ -189,3 +189,6 @@ GET https://api.wsmdn.top/v2/author/nekozzx
 ````
 其中`readme`为贡献者自述，`avatar_url`为贡献者Github头像，`github_username`为贡献者的Github用户名  
 这些参数**不一定**存在，调用时注意做判断
+
+### 缓存说明
+Dress API v2 版本使用 Cloudflare KV 存储进行缓存，缓存周期为 24 小时。系统会自动管理缓存以提高响应速度和可靠性。
