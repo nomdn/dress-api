@@ -34,9 +34,11 @@ async function getCachedIndex(env) {
 
 	// 更新缓存（即使为空也缓存，避免频繁请求）
 	const timestamp = Math.floor(Date.now() / 1000);
-	await env.DRESS_CACHE.put("indexID", JSON.stringify(indexID), { expirationTtl: CACHE_TTL });
-	await env.DRESS_CACHE.put("indexAuthor", JSON.stringify(indexAuthor), { expirationTtl: CACHE_TTL });
-	await env.DRESS_CACHE.put("indexTimestamp", timestamp.toString(), { expirationTtl: CACHE_TTL });
+	// 使用 expiration 选项设置绝对过期时间，确保过期时间准确
+	const expiration = timestamp + CACHE_TTL;
+	await env.DRESS_CACHE.put("indexID", JSON.stringify(indexID), { expiration });
+	await env.DRESS_CACHE.put("indexAuthor", JSON.stringify(indexAuthor), { expiration });
+	await env.DRESS_CACHE.put("indexTimestamp", timestamp.toString(), { expiration });
 
 	return { indexID, indexAuthor };
 
