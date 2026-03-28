@@ -63,15 +63,52 @@ Node.js推荐版本 : v22.18
 GET /v2/dress
 ```
 
-响应示例：
+#### 参数
+- `num`：可选，指定返回数量，默认为 1
+- `author`：可选，指定作者名称以获取该作者的图片
+
+#### POST 请求支持
+```http
+POST /v2/dress
+Content-Type: application/json
+
+{
+  "num": 5,
+  "author": "Zhuge"
+}
+```
+
+#### 响应示例
+
+**单个结果（默认）：**
 ```json
 {
   "author": "Mauve",
   "hash": "ae9f8020ff1bac84a2cb8953a8a1a6b8a1268bbb",
   "time": "2022-04-26T16:31:39+08:00",
-  "path": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/M/Mauve/1st/3.jpeg",
+  "url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/M/Mauve/1st/3.jpeg",
   "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
 }
+```
+
+**多个结果（当 num > 1 时）：**
+```json
+[
+  {
+    "author": "Mauve",
+    "hash": "ae9f8020ff1bac84a2cb8953a8a1a6b8a1268bbb",
+    "time": "2022-04-26T16:31:39+08:00",
+    "url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/M/Mauve/1st/3.jpeg",
+    "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
+  },
+  {
+    "author": "Zhuge",
+    "hash": "9fdb945e66f93fd2f37862fcf5d3f4855512bc6b",
+    "time": "2021-11-16T21:38:32+08:00",
+    "url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/A/Azhuquq/3.jpeg",
+    "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
+  }
+]
 ```
 
 ### 健康检查
@@ -148,6 +185,12 @@ GET https://api.wsmdn.top/v2/index/author
 ```http
 GET /v2/author/{author}
 ```
+
+#### POST 请求支持
+```http
+POST /v2/author/{author}
+```
+
 author为作者名，如Satenruiko和CuteDress
 
 调用实例

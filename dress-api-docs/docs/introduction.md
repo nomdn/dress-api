@@ -105,7 +105,24 @@ Node.js推荐版本 : v22.18
 GET /v1/dress
 ```
 
-响应示例：
+#### 参数
+- `num`：可选，指定返回数量，默认为 1
+- `author`：可选，指定作者名称以获取该作者的图片
+
+#### POST 请求支持
+```http
+POST /v1/dress
+Content-Type: application/json
+
+{
+  "num": 5,
+  "author": "Zhuge"
+}
+```
+
+#### 响应示例
+
+**单个结果（默认）：**
 ```json
 {
   "url": "https://dress.wsmdn.top/img/L/LF112/LF112_Dress%232019_1.jpg",
@@ -115,7 +132,28 @@ GET /v1/dress
   "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
 }
 ```
-最小化模式：
+
+**多个结果（当 num > 1 时）：**
+```json
+[
+  {
+    "url": "https://dress.wsmdn.top/img/L/LF112/LF112_Dress%232019_1.jpg",
+    "author": "“LF112”",
+    "hash": "2855ae71bd46bb84b2124577f941bb4c922587cc",
+    "time": "2019-03-15T23:18:48+08:00",
+    "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
+  },
+  {
+    "url": "https://dress.wsmdn.top/img/A/Azhuquq/3.jpeg",
+    "author": "Zhuge",
+    "hash": "9fdb945e66f93fd2f37862fcf5d3f4855512bc6b",
+    "time": "2021-11-16T21:38:32+08:00",
+    "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
+  }
+]
+```
+
+**最小化模式：**
 ```json
 {
   "url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/L/LF112/LF112_Dress%232019_1.jpg",
@@ -213,6 +251,12 @@ GET https://dress.wsmdn.top/v1/dress/index/index_1.json
 ```http
 GET /v1/dress/author/{author}
 ```
+
+#### POST 请求支持
+```http
+POST /v1/dress/author/{author}
+```
+
 author为作者名，如Satenruiko和CuteDress
 
 调用实例

@@ -11,12 +11,20 @@ async function getCachedIndex(env) {
 		// 正确 await 异步 get
 		const cachedID = await env.DRESS_CACHE.get("indexID");
 		const cachedAuthor = await env.DRESS_CACHE.get("indexAuthor");
+		const cachedTimestamp = await env.DRESS_CACHE.get("indexTimestamp");
 
-		if (cachedID && cachedAuthor) {
-			// 尝试解析缓存数据
-			const indexID = JSON.parse(cachedID);
-			const indexAuthor = JSON.parse(cachedAuthor);
-			return { indexID, indexAuthor };
+		// 检查缓存是否存在且未过期
+		if (cachedID && cachedAuthor && cachedTimestamp) {
+			const timestamp = parseInt(cachedTimestamp);
+			const now = Math.floor(Date.now() / 1000);
+			
+			// 检查缓存是否过期
+			if (now - timestamp < CACHE_TTL) {
+				// 尝试解析缓存数据
+				const indexID = JSON.parse(cachedID);
+				const indexAuthor = JSON.parse(cachedAuthor);
+				return { indexID, indexAuthor };
+			}
 		}
 	} catch (e) {
 		
@@ -25,8 +33,10 @@ async function getCachedIndex(env) {
 	const { indexID, indexAuthor } = await getIndex();
 
 	// 更新缓存（即使为空也缓存，避免频繁请求）
+	const timestamp = Math.floor(Date.now() / 1000);
 	await env.DRESS_CACHE.put("indexID", JSON.stringify(indexID), { expirationTtl: CACHE_TTL });
 	await env.DRESS_CACHE.put("indexAuthor", JSON.stringify(indexAuthor), { expirationTtl: CACHE_TTL });
+	await env.DRESS_CACHE.put("indexTimestamp", timestamp.toString(), { expirationTtl: CACHE_TTL });
 
 	return { indexID, indexAuthor };
 
@@ -65,43 +75,107 @@ app.use('*', cors());
 
 app.get('/', (c) => c.redirect('https://dress.wsmdn.top/', 302));
 
-app.get('/v2/dress', async (c) => {
+// 处理 /v2/dress 端点的共享函数
+async function handleDressRequest(c) {
+	// 从请求体或查询参数获取参数
+	let num = parseInt(c.req.query('num') || '1');
+	let authorParam = c.req.query('author');
+	
+	if (c.req.method === 'POST') {
+		try {
+			const body = await c.req.json();
+			num = parseInt(body.num || num);
+			authorParam = body.author || authorParam;
+		} catch (e) {
+			// 忽略解析错误
+		}
+	}
+	
 	try {
 		const { env } = c
 		const urlPrefix = env.URL_PREFIX || 'https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/';
 		var { indexID, indexAuthor } = await getCachedIndex(env);
 		indexID = Object.values(indexID);
 		const idLength = indexID.length;
-		const randomIndex = getRandomIntInclusive(0, idLength - 1);
-		const data = indexID[randomIndex];
-
-		if (!data) {
-		return c.json({ error: "Selected item is undefined" }, 500);
+		
+		// 确保num不超过最大值
+		const maxNum = Math.min(num, idLength);
+		const results = [];
+		const usedPaths = new Set(); // 用于存储已使用的path，确保不重复
+		
+		if (authorParam) {
+			// 根据作者名称筛选图片
+			const authorData = indexAuthor[authorParam];
+			if (!authorData) {
+				return c.json({ error: "Author not found" }, 404);
+			}
+			const contributions = authorData["contribution"];
+			// 随机选择num个不同的图片
+			while (results.length < maxNum && contributions.length > 0) {
+				const randomIndex = getRandomIntInclusive(0, contributions.length - 1);
+				const entry = contributions[randomIndex];
+				if (!usedPaths.has(entry["path"])) {
+					usedPaths.add(entry["path"]);
+					const author = authorParam;
+					const hash = entry['hash'] || '';
+					const time = entry['time'] || '';
+					const pathVal = entry['path'] || '';
+					const path = `${urlPrefix}${pathVal}`;
+					
+					results.push({
+						author: author,
+						hash: hash,
+						time: time,
+						url: path,
+						notice: "Cute-Dress/Dress CC-BY-NC-SA 4.0",
+					});
+					// 从列表中移除已选择的项，提高效率
+					contributions.splice(randomIndex, 1);
+				}
+			}
+		} else {
+			// 随机选择num个不同的图片
+			while (results.length < maxNum) {
+				const randomIndex = getRandomIntInclusive(0, idLength - 1);
+				const data = indexID[randomIndex];
+				if (data && !usedPaths.has(data["path"])) {
+					usedPaths.add(data["path"]);
+					const author = data['author'] || 'Unknown';
+					const hash = data['hash'] || '';
+					const time = data['time'] || '';
+					const pathVal = data['path'] || '';
+					const path = `${urlPrefix}${pathVal}`;
+					
+					results.push({
+						author: author,
+						hash: hash,
+						time: time,
+						url: path,
+						notice: "Cute-Dress/Dress CC-BY-NC-SA 4.0",
+					});
+				}
+			}
 		}
-
-		const author = data['author'] || 'Unknown';
-		const hash = data['hash'] || '';
-		const time = data['time'] || '';
-		const pathVal = data['path'] || '';
-
-		const path = `${urlPrefix}${pathVal}`;
-
-		return c.json({
-		author: author,
-		hash: hash,
-		time: time,
-		url: path,
-		notice: "Cute-Dress/Dress CC-BY-NC-SA 4.0",
-		});
+		
+		// 如果只请求一个，返回单个对象，保持向后兼容
+		if (num === 1 && results.length > 0) {
+			return c.json(results[0]);
+		}
+		return c.json(results);
 
 	} catch (err) {
 		console.error("Handler error:", err);
 		return c.json({ error: "Internal Server Error", message: err.message }, 500);
 	}
-});
+}
+
+// 注册 GET 和 POST 路由
+app.get('/v2/dress', handleDressRequest);
+app.post('/v2/dress', handleDressRequest);
 app.get('/v2/health', async (c) => { 
 	return c.json({ status: "ok" });
 });
+
 app.get('/v2/index/:index', async (c) => {
 	const index = c.req.param('index'); 
 	const { indexID, indexAuthor } = await getCachedIndex(c.env)
@@ -114,7 +188,26 @@ app.get('/v2/index/:index', async (c) => {
 	}
 
 });
+app.post('/v2/index/:index', async (c) => {
+	const index = c.req.param('index'); 
+	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	if (index === 'id') {
+		return c.json(indexID);
+	} else if (index === 'author') {
+		return c.json(indexAuthor);
+	} else {
+		return c.json({ error: "Invalid index" }, 400);
+	}
+
+});
+
 app.get('/v2/author/:author', async (c) => {
+	const author = c.req.param('author'); 
+	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	return c.json({ [author]: indexAuthor[author] });
+
+});
+app.post('/v2/author/:author', async (c) => {
 	const author = c.req.param('author'); 
 	const { indexID, indexAuthor } = await getCachedIndex(c.env)
 	return c.json({ [author]: indexAuthor[author] });

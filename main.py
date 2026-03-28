@@ -300,12 +300,23 @@ async def run_one_sync():
 
 
 @app.get("/v1/dress", summary="获取一张可爱男孩子的自拍")
-async def random_setu(request: Request):
+@app.post("/v1/dress", summary="获取一张可爱男孩子的自拍")
+async def random_setu(request: Request,
+                      num: int = Query(1, description="可选，指定返回数量，默认为1"),
+                      author: str = Query(None, description="可选，指定作者名称以获取该作者的图片"),):
+    # 检查是否为 POST 请求，如果是，则从请求体获取参数
+    if request.method == "POST":
+        try:
+            body = await request.json()
+            num = body.get("num", num)
+            author = body.get("author", author)
+        except Exception:
+            pass
     """
     你 GET 一下就行了
     """
     base_url = request.base_url
-    global index_id
+    global index_id,index_author
 
     max_count = len(index_id.keys())
     if max_count == 0:
@@ -314,41 +325,99 @@ async def random_setu(request: Request):
             with open("public/index_0.json", "r", encoding="utf-8") as f:
                 index_id = json.load(f)
                 max_count = len(index_id.keys())
+            with open("public/index_1.json", "r", encoding="utf-8") as f:
+                index_author = json.load(f)
         except:
         # 本地索引读失败立即开始一次同步
             await run_one_sync()
-
-    img_key = random.randint(a=1, b=max_count)
-    entry = index_id[f"{img_key}"]
-
-    img = entry["path"]
-    author_names = entry["author"]
-    upload_time = entry["time"]
-
-    if minimum_mode == "true":  # 修正：与"true"比较
-        return {
-            "url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
-            "author": f"{author_names}",
-            "hash": entry["hash"],  # 添加 hash 字段"
-            "time": upload_time,
-            "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0",
-        }
+    
+    # 确保num不超过最大值
+    num = min(num, max_count)
+    results = []
+    used_paths = set()  # 用于存储已使用的path，确保不重复
+    
+    if author:
+        # 根据作者名称筛选图片
+        if author not in index_author:
+            raise HTTPException(status_code=404, detail="Author not found")
+        contributions = index_author[author]["contribution"]
+        # 随机选择num个不同的图片
+        while len(results) < num and contributions:
+            entry = random.choice(contributions)
+            if entry["path"] not in used_paths:
+                used_paths.add(entry["path"])
+                img = entry["path"]
+                upload_time = entry["time"]
+                hash = entry["hash"]
+                author_names = author
+                
+                if minimum_mode == "true":
+                    results.append({
+                        "url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
+                        "author": f"{author_names}",
+                        "hash": hash,
+                        "time": upload_time,
+                        "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0",
+                    })
+                else:
+                    results.append({
+                        "url": f"{base_url}img/{img}",
+                        "author": f"{author_names}",
+                        "hash": hash,
+                        "time": upload_time,
+                        "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0",
+                    })
+                # 从列表中移除已选择的项，提高效率
+                contributions.remove(entry)
     else:
-        return {
-            "url": f"{base_url}img/{img}",
-            "author": f"{author_names}",
-            "hash": entry["hash"],
-            "time": upload_time,
-            "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0",
-        }
+        # 随机选择num个不同的图片
+        while len(results) < num:
+            img_key = random.randint(a=1, b=max_count)
+            entry = index_id[f"{img_key}"]
+            if entry["path"] not in used_paths:
+                used_paths.add(entry["path"])
+                img = entry["path"]
+                author_names = entry["author"]
+                hash = entry["hash"]
+                upload_time = entry["time"]
+                
+                if minimum_mode == "true":
+                    results.append({
+                        "url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
+                        "author": f"{author_names}",
+                        "hash": hash,
+                        "time": upload_time,
+                        "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0",
+                    })
+                else:
+                    results.append({
+                        "url": f"{base_url}img/{img}",
+                        "author": f"{author_names}",
+                        "hash": hash,
+                        "time": upload_time,
+                        "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0",
+                    })
+    
+    # 如果只请求一个，返回单个对象，保持向后兼容
+    if num == 1 and results:
+        return results[0]
+    return results
 
 
 @app.post("/v1/dress/sync", summary="同步远程 Dress 仓库")
 async def sync_dress_repo(
+    request: Request,
     background_tasks: BackgroundTasks,
     rebuild_index: bool = Query(...),  # 默认重建索引
     x_api_key: str = Header(None, alias="X-API-Key"),  # 必须提供 Header
 ):
+    # 检查是否为 POST 请求，如果是，则从请求体获取参数
+    if request.method == "POST":
+        try:
+            body = await request.json()
+            rebuild_index = body.get("rebuild_index", rebuild_index)
+        except Exception:
+            pass
     """
     触发服务器拉取 Dress 仓库的最新提交，并重建索引
     """
@@ -375,6 +444,7 @@ async def health_check():
 
 
 @app.get("/v1/dress/index/{name}", summary="获取指定索引文件内容")
+@app.post("/v1/dress/index/{name}", summary="获取指定索引文件内容")
 async def return_index(
     name: Annotated[
         str, Path(description="索引名称，支持 index_0.json 和 index_1.json")
@@ -398,6 +468,7 @@ async def return_index(
 
 
 @app.get("/v1/dress/author/{author}", summary="获取指定作者的图片信息")
+@app.post("/v1/dress/author/{author}", summary="获取指定作者的图片信息")
 async def return_author_info(author: Annotated[str, Path(description="作者名称")]):
     """
     获取指定作者的图片信息
