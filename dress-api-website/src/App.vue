@@ -230,7 +230,7 @@
                 </el-avatar>
         </a>
         <a v-else href="https://github.com/404">
-                <el-avatar shape="circle" size="large" fit="fill" src="/lh.webp" loading="lazy"></el-avatar>
+                <el-avatar shape="circle" size="large" fit="fill" src="/lh_easy.webp" loading="lazy"></el-avatar>
 
         </a>
         

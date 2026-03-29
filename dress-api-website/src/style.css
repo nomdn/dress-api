@@ -202,20 +202,7 @@ a {
    自定义字体应用（MiSans）
    ======================== */
 
-/* 所有 h1 标题使用 MiSans 字体（需确保该字体已加载） */
-h1 {
-  font-family: "MiSans";
-}
 
-/* Element Plus 的卡片组件使用 MiSans */
-el-card {
-  font-family: "MiSans";
-}
-
-/* Element Plus 的空状态组件使用 MiSans */
-el-empty {
-  font-family: "MiSans";
-}
 
 /* ========================
    覆盖 #app 容器的部分属性（注意：后定义会覆盖前定义）
