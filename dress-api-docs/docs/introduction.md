@@ -38,7 +38,7 @@ Dress API 是一个基于Dress的随机图片API，提供**随机图片、图片
 其中v2基于`cloudflare worker`和 `worker kv`  
 v1基于`python`和`fastapi`  
 下列步骤是**v1**的快速开始   
-v2的快速开始请看[v2](/v2/index.html)
+v2的快速开始请看[v2](./v2/index.md)
 
 ---
 最低Python版本：python3.8  
