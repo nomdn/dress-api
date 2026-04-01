@@ -83,3 +83,33 @@ def run_git_pull():
         logging.error(f"Git pull 子进程错误: {e}")
     except Exception as e:
         logging.error(f"Git pull 未知错误: {e}")
+async def random_pick(index_id :list,img_base_url :str) -> dict:
+    count = len(index_id)
+    id = random.randint(1, count)
+    entry = index_id[str(id)]
+    url = img_base_url + entry["path"]
+    hash = entry["hash"]
+    author = entry["author"]
+    time = entry["time"]
+    return {
+        "author": author,
+        "hash": hash,
+        "time": time,
+        "url": url,
+        "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
+    }
+async def random_pick_author(index_author :dict,img_base_url :str,author:str) -> dict:
+    if author not in index_author:
+        raise ValueError(f"作者 {author} 不存在")
+    entries = index_author[author]["contribution"]
+    entry = random.choice(entries)
+    url = img_base_url + entry["path"]
+    hash = entry["hash"]
+    time = entry["time"]
+    return {
+        "author": author,
+        "hash": hash,
+        "time": time,
+        "url": url,
+        "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
+    }

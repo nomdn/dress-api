@@ -29,7 +29,7 @@ from urllib.parse import urljoin, urlparse
 from httpx import TimeoutException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager  # 添加这个导入
-from dress_tools import run_git_pull, get_github_index
+from dress_tools import run_git_pull, get_github_index,random_pick,random_pick_author
 from tools_v2 import build_index_by_author, convert_index_author_to_index_id
 
 
@@ -304,17 +304,30 @@ async def run_one_sync():
 async def random_setu(request: Request,
                       num: int = Query(1, description="可选，指定返回数量，默认为1"),
                       author: str = Query(None, description="可选，指定作者名称以获取该作者的图片"),):
+    """
+    你 GET 一下就行了
+    参数放url
+    POST也行，参数放在 body 里，json格式，num 和 author 都是可选的，例如：
+    {"num": 3, "author": "nekozzx"}
+    """
     # 检查是否为 POST 请求，如果是，则从请求体获取参数
     if request.method == "POST":
         try:
             body = await request.json()
             num = body.get("num", num)
             author = body.get("author", author)
+            if isinstance(author, str):
+                author = [author]  # 如果是单个字符串，转换为列表
         except Exception:
             pass
-    """
-    你 GET 一下就行了
-    """
+    elif request.method == "GET":
+        if author:
+            author = author.split("|")
+        else:
+            pass
+    else:
+        raise HTTPException(status_code=405, detail="Method Not Allowed")
+
     base_url = request.base_url
     global index_id,index_author
 
@@ -333,71 +346,38 @@ async def random_setu(request: Request,
     
     # 确保num不超过最大值
     num = min(num, max_count)
+    author_all_count = 0 
     results = []
     used_paths = set()  # 用于存储已使用的path，确保不重复
-    
+    if minimum_mode == "true":
+        img_base_url = "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/"
+    else:
+        img_base_url = f"{base_url}img/"
     if author:
-        # 根据作者名称筛选图片
-        if author not in index_author:
-            raise HTTPException(status_code=404, detail="Author not found")
-        contributions = index_author[author]["contribution"]
-        # 随机选择num个不同的图片
-        while len(results) < num and contributions:
-            entry = random.choice(contributions)
-            if entry["path"] not in used_paths:
-                used_paths.add(entry["path"])
-                img = entry["path"]
-                upload_time = entry["time"]
-                hash = entry["hash"]
-                author_names = author
-                
-                if minimum_mode == "true":
-                    results.append({
-                        "url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
-                        "author": f"{author_names}",
-                        "hash": hash,
-                        "time": upload_time,
-                        "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0",
-                    })
-                else:
-                    results.append({
-                        "url": f"{base_url}img/{img}",
-                        "author": f"{author_names}",
-                        "hash": hash,
-                        "time": upload_time,
-                        "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0",
-                    })
-                # 从列表中移除已选择的项，提高效率
-                contributions.remove(entry)
+        
+        for one_author in author:
+            if one_author in index_author:
+                author_all_count += len(index_author[one_author]["contribution"])
+            else:
+                raise HTTPException(status_code=404, detail=f"Author {one_author} Not Found")
+        num = min(num, author_all_count)
+        while len(results) < num:
+            now_author = random.choice(author)
+            entry = await random_pick_author(index_author, img_base_url, now_author)
+            if entry["url"] not in used_paths:
+                used_paths.add(entry["url"])
+                results.append(entry)
+            else:
+                continue
     else:
         # 随机选择num个不同的图片
         while len(results) < num:
-            img_key = random.randint(a=1, b=max_count)
-            entry = index_id[f"{img_key}"]
-            if entry["path"] not in used_paths:
-                used_paths.add(entry["path"])
-                img = entry["path"]
-                author_names = entry["author"]
-                hash = entry["hash"]
-                upload_time = entry["time"]
-                
-                if minimum_mode == "true":
-                    results.append({
-                        "url": f"https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/{img}",
-                        "author": f"{author_names}",
-                        "hash": hash,
-                        "time": upload_time,
-                        "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0",
-                    })
-                else:
-                    results.append({
-                        "url": f"{base_url}img/{img}",
-                        "author": f"{author_names}",
-                        "hash": hash,
-                        "time": upload_time,
-                        "notice": "Cute-Dress/Dress CC BY-NC-SA 4.0",
-                    })
-    
+            entry = await random_pick(index_id, img_base_url)
+            if entry["url"] not in used_paths:
+                used_paths.add(entry["url"])
+                results.append(entry)
+            else:
+                continue
     # 如果只请求一个，返回单个对象，保持向后兼容
     if num == 1 and results:
         return results[0]
