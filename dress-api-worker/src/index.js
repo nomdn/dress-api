@@ -82,14 +82,24 @@ async function handleDressRequest(c) {
 	// 从请求体或查询参数获取参数
 	let num = parseInt(c.req.query('num') || '1');
 	let authorParam = c.req.query('author');
+	let authors = [];
 	
 	if (c.req.method === 'POST') {
 		try {
 			const body = await c.req.json();
 			num = parseInt(body.num || num);
 			authorParam = body.author || authorParam;
+			if (typeof authorParam === 'string') {
+				authors = [authorParam]; // 如果是单个字符串，转换为列表
+			} else if (Array.isArray(authorParam)) {
+				authors = authorParam;
+			}
 		} catch (e) {
 			// 忽略解析错误
+		}
+	} else if (c.req.method === 'GET') {
+		if (authorParam) {
+			authors = authorParam.split('|');
 		}
 	}
 	
@@ -101,38 +111,52 @@ async function handleDressRequest(c) {
 		const idLength = indexID.length;
 		
 		// 确保num不超过最大值
-		const maxNum = Math.min(num, idLength);
+		let maxNum = Math.min(num, idLength);
 		const results = [];
 		const usedPaths = new Set(); // 用于存储已使用的path，确保不重复
 		
-		if (authorParam) {
-			// 根据作者名称筛选图片
-			const authorData = indexAuthor[authorParam];
-			if (!authorData) {
-				return c.json({ error: "Author not found" }, 404);
+		if (authors.length > 0) {
+			// 检查所有作者是否存在，并计算总贡献数
+			let authorAllCount = 0;
+			for (const oneAuthor of authors) {
+				if (indexAuthor[oneAuthor]) {
+					authorAllCount += indexAuthor[oneAuthor]["contribution"].length;
+				} else {
+					return c.json({ error: `Author ${oneAuthor} not found` }, 404);
+				}
 			}
-			const contributions = authorData["contribution"];
+			
+			// 确保num不超过总贡献数
+			maxNum = Math.min(num, authorAllCount);
+			
 			// 随机选择num个不同的图片
-			while (results.length < maxNum && contributions.length > 0) {
-				const randomIndex = getRandomIntInclusive(0, contributions.length - 1);
-				const entry = contributions[randomIndex];
-				if (!usedPaths.has(entry["path"])) {
-					usedPaths.add(entry["path"]);
-					const author = authorParam;
-					const hash = entry['hash'] || '';
-					const time = entry['time'] || '';
-					const pathVal = entry['path'] || '';
-					const path = `${urlPrefix}${pathVal}`;
+			while (results.length < maxNum) {
+				// 随机选择一个作者
+				const randomAuthor = authors[getRandomIntInclusive(0, authors.length - 1)];
+				const authorData = indexAuthor[randomAuthor];
+				const contributions = authorData["contribution"];
+				
+				if (contributions.length > 0) {
+					// 随机选择一个贡献
+					const randomIndex = getRandomIntInclusive(0, contributions.length - 1);
+					const entry = contributions[randomIndex];
 					
-					results.push({
-						author: author,
-						hash: hash,
-						time: time,
-						url: path,
-						notice: "Cute-Dress/Dress CC-BY-NC-SA 4.0",
-					});
-					// 从列表中移除已选择的项，提高效率
-					contributions.splice(randomIndex, 1);
+					if (!usedPaths.has(entry["path"])) {
+						usedPaths.add(entry["path"]);
+						const author = randomAuthor;
+						const hash = entry['hash'] || '';
+						const time = entry['time'] || '';
+						const pathVal = entry['path'] || '';
+						const path = `${urlPrefix}${pathVal}`;
+						
+						results.push({
+							author: author,
+							hash: hash,
+							time: time,
+							url: path,
+							notice: "Cute-Dress/Dress CC-BY-NC-SA 4.0",
+						});
+					}
 				}
 			}
 		} else {
