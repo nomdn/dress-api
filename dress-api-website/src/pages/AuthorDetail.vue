@@ -1,12 +1,12 @@
 <script setup>
-import { ref, reactive, onMounted, computed,inject } from 'vue';
+import { ref,  onMounted,inject,computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { Sunny, Moon, Loading } from '@element-plus/icons-vue';
 import { useDark, useToggle } from '@vueuse/core';
-import Vue3MarkdownIt from 'vue3-markdown-it';
-import { ElMenu, ElMenuItem, ElAvatar, ElImage, ElCard } from 'element-plus';
+import MarkdownIt from 'markdown-it';
 
+import { generateSvgAvatar } from '../scripts/avatar_utils';
 const navigateToHome = () => {
   router.push('/');
 };
@@ -55,7 +55,17 @@ const loadAuthorData = async () => {
     alert('加载数据失败: ' + err.message);
   }
 };
+const md = new MarkdownIt({
+  html: true,        // <-- 允许渲染 HTML 标签
+  linkify: true,     // 自动将 URL 转为链接
+  typographer: true, // 启用智能排版（如 "--" -> "—")
+});
 
+// 在 setup 中创建计算属性
+const renderedMarkdown = computed(() => {
+  if (!markdownText.value) return '';
+  return md.render(markdownText.value);
+});
 
 const formatDate = (dateString) => {
   if (!dateString) return '未知时间';
@@ -108,11 +118,7 @@ onMounted(() => {
         </div>
 
         <!-- Markdown 内容 -->
-        <div class="author-markdown" v-if="markdownText">
-          <vue3-markdown-it 
-            :source="markdownText" 
-            style="text-align: left !important; margin: 20px 0;"
-          />
+        <div class="author-markdown" v-if="markdownText" v-html="renderedMarkdown" style="text-align: left !important; margin: 20px 0;">
         </div>
 
         <!-- 图片卡片 -->

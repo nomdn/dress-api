@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 import { generateSvgAvatar } from '../scripts/avatar_utils.js';
 import { Sunny, Moon, Search } from '@element-plus/icons-vue';
 import { useDark, useToggle } from '@vueuse/core';
-import { ElCard, ElEmpty, ElPagination, ElMenu, ElMenuItem, ElAvatar, ElImage, ElInput } from 'element-plus';
+
 
 const router = useRouter();
 
