@@ -24,7 +24,7 @@ from fastapi import (
     Path,
     status
 )
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from urllib.parse import urljoin, urlparse
 from httpx import TimeoutException
@@ -124,7 +124,22 @@ app = FastAPI(
     lifespan=auto_sync_on_start,  # 添加生命周期管理器
 )
 app.add_middleware(CORSMiddleware, allow_origins=["*"])
-
+@app.middleware("http")
+async def spa_middleware(request: Request, call_next):
+    response = await call_next(request)
+    
+    # 如果响应是 404，并且请求路径不是 API 或静态资源，则返回 index.html
+    if (
+        response.status_code == 404 
+        and not request.url.path.startswith("/v1/") # 你的 API 前缀
+        and not request.url.path.startswith("/img/") # 你的图片资源
+        and not request.url.path.startswith("/static/") # 如果你有其他静态资源
+        and not os.path.splitext(request.url.path)[1] # 不是请求一个带扩展名的文件 (如 .js, .css)
+    ):
+        # 返回 Vue 应用的入口文件
+        return FileResponse(os.path.join(BASE_DIR, "public", "index.html"))
+    
+    return response
 
 async def auto_sync():
     """
@@ -479,10 +494,12 @@ async def love_you(response: Response):
     else:
         response.status_code = status.HTTP_418_IM_A_TEAPOT
         return 'I am a teapot!!!!!'
-    
+
+
 if minimum_mode != "true":
     app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")
+
 if __name__ == "__main__":
     colorama.init(autoreset=True)
     print(f"🚀 启动服务: http://0.0.0.0:{ports}")

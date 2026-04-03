@@ -102,8 +102,10 @@ watch(searchQuery, () => {
         class="author-card"
         shadow="hover"
         v-show="shouldShowAuthor(index)"
+        @click="navigateToAuthor(authorName)"
+        style="cursor: pointer;"
       >
-        <div class="card-header" @click="navigateToAuthor(authorName)">
+        <div class="card-header">
           <a v-if="groupedImages[authorName].github_username" :href="'https://github.com/'+groupedImages[authorName].github_username" target="_blank">
             <el-avatar shape="circle" size="large" fit="fill">
               <el-image :src="groupedImages[authorName].avatar_url" fit="fill" lazy></el-image>
@@ -136,6 +138,17 @@ watch(searchQuery, () => {
         >
         </el-pagination>
       </div>
+      <footer>
+      <a style="text-decoration:none;color:#e77c8e;margin-left: 20px;" href="https://travel.moe/go.html" title="异次元之旅-跃迁-我们一起去萌站成员的星球旅行吧！" target="_blank">
+        <img src="https://travel.moe/images/icon/icon64pink.png" style="width:24px;height:24px">异次元之旅
+      </a>
+      <div class="some-link"> 
+        <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp&nbsp
+        <a href="https://github.com/Cute-Dress">Dress</a>&nbsp&nbsp
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>&nbsp&nbsp
+        <a href="https://icp.gov.moe/?keyword=20260057" target="_blank">萌ICP备20260057号</a>&nbsp&nbsp
+      </div>
+    </footer>
 </template>
 
 <style scoped>
