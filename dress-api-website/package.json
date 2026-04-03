@@ -17,6 +17,7 @@
     "express": "^5.2.1",
     "minidenticons": "^4.2.1",
     "vue": "^3.5.25",
+    "vue-router": "^4.6.4",
     "vue3-lazyload": "^0.3.8",
     "vue3-markdown-it": "^1.0.10"
   },
