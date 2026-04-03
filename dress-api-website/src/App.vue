@@ -8,7 +8,7 @@ const groupedImages = ref({});
 const remoteAPI = ref('https://dress.wsmdn.top/');
 const imgBaseURL = ref('https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/');
 const isLoading = ref(true);
-const useMinimum = ref(config.useMinimum || true);
+const useMinimum = ref(config.useMinimum);
 if (config.remote.remoteURL) {
   remoteAPI.value = config.remote.remoteURL;
 }
