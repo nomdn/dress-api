@@ -1,0 +1,305 @@
+<script setup>
+import { ref, reactive, onMounted, computed,inject } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import { Sunny, Moon, Loading } from '@element-plus/icons-vue';
+import { useDark, useToggle } from '@vueuse/core';
+import Vue3MarkdownIt from 'vue3-markdown-it';
+import { ElMenu, ElMenuItem, ElAvatar, ElImage, ElCard } from 'element-plus';
+
+const navigateToHome = () => {
+  router.push('/');
+};
+
+const route = useRoute();
+const router = useRouter();
+const authorname = route.params.authorname;
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+const activeIndex = ref('1');
+
+const groupedImages = inject('groupedImages');
+const remoteAPI = inject('remoteAPI');
+const imgBaseURL = inject('imgBaseURL');
+const isLoading = inject('isLoading');
+const authorData = ref(null);
+const markdownText = ref('');
+const srcList = ref([]);
+const createSrcList = () => {
+  if (authorData.value && authorData.value.contribution) {
+    srcList.value = authorData.value.contribution.map(image => imgBaseURL.value + image.path);
+  }
+};
+const loadAuthorData = async () => {
+  try {
+    // 加载所有作者数据
+    const response = await axios.get(remoteAPI.value + '/index_1.json');
+    const data = response.data;
+    groupedImages.value = data;
+    
+    // 找到当前作者的数据
+    if (data[authorname]) {
+      authorData.value = data[authorname];
+      
+      // 加载作者的 README.md
+      if (authorData.value.readme) {
+        const markdownResponse = await axios.get(imgBaseURL.value + authorData.value.readme);
+        markdownText.value = markdownResponse.data;
+      }
+      // 加载当前作者的图片列表
+      createSrcList();
+    }
+  } catch (err) {
+    console.error(err);
+    alert('加载数据失败: ' + err.message);
+  }
+};
+
+
+const formatDate = (dateString) => {
+  if (!dateString) return '未知时间';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('zh-CN');
+};
+
+
+const handleImageError = (e) => {
+  e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23000000"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="%23F8F8FF">图片无法加载</text></svg>';
+};
+
+onMounted(() => {
+  loadAuthorData();
+  
+});
+
+</script>
+
+<template>
+  <div class="app-container">
+    <el-menu
+      :default-active="activeIndex"
+      mode="horizontal"
+      :ellipsis="false"
+    >
+      <el-menu-item index="0">
+        <el-icon @click="toggleDark()" v-if="isDark" style="cursor: pointer;"><Moon style="height: 20px; width: 20px;"/></el-icon>
+        <el-icon @click="toggleDark()" v-else style="cursor: pointer;"><Sunny style="height: 20px; width: 20px;"/></el-icon>
+        <h3 style="width: max-content; cursor: pointer;" @click="navigateToHome()">
+          Dress-API
+        </h3>
+      </el-menu-item>
+    </el-menu>
+
+    <div class="display-area">
+      <div v-if="authorData" class="author-detail">
+
+        <!-- 作者头像和名字 -->
+        <div class="author-header">
+          <a v-if="authorData.github_username" :href="'https://github.com/'+authorData.github_username" target="_blank">
+            <el-avatar shape="circle" size="large" fit="fill">
+              <el-image :src="authorData.avatar_url" fit="fill" lazy></el-image>
+            </el-avatar>
+          </a>
+          <a v-else href="https://github.com/404">
+            <el-avatar shape="circle" size="large" fit="fill" :src="generateSvgAvatar(authorname)" loading="lazy"></el-avatar>
+          </a>
+          <h2>{{ authorname }}</h2>
+        </div>
+
+        <!-- Markdown 内容 -->
+        <div class="author-markdown" v-if="markdownText">
+          <vue3-markdown-it 
+            :source="markdownText" 
+            style="text-align: left !important; margin: 20px 0;"
+          />
+        </div>
+
+        <!-- 图片卡片 -->
+        <div class="author-images" v-if="authorData.contribution && authorData.contribution.length > 0">
+          <div class="image-grid">
+            <el-card 
+              v-for="(image, index) in authorData.contribution" 
+              :key="index"
+              class="image-card"
+              shadow="hover"
+            >
+
+              <el-image 
+                :src="imgBaseURL + image.path" 
+                fit="cover" 
+                class="image-preview"
+                @error="handleImageError"
+                :preview-src-list="srcList"
+                :initial-index="index"
+              >
+              <template #placeholder>
+                <div class="image-header">
+                  <el-icon class="is-loading"><Loading /></el-icon>
+                </div>
+              </template>
+            </el-image>
+              <div class="image-info">
+                {{ formatDate(image.time) }}
+              </div>
+            </el-card>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</template>
+
+<style scoped>
+@import '../style.css';
+
+/* 全局布局 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  --el-color-primary: rgb(0, 0, 0);
+}
+
+html.dark .app-container {
+  --el-color-primary: rgb(233, 233, 233);
+}
+
+.el-menu--horizontal {
+  --el-menu-horizontal-height: 50px;
+  border-bottom: none !important;
+  --el-menu-hover-bg-color: transparent !important;
+  --el-menu-active-color: var(--el-text-color-primary) !important;
+  --el-menu-bg-color: transparent !important;
+}
+
+.el-menu--horizontal > .el-menu-item:nth-child(1) {
+  margin-right: auto;
+}
+
+/* 去除选中强调和下划线 */
+.el-menu--horizontal > .el-menu-item.is-active {
+  color: var(--el-text-color-primary) !important;
+  background-color: transparent !important;
+  border-bottom: none !important;
+}
+
+.el-menu--horizontal > .el-menu-item:hover {
+  color: var(--el-text-color-primary) !important;
+  background-color: transparent !important;
+  border-bottom: none !important;
+}
+
+/* 去除所有可能的边框和下划线 */
+.el-menu--horizontal::after {
+  display: none !important;
+}
+
+.el-menu--horizontal > .el-menu-item {
+  border-bottom: none !important;
+  transition: none !important;
+}
+
+.el-menu--horizontal > .el-menu-item.is-active::after {
+  display: none !important;
+}
+
+.el-icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+
+
+/* 作者详情页面样式 */
+.author-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.author-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.author-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.author-markdown {
+  margin: 40px 0;
+}
+
+.author-images {
+  margin: 40px 0;
+  border-radius: 15px;
+}
+
+.author-images h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.image-card {
+  overflow: hidden;
+  max-height: 280px;
+  max-width: 300px;
+}
+
+.image-preview {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.image-info {
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #909399;
+}
+
+.loading {
+  text-align: center;
+  margin: 100px 0;
+  font-size: 18px;
+  color: #909399;
+}
+
+/* 移动端安全区适配 */
+@media screen and (max-width: 768px) {
+  footer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .author-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .image-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
+  
+  .image-preview {
+    height: 150px;
+  }
+}
+</style>

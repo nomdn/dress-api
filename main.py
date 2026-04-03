@@ -22,6 +22,7 @@ from fastapi import (
     Header,
     Query,
     Path,
+    status
 )
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -469,7 +470,16 @@ async def return_author_info(author: Annotated[str, Path(description="作者名�
     except KeyError:
         raise HTTPException(status_code=404, detail="Author not found")
 
-
+@app.get("/i/love/you",include_in_schema=False)
+async def love_you(response: Response):
+    which = random.randint(0, 1)
+    if which == 0:
+        response.status_code = 520
+        return "I love you too!Please don't forget me!"
+    else:
+        response.status_code = status.HTTP_418_IM_A_TEAPOT
+        return 'I am a teapot!!!!!'
+    
 if minimum_mode != "true":
     app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")

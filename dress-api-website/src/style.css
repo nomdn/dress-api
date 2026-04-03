@@ -31,6 +31,7 @@
   
   /* Firefox on macOS 启用灰度平滑 */
   -moz-osx-font-smoothing: grayscale;
+
 }
 
 html.dark {
@@ -89,11 +90,7 @@ button {
   transition: border-color 0.25s;
 }
 
-/* 按钮悬停状态 */
-button:hover {
-  /* 悬停时显示品牌色边框 */
-  border-color: #646cff;
-}
+
 
 /* 按钮获得焦点时的无障碍高亮（用于键盘导航） */
 button:focus,
@@ -116,18 +113,20 @@ button:focus-visible {
 
 .display-area {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
   /* 最大宽度限制，避免在超宽屏上内容拉伸过宽 */
   max-width: 1300px;
+  flex-grow: 1;
+  width: 90%;
+  flex-shrink: 0;
   
   /* 水平居中 */
   margin: 0 auto;
-  
   /* 上下左右内边距 */
   padding: 2rem;
-  
-  /* 内容文本居中（适用于标题、按钮等） */
-  text-align: center;
+  box-sizing: border-box;
 }
 
 .giscus-area {
@@ -170,32 +169,46 @@ button:focus-visible {
   }
 }
 
-/* ========================
-   页脚样式
-   ======================== */
+/* ========================   页脚样式   ======================== */
 footer {
-  /* 最大宽度，与内容区对齐 */
-  max-width: 1000px;
-  
+  display: flex;
+  flex-direction: column;
+  background-color: #f3f2f2;
   /* 水平居中 */
-  margin: 0 auto;
   
+  height: auto;
+  bottom: 0;
+
+  width: 100%;
   /* 小内边距 */
   padding: 10px;
-  
+  margin-top: 20px;
   /* 文本居中 */
-  text-align: center;
+  text-align: left;
+  color: var(--el-text-color-primary);
+  border-style: none;
+  box-shadow: none;
+  border-top: none;
+  box-sizing: border-box;
 }
-
+html.dark footer {
+  background-color: #333333;
+  color: var(--el-text-color-primary);
+  box-shadow: none;
+  border-top: none;
+}
 /* ========================
    全局链接样式
    ======================== */
 a {
   /* 使用 Element Plus 主题蓝色 */
-  color: #409eff;
+  color: #757575;
   
   /* 移除默认下划线 */
   text-decoration: none;
+}
+html.dark a {
+  color: #dbd9d9;
 }
 
 /* ========================
@@ -213,8 +226,16 @@ a {
    作者卡片样式
    ======================== */
 .author-card {
+  flex: 1;
   /* 卡片底部间距，避免堆叠太紧 */
-  margin-bottom: 16px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  min-height: 140px;
+  min-width: 245px;
+  max-width: 100%;
+  max-height: 150px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 /* 卡片头部容器（含标题和展开按钮） */
@@ -222,14 +243,12 @@ a {
   /* 使用 Flex 布局 */
   display: flex;
   
-  /* 两端对齐：作者名在左，按钮在右 */
-  justify-content: space-between;
-  
   /* 垂直居中对齐 */
   align-items: center;
   
   /* 鼠标悬停时显示手型光标（暗示可点击） */
   cursor: pointer;
+  gap: 16px;
 }
 
 /* ========================
@@ -318,10 +337,7 @@ card-content {
   justify-content: center;
 
 }
-.el-button {
-  background-color: #409eff;
-  color: white;
-}
+
 
 body {
   margin: 0;

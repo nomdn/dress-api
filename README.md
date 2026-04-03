@@ -18,6 +18,11 @@
 如果你觉得我侵犯了您的权利，请在issues交流  
 如果你想搭建完整版API请在项目根目录克隆[Dress](https://github.com/Cute-Dress/Dress)
 
+## 特别鸣谢
+[Dress](https://github.com/Cute-Dress/Dress)  
+整个项目都是基于这个图片库的  
+[Flysky12138/PicW](https://github.com/Flysky12138/PicW)  
+本项目的前端借鉴了这位大佬的设计(但是我没抄代码,因为我是MIT他是GPL)
 ## 友链
 以下是一些基于dress-api的优秀项目  
 <br>
