@@ -9,13 +9,13 @@
 const config = {
     // 是否启用最简模式（Minimal Mode）：
     // - true: 所有数据和图片均从 remote 或 rollback 指定的远程 URL 获取
-    // - false: 可能尝试使用本地托管的资源（需配合后端非 minimal_mode）
-    useMinimum: false,
+    // - false: 可能尝试使用本地托管的资源（需配合后端非 lite_mode）
+    useLite: false,
 
     // 主服务配置（生产环境推荐地址）
     remote: {
         remoteURL: 'https://dress.wsmdn.top/',     // API 根地址
-        imgURL: 'https://dress.wsmdn.top/img/'     // 本地托管图片的访问前缀（仅在非 minimal 模式下有效）
+        imgURL: 'https://dress.wsmdn.top/img/'     // 本地托管图片的访问前缀（仅在非 lite 模式下有效）
     },
 
     // 回退服务配置（CDN 备用地址，适用于主服务宕机或网络受限场景）

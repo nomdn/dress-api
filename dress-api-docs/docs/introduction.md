@@ -55,7 +55,7 @@ Node.js推荐版本 : v22.18
    ```bash
    git clone https://github.com/Cute-Dress/Dress public
    ```
-   若跳过此步，API 将自动从 GitHub 加载远程索引（最小化模式）。
+   若跳过此步，API 将自动从 GitHub 加载远程索引（轻量模式）。
 
 3. 安装依赖
    ```bash
@@ -75,7 +75,7 @@ Node.js推荐版本 : v22.18
    LOG_LEVEL=INFO
    AUTO_SYNC=true
    AUTO_SYNC_TIME=86400
-   FORCE_MINING=false
+   FORCE_LITE=false
    FORCE_REMOTE=false
    ```
    
@@ -91,7 +91,7 @@ Node.js推荐版本 : v22.18
    
    **AUTO_SYNC_TIME**：自动同步间隔（秒），默认86400（24小时）
    
-   **FORCE_MINING**：强制使用最小化模式（从CDN获取数据），默认false
+   **FORCE_LITE**：强制使用轻量模式（从CDN获取数据），默认false
    
    **FORCE_REMOTE**：强制使用远程预构建索引，默认false
 
@@ -110,7 +110,7 @@ const config = {
     // 是否启用最简模式（Minimal Mode）：
     // - true: 所有数据和图片均从 remote 或 rollback 指定的远程 URL 获取
     // - false: 可能尝试使用本地托管的资源（需配合后端非 minimal_mode）
-    useMinimum: false,
+    useLite: false,
 
     // 主服务配置（生产环境推荐地址）
     remote: {

@@ -44,7 +44,7 @@ ports = 8092
 log_level = "INFO"
 auto_sync_enabled = "true"
 auto_sync_time = 86400  # 默认24小时
-minimum_mode = "false"
+lite_mode = "false"
 force_remote_index = "false"
 # 统一加载逻辑
 load_dotenv()  # 先加载 .env
@@ -54,7 +54,7 @@ ports = int(os.environ.get("PORTS") or ports)
 log_level = os.environ.get("LOG_LEVEL") or log_level
 auto_sync_enabled = os.environ.get("AUTO_SYNC") or auto_sync_enabled
 auto_sync_time = int(os.environ.get("AUTO_SYNC_TIME") or auto_sync_time)
-minimum_mode = os.environ.get("FORCE_MINING") or minimum_mode
+lite_mode = os.environ.get("FORCE_LITE") or lite_mode
 force_remote_index = os.environ.get("FORCE_REMOTE") or force_remote_index
 
 # 安全地设置日志级别，处理None值和无效值
@@ -80,18 +80,18 @@ BASE_DIR = p_pathlib(__file__).resolve().parent
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"}
 
 
-if not os.path.exists("Dress") and minimum_mode != "true":
-    logging.info("未在当前目录发现Dress仓库，将以最小化API运行")
-    minimum_mode = "true"
+if not os.path.exists("Dress") and lite_mode != "true":
+    logging.info("未在当前目录发现Dress仓库，将以轻量API运行")
+    lite_mode = "true"
     try:
         index_id = asyncio.run(get_github_index())
         index_author = asyncio.run(get_github_index("index_1.json"))
     except Exception as e:
         logging.error(f"获取远端数据失败: {e}")
         raise RuntimeError("无法连接到远程服务器获取数据")
-elif minimum_mode == "true":
-    # 即使存在Dress目录，如果用户强制设置为最小化模式，也要使用远程数据
-    logging.info("强制使用最小化API运行模式")
+elif lite_mode == "true":
+    # 即使存在Dress目录，如果用户强制设置为轻量模式，也要使用远程数据
+    logging.info("强制使用轻量API运行模式")
     try:
         index_id = asyncio.run(get_github_index())
         index_author = asyncio.run(get_github_index())
@@ -99,7 +99,7 @@ elif minimum_mode == "true":
         logging.error(f"获取远端数据失败: {e}")
         raise RuntimeError("无法连接到远程服务器获取数据")
 else:
-    # 在非最小化模式下，也需要初始化data变量，以防万一需要使用
+    # 在非轻量模式下，也需要初始化data变量，以防万一需要使用
     data = None
 
 
@@ -143,7 +143,7 @@ async def spa_middleware(request: Request, call_next):
 
 async def auto_sync():
     """
-    启动时自动同步 Dress 仓库（仅非最小化模式）
+    启动时自动同步 Dress 仓库（仅非轻量模式）
     """
     global index_author, index_id, jsdelivr_ok, github_ok
     if auto_sync_enabled == "true":
@@ -174,7 +174,7 @@ async def auto_sync():
                         continue  # Try next URL
             # 使用无限循环替代单次sleep
 
-            if minimum_mode != "true":
+            if lite_mode != "true":
                 logging.info("开始执行本地Dress仓库同步...")
                 await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
                 if force_remote_index == "true":
@@ -273,7 +273,7 @@ async def run_one_sync():
                 continue  # Try next URL
     # 使用无限循环替代单次sleep
 
-    if minimum_mode != "true":
+    if lite_mode != "true":
         logging.info("开始执行本地Dress仓库同步...")
         await asyncio.to_thread(run_git_pull)  # run_git_pull 不是异步函数
         if force_remote_index == "true":
@@ -365,7 +365,7 @@ async def random_setu(request: Request,
     author_all_count = 0 
     results = []
     used_paths = set()  # 用于存储已使用的path，确保不重复
-    if minimum_mode == "true":
+    if lite_mode == "true":
         img_base_url = "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/"
     else:
         img_base_url = f"{base_url}img/"
@@ -430,8 +430,8 @@ async def sync_dress_repo(
 async def health_check():
 
     return {
-        "status": "healthy",
-        "minimum_mode": minimum_mode,
+        "status": "ok",
+        "lite_mode": lite_mode,
         "auto_sync_enabled": auto_sync_enabled,
         "auto_sync_time": auto_sync_time,
         "connectivity_to_gitHub": github_ok,
@@ -496,7 +496,7 @@ async def love_you(response: Response):
         return 'I am a teapot!!!!!'
 
 
-if minimum_mode != "true":
+if lite_mode != "true":
     app.mount("/img", StaticFiles(directory=BASE_DIR / "Dress"), name="static")
 app.mount("/", StaticFiles(directory=BASE_DIR / "public", html=True), name="static")
 

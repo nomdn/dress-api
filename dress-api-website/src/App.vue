@@ -8,7 +8,7 @@ const groupedImages = ref({});
 const remoteAPI = ref('https://dress.wsmdn.top/');
 const imgBaseURL = ref('https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/');
 const isLoading = ref(true);
-const useMinimum = ref(config.useMinimum);
+const useLite = ref(config.useLite);
 if (config.remote.remoteURL) {
   remoteAPI.value = config.remote.remoteURL;
 }
@@ -30,8 +30,8 @@ const loadJsonData = async () => {
     groupedImages.value = data;
   } catch (err) {
     console.error(err);
-    useMinimum.value = true; // 切换到最小模式
-    loadJsonData();
+    useLite.value = true; // 切换到最小模式
+    checkApiHealth(); // 重新检查API健康状态
     
   } finally {
     isLoading.value = false;
@@ -41,7 +41,7 @@ const loadJsonData = async () => {
 // 检查API健康状态
 const checkApiHealth = async () => {
   try {
-    if (useMinimum.value == false) {
+    if (useLite.value == false) {
       console.log('使用远程API地址加载图片');
       imgBaseURL.value = remoteAPI.value + "img/";
     } else {
