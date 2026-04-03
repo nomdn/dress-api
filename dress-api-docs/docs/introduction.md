@@ -76,7 +76,6 @@ Node.js推荐版本 : v22.18
    AUTO_SYNC=true
    AUTO_SYNC_TIME=86400
    FORCE_MINING=false
-   AUTO_MINING_TIME=86400
    FORCE_REMOTE=false
    ```
    
