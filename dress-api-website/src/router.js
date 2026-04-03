@@ -12,7 +12,6 @@ const routes = [
     path: '/author/:authorname',
     name: 'AuthorDetail',
     component: AuthorDetail,
-    props: true
   }
 ];
 

@@ -34,7 +34,7 @@ const createSrcList = () => {
 const loadAuthorData = async () => {
   try {
     // 加载所有作者数据
-    const response = await axios.get(remoteAPI.value + '/index_1.json');
+    const response = await axios.get(remoteAPI.value + 'index_1.json');
     const data = response.data;
     groupedImages.value = data;
     
