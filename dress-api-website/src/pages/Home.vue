@@ -69,7 +69,6 @@ watch(searchQuery, () => {
       :default-active="activeIndex"
       mode="horizontal"
       :ellipsis="false"
-      @select="handleSelect"
     >
       <el-menu-item index="0">
         <el-icon @click="toggleDark()" v-if="isDark" style="cursor: pointer;"><Moon style="height: 20px; width: 20px;"/></el-icon>
@@ -89,7 +88,6 @@ watch(searchQuery, () => {
           clearable
           size="large"
           :prefix-icon="Search"
-          
         />
       </el-menu-item>
     </el-menu>
@@ -124,7 +122,7 @@ watch(searchQuery, () => {
 
 
   </div>
-        <div style="width: 80%;max-width: 1000px;margin-bottom: 20px;margin: 0 auto;">
+        <div style="width: 60%;margin-bottom: 20px;margin: 0 auto;">
         <el-pagination
           v-if = "filteredAuthors.length>0"
           v-model:page-size="pageSize"
