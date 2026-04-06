@@ -1,9 +1,11 @@
 <script setup>
-import { ref, computed, watch, inject } from 'vue';
+import { ref, computed, watch, inject, onMounted,onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
+
 import { generateSvgAvatar } from '../scripts/avatar_utils.js';
 import { Sunny, Moon, Search } from '@element-plus/icons-vue';
 import { useDark, useToggle } from '@vueuse/core';
+import { vi } from 'element-plus/es/locale/index.mjs';
 
 
 const router = useRouter();
@@ -12,6 +14,7 @@ const navigateToAuthor = (authorName) => {
   router.push(`/author/${authorName}`);
 };
 
+const visible = ref(false);
 const isDark = useDark();
 const activeIndex = ref('1');
 const toggleDark = useToggle(isDark);
@@ -61,6 +64,34 @@ const handleSelect = (key, keyPath) => {
 watch(searchQuery, () => {
   currentPage.value = 1;
 });
+
+const isNarrow = ref(false);
+let mediaQueryList = null;
+const paginationModules = () =>{
+  if (!isNarrow.value) {
+    return "total, sizes, prev, pager, next, jumper";
+  }else{
+    return "sizes,pager, prev, next";
+  }
+}
+onMounted(() => {
+  mediaQueryList = window.matchMedia('(max-width: 768px)');
+  isNarrow.value = mediaQueryList.matches;
+  
+  // 监听窗口大小变化（可选，增强体验）
+  const handler = (e) => {
+    isNarrow.value = e.matches;
+    visible.value = false; // 窗口大小变化时关闭搜索框
+  };
+  mediaQueryList.addEventListener('change', handler);
+
+  // 清理监听器
+  onBeforeUnmount(() => {
+    mediaQueryList.removeEventListener('change', handler);
+  });
+
+  console.log("当前设备是否是窄屏：" + isNarrow.value);
+});
 </script>
 
 <template>
@@ -81,48 +112,80 @@ watch(searchQuery, () => {
         </span>
       </el-menu-item>
       <el-menu-item index="1">
-        <el-input
-          v-model="searchQuery"
-          placeholder="搜索作者..."
-          sytle="width: 100%;"
-          clearable
-          size="large"
-          :prefix-icon="Search"
-        />
+        <div class="search-container"> 
+          <el-input
+            v-if="!isNarrow"
+            v-model="searchQuery"
+            placeholder="搜索作者..."
+            style="width: 100%;"
+            clearable
+            size="large"
+            :prefix-icon="Search"
+          />
+        </div>
+
+          <el-popover
+        :visible="visible"
+        placement="bottom"
+        :width="200"
+        >
+          <el-input
+            v-model="searchQuery"
+            placeholder="搜索作者..."
+            clearable
+            size="large"
+            :prefix-icon="Search"
+          />
+          <template #reference>
+            <el-icon v-if="isNarrow" class="menu-icon" @click="visible = !visible" >
+              <Search />
+            </el-icon>
+          </template>
+        </el-popover>
+
       </el-menu-item>
+
     </el-menu>
 
     <div class="display-area">
       <!-- 按作者分组的可折叠卡片 -->
-      <el-card 
-        v-for="(authorName, index) in filteredAuthors" 
-        :key="authorName"
+      <RouterLink 
+      v-for="(authorName, index) in filteredAuthors" 
+      :key="authorName"
+      :to="'/author/'+authorName"
+      >
+        <el-card 
+
         class="author-card"
         shadow="hover"
         v-show="shouldShowAuthor(index)"
         @click="navigateToAuthor(authorName)"
         style="cursor: pointer;"
+        tag="a"
+        :href="'/author/'+authorName"
       >
-        <div class="card-header">
-          <a v-if="groupedImages[authorName].github_username" :href="'https://github.com/'+groupedImages[authorName].github_username" target="_blank">
-            <el-avatar shape="circle" size="large" fit="fill">
-              <el-image :src="groupedImages[authorName].avatar_url" fit="fill" lazy></el-image>
-            </el-avatar>
-          </a>
-          <a v-else href="https://github.com/404">
-            <el-avatar shape="circle" size="large" fit="fill" :src="generateSvgAvatar(authorName)" loading="lazy"></el-avatar>
-          </a>
-          <span style="font-weight: bold; font-size: 18px;">
-            {{ authorName }}
-          </span>
-        </div>
+
+          <div class="card-header">
+            <a v-if="groupedImages[authorName].github_username" :href="'https://github.com/'+groupedImages[authorName].github_username" target="_blank">
+              <el-avatar shape="circle" size="large" fit="fill">
+                <el-image :src="groupedImages[authorName].avatar_url" fit="fill" lazy></el-image>
+              </el-avatar>
+            </a>
+            <a v-else href="https://github.com/404">
+              <el-avatar shape="circle" size="large" fit="fill" :src="generateSvgAvatar(authorName)" loading="lazy"></el-avatar>
+            </a>
+            <span style="font-weight: bold; font-size: 18px;">
+              {{ authorName }}
+            </span>
+          </div>
       </el-card>
+      </RouterLink>
 
     </div>
 
 
   </div>
-        <div style="width: 60%;margin-bottom: 20px;margin: 0 auto;">
+      <div class="pagination-container">
         <el-pagination
           v-if = "filteredAuthors.length>0"
           v-model:page-size="pageSize"
@@ -131,14 +194,15 @@ watch(searchQuery, () => {
           :current-page="currentPage"
           :page-sizes="[20, 40, 60,80]"
           :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
+          :layout="paginationModules()"
           :total="totalAuthors"
+          :small="isNarrow"
         >
         </el-pagination>
       </div>
       <footer>
       <a style="text-decoration:none;color:#e77c8e;margin-left: 20px;" href="https://travel.moe/go.html" title="异次元之旅-跃迁-我们一起去萌站成员的星球旅行吧！" target="_blank">
-        <img src="https://travel.moe/images/icon/icon64pink.png" style="width:24px;height:24px">异次元之旅
+        <img src="https://travel.moe/images/icon/icon64pink.png" style="width:24px;height:24px;">异次元之旅
       </a>
       <div class="some-link"> 
         <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp&nbsp
@@ -157,7 +221,7 @@ watch(searchQuery, () => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  --el-color-primary: rgb(0, 0, 0);
+  --el-color-primary: #313131;
 }
 
 html.dark .app-container {
@@ -210,7 +274,7 @@ html.dark .app-container {
 }
 
 /* 去除 input 组件的选择强调并固定宽度 */
-.el-input {
+.search-container .el-input {
   max-width: 300px !important;
   width: 300px !important;
 }
@@ -235,7 +299,11 @@ html.dark .app-container {
   height: 40px;
   cursor: pointer;
 }
-
+.pagination-container {
+  margin: 0 auto;
+  margin-top: 20px;
+  max-width: 10px;
+}
 
 
 /* 移动端安全区适配 */
@@ -243,5 +311,13 @@ html.dark .app-container {
   footer {
     padding-bottom: env(safe-area-inset-bottom);
   }
+}
+</style>
+<style>
+:root {
+  --el-color-primary: #313131; /* 黑色 */
+}
+html.dark {
+  --el-color-primary: #e9e9e9; /* 暗色模式 */
 }
 </style>
