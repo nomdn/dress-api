@@ -153,16 +153,14 @@ onMounted(() => {
       v-for="(authorName, index) in filteredAuthors" 
       :key="authorName"
       :to="'/author/'+authorName"
+      class="author-link"
       >
         <el-card 
-
         class="author-card"
         shadow="hover"
         v-show="shouldShowAuthor(index)"
         @click="navigateToAuthor(authorName)"
         style="cursor: pointer;"
-        tag="a"
-        :href="'/author/'+authorName"
       >
 
           <div class="card-header">
@@ -214,8 +212,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@import '../style.css';
 
+@import '../style.css';
 /* 全局布局 */
 .app-container {
   display: flex;
@@ -314,6 +312,7 @@ html.dark .app-container {
 }
 </style>
 <style>
+
 :root {
   --el-color-primary: #313131; /* 黑色 */
 }
