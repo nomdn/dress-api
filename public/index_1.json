@@ -4095,6 +4095,64 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/115263660?v=4?size=500",
         "github_username": "clairjoestar"
     },
+    "clang3722": {
+        "email": "111631461+clang3722@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d",
+                "path": "C/clang3722/1.jpg",
+                "time": "2026-04-17T14:56:31+08:00"
+            },
+            {
+                "path": "C/clang3722/10.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/2.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/3.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/4.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/5.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/6.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/7.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/8.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            },
+            {
+                "path": "C/clang3722/9.jpg",
+                "time": "2026-04-17T14:56:31+08:00",
+                "hash": "e34e52b944b986a75b9cade68162c0f62723182d"
+            }
+        ],
+        "readme": "C/clang3722/README.md",
+        "avatar_url": "https://avatars.githubusercontent.com/u/111631461?v=4?size=500",
+        "github_username": "clang3722"
+    },
     "crabapples": {
         "email": "crabapples.cn@gmail.com",
         "contribution": [
@@ -18247,19 +18305,6 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/183824710?v=4?size=500",
         "github_username": "xiaolongxia521"
     },
-    "xiaorona": {
-        "email": "xiaorona@outlook.com",
-        "contribution": [
-            {
-                "hash": "a578c526fa59592fafeb8f386d73a08c5e942b1e",
-                "path": "X/xiaorona/01.png",
-                "time": "2025-07-20T17:32:58+08:00"
-            }
-        ],
-        "readme": "X/xiaorona/README.md",
-        "avatar_url": "https://avatars.githubusercontent.com/u/224343223?v=4?size=500",
-        "github_username": "xiaorona"
-    },
     "xiaoyv404": {
         "email": "xiaoyv_404@outlook.com",
         "contribution": [
@@ -19638,54 +19683,9 @@
                 "time": "2025-01-04T13:00:40+08:00"
             },
             {
-                "path": "Z/ZeroWolf/IMG_20250921_104243_223.jpeg",
-                "time": "2025-10-31T11:30:23+08:00",
-                "hash": "f67a9b41dd71019512760c6d96a9f9840d7cbe39"
-            },
-            {
                 "path": "Z/ZeroWolf/IMG_20250921_104727_749.jpeg",
                 "time": "2025-10-31T11:30:23+08:00",
                 "hash": "f67a9b41dd71019512760c6d96a9f9840d7cbe39"
-            },
-            {
-                "path": "Z/ZeroWolf/IMG_20250921_105552_298.jpeg",
-                "time": "2025-10-31T11:30:23+08:00",
-                "hash": "f67a9b41dd71019512760c6d96a9f9840d7cbe39"
-            },
-            {
-                "path": "Z/ZeroWolf/Image_1736180456204.jpg",
-                "time": "2025-01-07T10:38:02+08:00",
-                "hash": "cc92b64f9152a76a59d2341bc17acc3212ad7276"
-            },
-            {
-                "path": "Z/ZeroWolf/PXL_20250722_153246283.MP.jpg",
-                "time": "2025-08-08T11:12:35+08:00",
-                "hash": "a65502b3b751bbc215ebf6fed0e1753c83ba12e7"
-            },
-            {
-                "path": "Z/ZeroWolf/PXL_20250722_153702193.MP.jpg",
-                "time": "2025-08-08T11:12:35+08:00",
-                "hash": "a65502b3b751bbc215ebf6fed0e1753c83ba12e7"
-            },
-            {
-                "path": "Z/ZeroWolf/PXL_20250722_153931746.MP.jpg",
-                "time": "2025-08-08T11:12:35+08:00",
-                "hash": "a65502b3b751bbc215ebf6fed0e1753c83ba12e7"
-            },
-            {
-                "path": "Z/ZeroWolf/a5f4dd676aff6ffc167cfa4ab66737e.jpg",
-                "time": "2025-01-04T13:00:40+08:00",
-                "hash": "d363aacf963167e01f60eec8313b39059794cfea"
-            },
-            {
-                "path": "Z/ZeroWolf/e508d631e803d652f89a026e9ac098c.jpg",
-                "time": "2025-01-04T13:00:40+08:00",
-                "hash": "d363aacf963167e01f60eec8313b39059794cfea"
-            },
-            {
-                "path": "Z/ZeroWolf/fef41c5abcca98025c696b7183bab01.jpg",
-                "time": "2025-01-04T13:00:40+08:00",
-                "hash": "d363aacf963167e01f60eec8313b39059794cfea"
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/23271194?v=4?size=500",
@@ -19698,16 +19698,6 @@
                 "hash": "6cbc8e589996c2df71bd54388da76e83c6ef3e3b",
                 "path": "Z/ZeroWolf/PXL_20250220_150647647.RAW-01.COVER.jpg",
                 "time": "2025-03-29T22:08:22+08:00"
-            },
-            {
-                "path": "Z/ZeroWolf/PXL_20250220_152116068.RAW-01.COVER.jpg",
-                "time": "2025-03-29T22:08:22+08:00",
-                "hash": "6cbc8e589996c2df71bd54388da76e83c6ef3e3b"
-            },
-            {
-                "path": "Z/ZeroWolf/PXL_20250223_122636344.jpg",
-                "time": "2025-03-29T22:08:22+08:00",
-                "hash": "6cbc8e589996c2df71bd54388da76e83c6ef3e3b"
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/142653035?v=4?size=500",
