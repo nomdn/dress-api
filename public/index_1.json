@@ -1819,7 +1819,7 @@
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/137397992?v=4?size=500",
-        "github_username": "CelestialDesolation7"
+        "github_username": "Airi-dynamic"
     },
     "Mingye Wang": {
         "email": "arthur200126@gmail.com",
@@ -18240,6 +18240,24 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/30458572?v=4?size=500",
         "github_username": "XiaoliChan"
+    },
+    "XiayiZhang": {
+        "email": "122589407+XiayiZhang@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "9302adb28caa7cb5b1530779bc7fb809e013d02d",
+                "path": "X/XiayiZhang/1.jpg",
+                "time": "2026-04-25T02:00:26+08:00"
+            },
+            {
+                "path": "X/XiayiZhang/2.jpg",
+                "time": "2026-04-25T02:00:26+08:00",
+                "hash": "9302adb28caa7cb5b1530779bc7fb809e013d02d"
+            }
+        ],
+        "readme": "X/XiayiZhang/README.md",
+        "avatar_url": "https://avatars.githubusercontent.com/u/122589407?v=4?size=500",
+        "github_username": "XiayiZhang"
     },
     "通晓宇宙": {
         "email": "2581011320@qq.com",
