@@ -6513,6 +6513,29 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/72686586?v=4?size=500",
         "github_username": "g2nnyS"
     },
+    "Gary414": {
+        "email": "137972757+Gary414@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "41eeae4a79266e5e5ddacfcd117d898afaec3fd0",
+                "path": "G/Gary414/photo_01.jpeg",
+                "time": "2026-04-29T18:24:45+08:00"
+            },
+            {
+                "path": "G/Gary414/photo_02.jpeg",
+                "time": "2026-04-29T18:24:45+08:00",
+                "hash": "41eeae4a79266e5e5ddacfcd117d898afaec3fd0"
+            },
+            {
+                "path": "G/Gary414/photo_03.jpeg",
+                "time": "2026-04-29T18:24:45+08:00",
+                "hash": "41eeae4a79266e5e5ddacfcd117d898afaec3fd0"
+            }
+        ],
+        "readme": "G/Gary414/README.md",
+        "avatar_url": "https://avatars.githubusercontent.com/u/137972757?v=4?size=500",
+        "github_username": "Gary414"
+    },
     "Geaper327": {
         "email": "49384130+Geaper327@users.noreply.github.com",
         "contribution": [
@@ -9607,6 +9630,16 @@
                 "path": "K/KeqingMoe/1.jpg",
                 "time": "2024-11-20T15:25:50Z",
                 "hash": "b1888db0f9c5b590f643a12ca5d3412bdb7dfe47"
+            },
+            {
+                "hash": "0d1b1c1784b11302c3b5a739504a7644f372d859",
+                "path": "K/KeqingMoe/20260424.webp",
+                "time": "2026-04-29T18:25:36+08:00"
+            },
+            {
+                "path": "K/KeqingMoe/20260425.webp",
+                "time": "2026-04-29T18:25:36+08:00",
+                "hash": "0d1b1c1784b11302c3b5a739504a7644f372d859"
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/59642397?v=4?size=500",
@@ -13130,6 +13163,48 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/29908139?v=4?size=500",
         "github_username": "OldDriverTree"
+    },
+    "OAO-260429": {
+        "email": "3775562706@qq.com",
+        "contribution": [
+            {
+                "hash": "c8dcee6351f62bcbe2def57d5fdf80bdeeef65b5",
+                "path": "O/OAO/旗袍.jpg",
+                "time": "2026-04-29T18:23:42+08:00"
+            },
+            {
+                "path": "O/OAO/白色.jpg",
+                "time": "2026-04-30T13:25:49+08:00",
+                "hash": "cf2712e44f22728b1b083dc2b1b604f7496fa5eb"
+            },
+            {
+                "path": "O/OAO/黄灰.jpg",
+                "time": "2026-04-29T18:23:42+08:00",
+                "hash": "c8dcee6351f62bcbe2def57d5fdf80bdeeef65b5"
+            },
+            {
+                "path": "O/OAO/黄灰[2].jpg",
+                "time": "2026-04-29T18:23:42+08:00",
+                "hash": "c8dcee6351f62bcbe2def57d5fdf80bdeeef65b5"
+            },
+            {
+                "path": "O/OAO/黄灰[3].jpg",
+                "time": "2026-04-29T18:23:42+08:00",
+                "hash": "c8dcee6351f62bcbe2def57d5fdf80bdeeef65b5"
+            },
+            {
+                "path": "O/OAO/黄灰[4].jpg",
+                "time": "2026-04-29T18:23:42+08:00",
+                "hash": "c8dcee6351f62bcbe2def57d5fdf80bdeeef65b5"
+            },
+            {
+                "path": "O/OAO/黑白.jpg",
+                "time": "2026-04-29T18:23:42+08:00",
+                "hash": "c8dcee6351f62bcbe2def57d5fdf80bdeeef65b5"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/280313470?v=4?size=500",
+        "github_username": "OAO-260429"
     },
     "OceanInDreams": {
         "email": "166153558+nekonekos@users.noreply.github.com",
