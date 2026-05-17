@@ -20,7 +20,7 @@ const config = {
 
     // 回退服务配置（CDN 备用地址，适用于主服务宕机或网络受限场景）
     rollback: {
-        remoteURL: 'https://testingcf.jsdelivr.net/gh/nomdn/dress-api@main/', // 这里的RemoteAPI只用于获取json数据，使用v1标准，即直接获取url/index_*.json
+        remoteURL: 'https://cdn.jsdelivr.net/gh/nomdn/dress-api@main/public/', // 这里的RemoteAPI只用于获取json数据，使用v1标准，即直接获取url/index_*.json
         imgURL: 'https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/'
     }
 };

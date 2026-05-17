@@ -26,6 +26,7 @@ const isLoading = inject('isLoading');
 const authorData = ref(null);
 const markdownText = ref('');
 const srcList = ref([]);
+const readmeList=ref([])
 const createSrcList = () => {
   if (authorData.value && authorData.value.contribution) {
     srcList.value = authorData.value.contribution.map(image => imgBaseURL.value + image.path);
@@ -33,28 +34,51 @@ const createSrcList = () => {
 };
 const loadAuthorData = async () => {
   try {
-    // 加载所有作者数据
+    // 1. 加载主数据
     const response = await axios.get(remoteAPI.value + 'index_1.json');
     const data = response.data;
     groupedImages.value = data;
     
-    // 找到当前作者的数据
-    if (data[authorname]) {
-      authorData.value = data[authorname];
-      
-      // 加载作者的多个 README.md
-      if (authorData.value.readme && authorData.value.readme.length > 0) {
-        const markdownPromises = authorData.value.readme.map(readmePath =>
-          axios.get(imgBaseURL.value + readmePath).then(res => res.data)
-        );
-        const markdownContents = await Promise.all(markdownPromises);
-        markdownText.value = markdownContents.join('\n\n---\n\n');
-      }
-      // 加载当前作者的图片列表
-      createSrcList();
+    if (!data[authorname]) {
+      console.warn(`⚠️ 未找到作者: ${authorname}`);
+      return;
     }
+    
+    authorData.value = data[authorname];
+    
+    // 2. 加载 README 文件（修复核心问题）
+    if (authorData.value.readme?.length > 0) {
+      // ✅ 清空旧数据，避免累加
+      readmeList.value = [];
+      console.log(authorData.value)
+      
+      console.log(`🚀 开始加载 ${authorData.value.readme.length} 个 README...`);
+      
+      // ✅ 方案：串行请求（稳，适合小数量，避免后端限流）
+      for (const path of authorData.value.readme) {
+        try {
+          const res = await axios.get(imgBaseURL.value + path);
+          readmeList.value.push(res.data);
+          console.log(`✅ 加载成功: ${path}`);
+        } catch (err) {
+          console.error(`❌ 加载失败: ${path}`, err.message);
+          // 可选：推入错误占位，保持顺序
+          // readmeList.value.push(`<!-- 加载失败: ${path} -->`);
+        }
+      }
+      
+      // ✅ 所有加载完成后，只打印一次最终结果
+      console.log(`🎉 README 全部完成，共 ${readmeList.value.length} 项`);
+      console.log(readmeList.value)
+      // 🔍 调试用：查看真实数据（避免 Proxy 干扰）
+      // console.log('📦 数据预览:', readmeList.value.slice(0, 3));
+    }
+    
+    // 3. ✅ 确保 README 加载完后再加载图片列表
+    createSrcList();
+    
   } catch (err) {
-    console.error(err);
+    console.error('❌ loadAuthorData 主流程异常:', err);
     alert('加载数据失败: ' + err.message);
   }
 };
@@ -62,6 +86,7 @@ const md = new MarkdownIt({
   html: true,        // <-- 允许渲染 HTML 标签
   linkify: true,     // 自动将 URL 转为链接
   typographer: true, // 启用智能排版（如 "--" -> "—")
+  breaks: true
 });
 
 // 在 setup 中创建计算属性
@@ -121,7 +146,7 @@ onMounted(() => {
         </div>
 
         <!-- Markdown 内容 -->
-        <div class="author-markdown" v-if="markdownText" v-html="renderedMarkdown" style="text-align: left !important; margin: 20px 0;">
+        <div v-for="text in readmeList" class="author-markdown" v-html="md.render(text)" style="text-align: left !important; margin: 20px 0;">
         </div>
 
         <!-- 图片卡片 -->
