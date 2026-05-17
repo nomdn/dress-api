@@ -48,8 +48,8 @@ async function getIndex() {
 	try {
 		// 并行请求两个文件
 		const [res1, res2] = await Promise.all([
-		fetch("https://testingcf.jsdelivr.net/gh/nomdn/dress-api@main/public/index_0.json"),
-		fetch("https://testingcf.jsdelivr.net/gh/nomdn/dress-api@main/public/index_1.json")
+		fetch("https://fastly.jsdelivr.net/gh/nomdn/dress-api@main/public/index_0.json"),
+		fetch("https://fastly.jsdelivr.net/gh/nomdn/dress-api@main/public/index_1.json")
 		]);
 
 		if (!res1.ok || !res2.ok) {
