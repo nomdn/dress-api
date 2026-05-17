@@ -239,4 +239,17 @@ app.post('/v2/author/:author', async (c) => {
 	return c.json({ [author]: indexAuthor[author] });
 
 });
+// 适配v1版本特性，不推荐使用
+app.get('/:index', async (c) => {
+	const index = c.req.param('index'); 
+	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	if (index === 'index_0.json') {
+		return c.json(indexID);
+	} else if (index === 'index_1.json') {
+		return c.json(indexAuthor);
+	} else {
+		return c.json({ error: "Invalid index" }, 400);
+	}
+
+});
 export default app;

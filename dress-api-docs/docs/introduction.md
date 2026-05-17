@@ -127,12 +127,16 @@ const config = {
 
 export default config;
 ````
-6. 编译前端页面  
-   ````bash
-   cd dress-api-website
-   npm i
-   npm run build
-   ````
+ 6. 编译前端页面  
+    ````bash
+    cd dress-api-website
+    # 方法一：pnpm（推荐）
+    pnpm install
+    pnpm run build
+    # 方法二：npm（兼容）
+    # npm install
+    # npm run build
+    ````
 7. 启动服务
    ```bash
    python main.py

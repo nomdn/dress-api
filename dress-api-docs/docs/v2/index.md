@@ -32,9 +32,12 @@ Node.js推荐版本 : v22.18
    cd dress-api
    cd dress-api-worker
    ```
-2. 安装依赖
+2. 安装依赖（二选一）
     ```bash
-    npm i 
+    # 方法一：pnpm（推荐）
+    pnpm install
+    # 方法二：npm（兼容）
+    # npm install
     ```
 3. 登录到cloudflare
     ```bash

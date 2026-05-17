@@ -160,12 +160,12 @@ async def build_index_by_author(repo:Repo):
                                 f'https://api.github.com/repos/Cute-Dress/Dress/commits/{index_author[author]["contribution"][0]["hash"]}',
                                 headers=headers, timeout=10)
                             if commit_result.status_code == 403:
-                                logging.warning("你被限流了")
+                                logging.warning("您的IP或访问密钥已被Github限流")
                                 index_author[author]["avatar_url"] = None
                                 index_author[author]["github_username"] = None
                                 break
                             if commit_result.status_code == 404:
-                                logging.warning("灵异事件，还没找到")
+                                logging.warning("无法溯源到原作者的任何信息")
                                 index_author[author]["avatar_url"] = None
                                 index_author[author]["github_username"] = None
                                 break
@@ -186,7 +186,7 @@ async def build_index_by_author(repo:Repo):
 
                         break
                     if result.status_code == 403:
-                        logging.warning("你被限流了")
+                        logging.warning("您的IP或访问密钥已被Github限流")
                         index_author[author]["avatar_url"] = None
                         index_author[author]["github_username"] = None
                         break
@@ -282,11 +282,13 @@ async def build_index_by_author(repo:Repo):
     return index_author
 async def convert_index_author_to_index_id(index_author: dict) -> dict:
     index_id ={}
-    for id,authors in enumerate(index_author.keys(),start=1):
+    id = 0
+    for authors in index_author.keys():
         for contribution in index_author[authors]["contribution"]:
             logging.debug(f"处理{contribution},ID为{id}")
             contribution["author"]=authors
             index_id[id] = contribution
+            id+=1
     return index_id
 
 

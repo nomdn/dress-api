@@ -1,4 +1,9 @@
 {
+  "packageManager": "pnpm@10.10.0",
+  "engines": {
+    "pnpm": ">=10",
+    "npm": ">=8"
+  },
   "devDependencies": {
     "vitepress": "^2.0.0-alpha.16"
   },

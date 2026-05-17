@@ -18,6 +18,11 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       # 部署到 Cloudflare Workers
       - name: Deploy to Cloudflare Workers
 
@@ -26,5 +31,5 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           cd dress-api-worker
-          npm install
-          npm run deploy
+          pnpm install
+          pnpm run deploy
