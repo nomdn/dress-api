@@ -23,8 +23,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       # 进入子目录并构建
       - name: Build VitePress Site
