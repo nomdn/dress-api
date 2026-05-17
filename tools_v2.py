@@ -143,7 +143,9 @@ async def build_index_by_author(repo:Repo):
         first_author_name=first_author_info[1]
         if first_author_name not in index_author.keys():
             continue
-        index_author[first_author_name]["readme"]=i
+        if "readme" not in index_author[first_author_name]:
+            index_author[first_author_name]["readme"] = []
+        index_author[first_author_name]["readme"].append(i)
     async with httpx.AsyncClient() as client:
         for author in index_author.keys():
 
@@ -241,7 +243,9 @@ async def build_index_by_author(repo:Repo):
                     if item and item.get("path"):
                         author["contribution"].append(item)
                 if another_author.get("readme"):
-                    author["readme"] = another_author["readme"]
+                    if "readme" not in author:
+                        author["readme"] = []
+                    author["readme"].extend(another_author["readme"])
                 # 标记为待删除（记录 git 用户名 key）
                 authors_to_delete.add(another_git_username)
                 logging.debug(f"标记删除: {another_git_username} (合并到 {git_username})")
@@ -270,12 +274,15 @@ async def build_index_by_author(repo:Repo):
             seen_paths.add(path)
             clean_list.append(item)
         author["contribution"] = clean_list
+
+        if author.get("readme"):
+            author["readme"] = list(dict.fromkeys(author["readme"]))
     logging.info("处理 URL 编码...")
     for author, data in index_author.items():  # ✅ 修复：正确遍历
         for url in data.get("contribution", []):
             url["path"] = url["path"].replace("#", "%23")
-        if data.get("readme","") != "":
-            data["readme"] = data["readme"].replace("#", "%23")
+        if data.get("readme"):
+            data["readme"] = [p.replace("#", "%23") for p in data["readme"]]
 
 
 

@@ -42,10 +42,13 @@ const loadAuthorData = async () => {
     if (data[authorname]) {
       authorData.value = data[authorname];
       
-      // 加载作者的 README.md
-      if (authorData.value.readme) {
-        const markdownResponse = await axios.get(imgBaseURL.value + authorData.value.readme);
-        markdownText.value = markdownResponse.data;
+      // 加载作者的多个 README.md
+      if (authorData.value.readme && authorData.value.readme.length > 0) {
+        const markdownPromises = authorData.value.readme.map(readmePath =>
+          axios.get(imgBaseURL.value + readmePath).then(res => res.data)
+        );
+        const markdownContents = await Promise.all(markdownPromises);
+        markdownText.value = markdownContents.join('\n\n---\n\n');
       }
       // 加载当前作者的图片列表
       createSrcList();
