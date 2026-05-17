@@ -205,6 +205,7 @@ app.get('/v2/health', async (c) => {
 app.get('/v2/index/:index', async (c) => {
 	const index = c.req.param('index'); 
 	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	c.header('Cache-Control', 'public, max-age=86400');
 	if (index === 'id') {
 		return c.json(indexID);
 	} else if (index === 'author') {
@@ -217,6 +218,7 @@ app.get('/v2/index/:index', async (c) => {
 app.post('/v2/index/:index', async (c) => {
 	const index = c.req.param('index'); 
 	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	c.header('Cache-Control', 'public, max-age=86400');
 	if (index === 'id') {
 		return c.json(indexID);
 	} else if (index === 'author') {
@@ -243,6 +245,7 @@ app.post('/v2/author/:author', async (c) => {
 app.get('/:index', async (c) => {
 	const index = c.req.param('index'); 
 	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	c.header('Cache-Control', 'public, max-age=86400');
 	if (index === 'index_0.json') {
 		return c.json(indexID);
 	} else if (index === 'index_1.json') {
