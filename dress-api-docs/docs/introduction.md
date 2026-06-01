@@ -21,7 +21,8 @@ Dress API 是一个基于Dress的随机图片API，提供**随机图片、图片
 ![Vue](https://img.shields.io/badge/Vue-3.5.25-4FC08D?logo=vue.js)
 
 > [!TIP]
-> v1演示站点部署在不稳定的机器上v2部署在免费计划的worker上，我在这里强烈建议您自己部署使用！！
+> v1演示站点部署在不稳定的机器上v2部署在免费计划的worker上，我在这里强烈建议您自己部署使用
+> v1站点的后端已关停
 
  
 > [!NOTE]
@@ -29,7 +30,7 @@ Dress API 是一个基于Dress的随机图片API，提供**随机图片、图片
 > https://blog.wsmdn.top
 
 演示站点：  
-[前端+v1后端](https://dress.wsmdn.top)  
+[前端](https://dress.wsmdn.top)  
 [v2后端](https://api.wsmdn.top/v2/health) 
 
 ## 快速开始

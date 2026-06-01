@@ -10,6 +10,7 @@ prev:
 
 API V1:  
 ````text
+# 已关停
 https://dress.wsmdn.top/v1/dress
 ````
 ## 获取随机图片
