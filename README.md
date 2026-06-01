@@ -19,37 +19,6 @@
 如果你觉得我侵犯了您的权利，请在issues交流  
 如果你想搭建完整版API请在项目根目录克隆[Dress](https://github.com/Cute-Dress/Dress)
 
-## 包管理
-本项目使用 **pnpm** 作为主要的包管理器（推荐），同时保留对 npm 的完全兼容。
-
-### 方法一：pnpm（推荐）
-```bash
-# 安装 pnpm（如未安装）
-npm install -g pnpm
-
-# 安装依赖（根目录）
-pnpm install
-
-# 构建前端
-cd dress-api-website && pnpm run build
-
-# 部署 Worker
-cd dress-api-worker && pnpm run deploy
-```
-
-### 方法二：npm（兼容）
-```bash
-# 安装依赖
-npm install
-
-# 构建前端
-cd dress-api-website && npm run build
-
-# 部署 Worker
-cd dress-api-worker && npm run deploy
-```
-
-> 所有 GitHub Actions 工作流已统一使用 pnpm。
 
 ## 特别鸣谢
 [Dress](https://github.com/Cute-Dress/Dress)  
