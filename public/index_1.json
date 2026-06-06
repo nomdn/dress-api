@@ -2788,6 +2788,36 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/29454668?v=4?size=500",
         "github_username": "vonhyou"
     },
+    "awaw-a": {
+        "email": "xinchanren@gmail.com",
+        "contribution": [
+            {
+                "hash": "0faba3fc72ba717fe15d819f8ec49c24a53ce5ee",
+                "path": "A/awaw-a/喵1.jpg",
+                "time": "2026-06-06T22:00:54+08:00"
+            },
+            {
+                "path": "A/awaw-a/喵2.jpg",
+                "time": "2026-06-06T22:00:54+08:00",
+                "hash": "0faba3fc72ba717fe15d819f8ec49c24a53ce5ee"
+            },
+            {
+                "path": "A/awaw-a/喵3.jpg",
+                "time": "2026-06-06T22:00:54+08:00",
+                "hash": "0faba3fc72ba717fe15d819f8ec49c24a53ce5ee"
+            },
+            {
+                "path": "A/awaw-a/喵4.jpg",
+                "time": "2026-06-06T22:00:54+08:00",
+                "hash": "0faba3fc72ba717fe15d819f8ec49c24a53ce5ee"
+            }
+        ],
+        "readme": [
+            "A/awaw-a/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/272553116?v=4?size=500",
+        "github_username": "awaw-a"
+    },
     "awaxiaoyu": {
         "email": "13112013711@163.com",
         "contribution": [
@@ -3430,6 +3460,33 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/3430784?v=4?size=500",
         "github_username": "bangbang93"
+    },
+    "个个头疼": {
+        "email": "zhouyi_ggtt_2007@163.com",
+        "contribution": [
+            {
+                "hash": "3ab82a3f4a7a01e59acea0b40a74cae3e3dcf13d",
+                "path": "B/bili_个个头疼/五河士织喵.jpg",
+                "time": "2026-06-03T14:24:30+08:00"
+            },
+            {
+                "path": "B/bili_个个头疼/月见八千代.jpg",
+                "time": "2026-06-03T14:24:30+08:00",
+                "hash": "3ab82a3f4a7a01e59acea0b40a74cae3e3dcf13d"
+            },
+            {
+                "path": "B/bili_个个头疼/泉此方喵.jpg",
+                "time": "2026-06-03T14:24:30+08:00",
+                "hash": "3ab82a3f4a7a01e59acea0b40a74cae3e3dcf13d"
+            },
+            {
+                "path": "B/bili_个个头疼/绪山真寻.jpg",
+                "time": "2026-06-03T14:24:30+08:00",
+                "hash": "3ab82a3f4a7a01e59acea0b40a74cae3e3dcf13d"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/288630605?v=4?size=500",
+        "github_username": "biliggtt"
     },
     "Zhang Meng": {
         "email": "1308756652@qq.com",
@@ -10311,7 +10368,7 @@
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/3286092?v=4?size=500",
-        "github_username": "LKI"
+        "github_username": "liriansu-opus"
     },
     "ll-buxudong": {
         "email": "163698589+LLbuxudong@users.noreply.github.com",
@@ -18622,15 +18679,28 @@
         "email": "67470569+wolfsmith520-github@users.noreply.github.com",
         "contribution": [
             {
-                "hash": "3fb2263b75ced7ab6d55685a81a1eb6f86fee206",
-                "path": "W/wolfsmith520-github/HinaKagiyama.jpg",
-                "time": "2026-05-14T13:45:03+08:00"
+                "hash": "5d86a913b4a0c2f686d724ddd8262eff734307c5",
+                "path": "W/wolfsmith520-github/HinaKagiyama_dark_1.jpg",
+                "time": "2026-06-03T14:23:15+08:00"
             },
             {
-                "path": "W/wolfsmith520-github/HinaKagiyama2.jpg",
+                "path": "W/wolfsmith520-github/HinaKagiyama_dark_2.jpg",
+                "time": "2026-06-03T14:23:15+08:00",
+                "hash": "5d86a913b4a0c2f686d724ddd8262eff734307c5"
+            },
+            {
+                "path": "W/wolfsmith520-github/HinaKagiyama_official_1.jpg",
+                "time": "2026-05-14T13:45:03+08:00",
+                "hash": "3fb2263b75ced7ab6d55685a81a1eb6f86fee206"
+            },
+            {
+                "path": "W/wolfsmith520-github/HinaKagiyama_official_2.jpg",
                 "time": "2026-05-14T13:45:03+08:00",
                 "hash": "3fb2263b75ced7ab6d55685a81a1eb6f86fee206"
             }
+        ],
+        "readme": [
+            "W/wolfsmith520-github/Readme.md"
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/37581300?v=4?size=500",
         "github_username": "wolfsmith"
@@ -19515,6 +19585,46 @@
                 "path": "Y/Yueosa/2026-3/lian_006.jpg",
                 "time": "2026-03-25T14:15:23+08:00",
                 "hash": "3fc87f101013bdaab19fb30e7401794a8a0d4d24"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_001.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_002.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_003.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_004.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_005.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_006.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_007.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
+            },
+            {
+                "path": "Y/Yueosa/2026-5/lian_008.jpg",
+                "time": "2026-06-03T14:26:13+08:00",
+                "hash": "6f50fa0678239c2c585c723a19c4336b3ba46189"
             }
         ],
         "readme": [
