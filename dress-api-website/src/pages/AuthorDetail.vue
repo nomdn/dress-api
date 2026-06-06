@@ -1,6 +1,7 @@
 <script setup>
 import { ref,  onMounted,inject,computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useHead } from '@unhead/vue'
 import axios from 'axios';
 import { Sunny, Moon, Loading } from '@element-plus/icons-vue';
 import { useDark, useToggle } from '@vueuse/core';
@@ -27,6 +28,7 @@ const authorData = ref(null);
 const markdownText = ref('');
 const srcList = ref([]);
 const readmeList=ref([])
+const description = ref('');
 const createSrcList = () => {
   if (authorData.value && authorData.value.contribution) {
     srcList.value = authorData.value.contribution.map(image => imgBaseURL.value + image.path);
@@ -40,7 +42,7 @@ const loadAuthorData = async () => {
     groupedImages.value = data;
     
     if (!data[authorname]) {
-      console.warn(`⚠️ 未找到作者: ${authorname}`);
+      console.warn(` 未找到作者: ${authorname}`);
       return;
     }
     
@@ -52,26 +54,31 @@ const loadAuthorData = async () => {
       readmeList.value = [];
       console.log(authorData.value)
       
-      console.log(`🚀 开始加载 ${authorData.value.readme.length} 个 README...`);
+      console.log(`开始加载 ${authorData.value.readme.length} 个 README...`);
       
       // ✅ 方案：串行请求（稳，适合小数量，避免后端限流）
       for (const path of authorData.value.readme) {
         try {
           const res = await axios.get(imgBaseURL.value + path);
           readmeList.value.push(res.data);
-          console.log(`✅ 加载成功: ${path}`);
+          console.log(`加载成功: ${path}`);
         } catch (err) {
-          console.error(`❌ 加载失败: ${path}`, err.message);
+          console.error(`加载失败: ${path}`, err.message);
           // 可选：推入错误占位，保持顺序
           // readmeList.value.push(`<!-- 加载失败: ${path} -->`);
         }
+        
       }
-      
+      description.value = markdownToPlainText(readmeList.value[0]) || `${authorname} 的可爱照片喵~`;
       // ✅ 所有加载完成后，只打印一次最终结果
-      console.log(`🎉 README 全部完成，共 ${readmeList.value.length} 项`);
+      console.log(`README 全部完成，共 ${readmeList.value.length} 项`);
       console.log(readmeList.value)
+
       // 🔍 调试用：查看真实数据（避免 Proxy 干扰）
       // console.log('📦 数据预览:', readmeList.value.slice(0, 3));
+    }else {
+      console.log('没有 README 文件，跳过加载');
+      description.value = `${authorname} 的可爱照片喵~`;
     }
     
     // 3. ✅ 确保 README 加载完后再加载图片列表
@@ -88,7 +95,21 @@ const md = new MarkdownIt({
   typographer: true, // 启用智能排版（如 "--" -> "—")
   breaks: true
 });
-
+function markdownToPlainText(mdText) {
+  if (!mdText) return '';
+  try {
+    // 1. Markdown -> HTML
+    const html = md.render(mdText);
+    // 2. HTML -> 纯文本（利用浏览器原生 DOMParser）
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    // textContent 会自动剥离所有 HTML 标签
+    return doc.body.textContent.replace(/\s+/g, ' ').trim();
+  } catch (err) {
+    console.error('Markdown 转纯文本失败:', err);
+    return mdText;
+  }
+}
 // 在 setup 中创建计算属性
 const renderedMarkdown = computed(() => {
   if (!markdownText.value) return '';
@@ -109,6 +130,36 @@ const handleImageError = (e) => {
 onMounted(() => {
   loadAuthorData();
   
+});
+useHead({
+  title: `${authorname} - Dress-API`,
+  meta: computed(() =>[
+    {
+      name: 'description',
+      content: description.value.slice(0, 150) || `${authorname} 的可爱照片喵~`
+    },
+    {
+      name: 'keywords',
+      content: `${authorname}, Dress, Dress API, DressAPI, Dress API 文档, 女装,小男娘,可爱男孩子,小南梁,图灵派`
+    },
+    {
+      name: 'og:title',
+      content: `${authorname} - Dress-API`
+    },
+    {
+      name: 'og:description',
+      content: description.value.slice(0, 150) || `${authorname} 的可爱照片喵~`
+    },
+    {
+      name: 'og:image',
+      content: authorData.value?.avatar_url || generateSvgAvatar(authorname)
+    },
+    {
+      name: 'og:type',
+      content: 'website'
+    }
+
+  ])
 });
 
 </script>
