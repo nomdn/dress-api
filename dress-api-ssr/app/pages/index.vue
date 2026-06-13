@@ -91,7 +91,7 @@ onMounted(() => {
   console.log("当前设备是否是窄屏：" + isNarrow.value);
 });
 useHead({
-  title: 'Dress API - 面向可爱男孩子的前端 | 随机图API Dress API前端',
+  title: 'Dress API - 面向可爱男孩子的前端',
   script: [
     {
       type: 'application/ld+json',
@@ -115,7 +115,7 @@ useHead({
     },
     {
       name: 'keywords',
-      content: 'Dress API, DressAPI, 可爱男孩子, 图片分享, 随机图片API, 图灵派, 程序员, MTF, dress图库, 图片作者'
+      content: 'Dress API, DressAPI, 可爱男孩子, 图片分享, 随机图片API, 图灵派, 程序员, MTF, dress图库, 图片作者,女装,男孩子,萌图'
     },
     {
       name: 'author',

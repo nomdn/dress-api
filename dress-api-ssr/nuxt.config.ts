@@ -1,3 +1,4 @@
+import config from "./config/index";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -5,6 +6,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/**': { ssr: true },
   },
+
   app: {
     head: {
       link: [
@@ -13,7 +15,19 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ['@element-plus/nuxt'],
+  modules: ['@element-plus/nuxt', '@nuxtjs/seo', '@nuxtjs/sitemap', '@nuxtjs/robots'],
+  site:{
+    name: 'Dress API',
+    url: config.siteUrl,
+  },
+  robots:{
+  },
+  sitemap: {
+    sources: [
+      '/api/__sitemap__/urls',
+    ]
+  },
+
   vite: {
     optimizeDeps: {
       include: [
@@ -25,5 +39,9 @@ export default defineNuxtConfig({
         'minidenticons',
       ]
     }
-  }
+  },
+  runtimeConfig: {
+    remote: config.remote,
+    rollback: config.rollback,
+  },
 })
