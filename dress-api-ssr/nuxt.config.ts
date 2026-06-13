@@ -15,7 +15,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ['@element-plus/nuxt', '@nuxtjs/seo', '@nuxtjs/sitemap', '@nuxtjs/robots'],
+  modules: ['@element-plus/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots'],
   site:{
     name: 'Dress API',
     url: config.siteUrl,
