@@ -18,7 +18,7 @@ const isDark = useDark();
 const activeIndex = ref('1');
 const toggleDark = useToggle(isDark);
 const searchQuery = ref('');
-
+const requestURL = useRequestURL();
 // 从App.vue注入共享数据
 const groupedImages = useState('groupedImages');
 
@@ -89,6 +89,41 @@ onMounted(() => {
 
   console.log("当前设备是否是窄屏：" + isNarrow.value);
 });
+useHead({
+  title: `Dress API`,
+  meta: [
+    {
+      name: 'description',
+      content: "Dress API - 面向可爱蓝孩子的前端"
+    },
+    {
+      name: 'keywords',
+      content: `${authorname}, Dress, Dress API, DressAPI, Dress API 文档, 女装,小男娘,可爱男孩子,小南梁,图灵派,随机色图,程序员,MTF,好想当个女孩子`
+    },
+    {
+      name: 'og:title',
+      content: `Dress API`
+    },
+    {
+      name: 'og:description',
+      content: "Dress API - 面向可爱蓝孩子的前端"
+    },
+    {
+      name: 'og:image',
+      content: requestURL.origin + '/favicon.png'
+    },
+    {
+      name: 'og:type',
+      content: 'website'
+    },
+    {
+      name: `og:url`,
+      content: requestURL.href
+    }
+
+  ]
+});
+
 </script>
 
 <template>

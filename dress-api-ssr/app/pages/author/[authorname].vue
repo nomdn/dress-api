@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import removeMd from 'remove-markdown';
 import { Sunny, Moon, Loading } from '@element-plus/icons-vue';
 import { useDark, useToggle } from '@vueuse/core';
 import MarkdownIt from 'markdown-it';
@@ -21,7 +21,7 @@ const activeIndex = ref('1');
 const groupedImages = useState('groupedImages');
 const remoteAPI = useState('remoteAPI');
 const imgBaseURL = useState('imgBaseURL');
-
+const requestURL = useRequestURL();
 const authorData = ref(null);
 const markdownText = ref('');
 const srcList = ref([]);
@@ -35,9 +35,8 @@ const createSrcList = () => {
 const loadAuthorData = async () => {
   try {
     // 1. 加载主数据
-    const { data: response } = await useFetch(remoteAPI.value + 'index_1.json');
-    const data = response;
-    groupedImages.value = data.value;
+    const data = await $fetch(remoteAPI.value + 'index_1.json');
+    groupedImages.value = data;
     console.log('主数据加载成功:', data);
     
     if (!groupedImages.value[authorname]) {
@@ -68,7 +67,7 @@ const loadAuthorData = async () => {
         }
         
       }
-      description.value = markdownToPlainText(readmeList.value[0]) || `${authorname} 的可爱照片喵~`;
+      description.value = markdownToPlainText(readmeList.value[0]);
       // ✅ 所有加载完成后，只打印一次最终结果
       console.log(`README 全部完成，共 ${readmeList.value.length} 项`);
       console.log(readmeList.value)
@@ -97,13 +96,9 @@ const md = new MarkdownIt({
 function markdownToPlainText(mdText) {
   if (!mdText) return '';
   try {
-    // 1. Markdown -> HTML
-    const html = md.render(mdText);
-    // 2. HTML -> 纯文本（利用浏览器原生 DOMParser）
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    // textContent 会自动剥离所有 HTML 标签
-    return doc.body.textContent.replace(/\s+/g, ' ').trim();
+    const text = removeMd(mdText);
+    const cleanText = text.replace(/\n/g, " "); 
+    return cleanText;
   } catch (err) {
     console.error('Markdown 转纯文本失败:', err);
     return mdText;
@@ -126,16 +121,13 @@ const handleImageError = (e) => {
   e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23000000"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="14" fill="%23F8F8FF">图片无法加载</text></svg>';
 };
 
-onMounted(() => {
-  loadAuthorData();
-  
-});
+await loadAuthorData();
 useHead({
   title: `${authorname} - Dress-API`,
   meta: [
     {
       name: 'description',
-      content: description.value.slice(0, 150) || `${authorname} 的可爱照片喵~`
+      content: description.value
     },
     {
       name: 'keywords',
@@ -151,11 +143,15 @@ useHead({
     },
     {
       name: 'og:image',
-      content: authorData.value?.avatar_url || generateSvgAvatar(authorname)
+      content: authorData.value?.avatar_url || null
     },
     {
       name: 'og:type',
       content: 'website'
+    },
+    {
+      name: `og:url`,
+      content: requestURL.href
     }
 
   ]
