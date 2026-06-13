@@ -1,0 +1,359 @@
+/* ========================
+   全局根元素 (:root) 样式
+   ======================== */
+:root {
+  /* 字体栈：优先使用系统 UI 字体，依次降级到通用无衬线字体 */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  
+  /* 行高：提升可读性 */
+  line-height: 1.5;
+  
+  /* 默认字体粗细 */
+  font-weight: 400;
+
+  /* 声明页面支持亮色和暗色主题，让浏览器/操作系统能自动适配 */
+  color-scheme: light dark;
+  
+  /* 暗色模式下的默认文字颜色（带轻微透明度，更柔和） */
+  color: rgba(255, 255, 255, 0.87);
+  
+  /* 暗色模式下的背景色 */
+  background-color: #242424;
+
+  /* 禁止浏览器自动合成斜体/粗体，保证字体渲染精准 */
+  font-synthesis: none;
+  
+  /* 优化文本渲染，提升小字号下的可读性 */
+  text-rendering: optimizeLegibility;
+  
+  /* WebKit 浏览器（如 Chrome、Safari）启用抗锯齿 */
+  -webkit-font-smoothing: antialiased;
+  
+  /* Firefox on macOS 启用灰度平滑 */
+  -moz-osx-font-smoothing: grayscale;
+
+}
+
+html.dark {
+  /* 在暗色模式下，覆盖根元素的文字颜色和背景色 */
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
+/* ========================
+   body 元素样式
+   ======================== */
+
+/* ========================
+   一级标题 h1 样式
+   ======================== */
+h1 {
+  /* 大号字体，强调主标题 */
+  font-size: 3.2em;
+  
+  /* 紧凑行高，增强视觉冲击力 */
+  line-height: 1.1;
+}
+h3 {
+  margin: 20px;
+}
+
+/* ========================
+   按钮通用样式
+   ======================== */
+button {
+  /* 圆角边框 */
+  border-radius: 8px;
+  
+  /* 默认边框透明，不显眼 */
+  border: 1px solid transparent;
+  
+  /* 内边距，提供舒适的点击区域 */
+  padding: 0.6em 1.2em;
+  
+  /* 字体大小与正文一致 */
+  font-size: 1em;
+  
+  /* 中等加粗 */
+  font-weight: 500;
+  
+  /* 继承父容器字体族 */
+  font-family: inherit;
+  
+  /* 深色背景 */
+  background-color: #1a1a1a;
+  
+  /* 鼠标悬停时显示为手型光标 */
+  cursor: pointer;
+  
+  /* 边框颜色变化时添加平滑过渡 */
+  transition: border-color 0.25s;
+}
+
+
+
+/* 按钮获得焦点时的无障碍高亮（用于键盘导航） */
+button:focus,
+button:focus-visible {
+  /* 使用系统默认焦点环样式（WebKit 浏览器） */
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* ========================
+   卡片容器基础样式
+   ======================== */
+.card {
+  /* 内边距，留出呼吸空间 */
+  padding: 2em;
+}
+
+/* ========================
+   Vue 应用挂载点容器 (#app)
+   ======================== */
+
+.display-area {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  /* 最大宽度限制，避免在超宽屏上内容拉伸过宽 */
+  max-width: 1300px;
+  flex-grow: 1;
+  width: 90%;
+  flex-shrink: 0;
+  
+  /* 水平居中 */
+  margin: 0 auto;
+  /* 上下左右内边距 */
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.giscus-area {
+  display: flex;
+  flex-direction: column;
+  /* 最大宽度限制，避免在超宽屏上内容拉伸过宽 */
+  max-width: 990px;
+  width: 70%;
+  /* 水平居中 */
+  margin: 0 auto;
+  
+  /* 上下左右内边距 */
+  padding: 2rem;
+  
+  /* 内容文本居中（适用于标题、按钮等） */
+  text-align: center;
+}
+
+/* ========================
+   亮色主题媒体查询
+   当用户系统偏好为浅色模式时生效
+   ======================== */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* 浅色模式文字颜色（深灰蓝，比纯黑更舒适） */
+    color: #213547;
+    
+    /* 浅色模式背景为纯白 */
+    background-color: #ffffff;
+  }
+
+  /* 链接悬停颜色 */
+  a:hover {
+    color: #747bff;
+  }
+
+  /* 按钮在浅色模式下的背景色（浅灰） */
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* ========================   页脚样式   ======================== */
+footer {
+  display: flex;
+  flex-direction: column;
+  background-color: #f3f2f2;
+  /* 水平居中 */
+  
+  height: auto;
+  bottom: 0;
+
+  width: 100%;
+  /* 小内边距 */
+  padding: 10px;
+  margin-top: 20px;
+  /* 文本居中 */
+  text-align: left;
+  color: var(--el-text-color-primary);
+  border-style: none;
+  box-shadow: none;
+  border-top: none;
+  box-sizing: border-box;
+}
+html.dark footer {
+  background-color: #333333;
+  color: var(--el-text-color-primary);
+  box-shadow: none;
+  border-top: none;
+}
+/* ========================
+   全局链接样式
+   ======================== */
+a {
+  /* 使用 Element Plus 主题蓝色 */
+  color: #757575;
+  
+  /* 移除默认下划线 */
+  text-decoration: none;
+}
+html.dark a {
+  color: #dbd9d9;
+}
+
+/* ========================
+   自定义字体应用（MiSans）
+   ======================== */
+
+
+
+/* ========================
+   覆盖 #app 容器的部分属性（注意：后定义会覆盖前定义）
+   ======================== */
+
+
+/* ========================
+   作者卡片样式
+   ======================== */
+.author-link {
+  flex: 1;
+  min-width: 245px;
+  max-width: 100%;
+  margin-right: 10px;
+  margin-left: 10px;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.author-card {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  min-height: 140px;
+  max-height: 150px;
+  box-sizing: border-box;
+}
+
+/* 卡片头部容器（含标题和展开按钮） */
+.card-header {
+  /* 使用 Flex 布局 */
+  display: flex;
+  
+  /* 垂直居中对齐 */
+  align-items: center;
+  
+  /* 鼠标悬停时显示手型光标（暗示可点击） */
+  cursor: pointer;
+  gap: 16px;
+}
+
+/* ========================
+   图片网格布局
+   ======================== */
+.image-grid {
+  /* 使用 CSS Grid 布局 */
+  display: grid;
+  
+  /* 自动填充列：每列最小 150px，最大 1fr（均分剩余空间） */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  
+  /* 网格项之间的间隙 */
+  gap: 15px;
+  
+  /* 上下内边距，与卡片内容区分离 */
+  padding: 16px 0;
+}
+
+/* ========================
+   图片预览样式
+   ======================== */
+.image-preview {
+  /* 宽度占满容器 */
+  width: 100%;
+  
+  /* 固定高度，保持统一比例 */
+  height: 150px;
+  
+  /* 裁剪图片以适应容器，保持比例 */
+  object-fit: cover;
+  
+  /* 小圆角 */
+  border-radius: 4px;
+  
+  /* 轻微阴影，提升层次感 */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  
+  /* 块级显示，避免基线对齐问题 */
+  display: block;
+}
+
+/* ========================
+   图片信息（如日期）样式
+   ======================== */
+.image-info {
+  /* 顶部留白 */
+  padding-top: 5px;
+  
+  /* 文字居中 */
+  text-align: center;
+  
+  /* 小字号 */
+  font-size: 12px;
+  
+  /* 灰色文字，弱化次要信息 */
+  color: #909399;
+}
+
+/* ========================
+   空状态提示区域
+   ======================== */
+.empty-state {
+  /* 文字居中 */
+  text-align: center;
+  
+  /* 大内边距，突出“空”感 */
+  padding: 40px;
+  
+  /* 浅灰色文字 */
+  color: #999;
+}
+card-content {
+  /* 卡片内容区内边距 */
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 20px;
+  align-items: center;
+  
+  justify-content: center;
+}
+:deep(.el-pagination) {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+}
+.some-link {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  margin-top: 5px;
+}
