@@ -4,6 +4,7 @@
 .nuxt
 .nitro
 .cache
+.edgeone
 dist
 
 # Node dependencies
