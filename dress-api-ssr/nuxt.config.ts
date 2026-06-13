@@ -6,4 +6,16 @@ export default defineNuxtConfig({
     '/**': { ssr: true },
   },
   modules: ['@element-plus/nuxt'],
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@element-plus/icons-vue',
+        '@vueuse/core',
+        'dayjs', // CJS
+        'dayjs/plugin/*.js',
+        'lodash-unified',
+        'minidenticons',
+      ]
+    }
+  }
 })

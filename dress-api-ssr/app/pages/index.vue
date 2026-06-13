@@ -98,7 +98,19 @@ useHead({
     },
     {
       name: 'keywords',
-      content: `${authorname}, Dress, Dress API, DressAPI, Dress API 文档, 女装,小男娘,可爱男孩子,小南梁,图灵派,随机色图,程序员,MTF,好想当个女孩子`
+      content: ' Dress, Dress API, DressAPI, Dress API 文档, 女装,小男娘,可爱男孩子,小南梁,图灵派,随机色图,程序员,MTF,好想当个女孩子'
+    },
+    {
+      name: 'author',
+      content: 'Dress API Team,nomdn'
+    },
+    {
+      name: 'robots',
+      content: 'index, follow'
+    },
+    {
+      name: 'theme-color',
+      content: '#242424'
     },
     {
       name: 'og:title',
