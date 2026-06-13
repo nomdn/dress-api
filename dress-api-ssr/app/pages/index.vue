@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { generateSvgAvatar } from '../scripts/avatar_utils.js';
 import { Sunny, Moon, Search } from '@element-plus/icons-vue';
 import { useDark, useToggle } from '@vueuse/core';
+import config from '~~/config/index.js';
 
 
 
@@ -90,19 +91,35 @@ onMounted(() => {
   console.log("当前设备是否是窄屏：" + isNarrow.value);
 });
 useHead({
-  title: `Dress API`,
+  title: 'Dress API - 面向可爱男孩子的前端 | 随机图API Dress API前端',
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Dress API',
+        url: config.siteUrl,
+        description: 'Dress API是一个面向可爱男孩子的图片分享平台，基于Dress项目提供随机图片API服务。',
+        publisher: {
+          '@type': 'Organization',
+          name: 'Dress API Team',
+        },
+      }),
+    },
+  ],
   meta: [
     {
       name: 'description',
-      content: "Dress API - 面向可爱蓝孩子的前端"
+      content: 'Dress API是一个面向可爱男孩子的图片分享平台，基于Dress项目提供随机图片API服务。浏览海量图片作品、查看图片作者信息与版权声明，支持暗色模式与响应式布局，为程序猿和图片爱好者打造的前端站点。'
     },
     {
       name: 'keywords',
-      content: ' Dress, Dress API, DressAPI, Dress API 文档, 女装,小男娘,可爱男孩子,小南梁,图灵派,随机色图,程序员,MTF,好想当个女孩子'
+      content: 'Dress API, DressAPI, 可爱男孩子, 图片分享, 随机图片API, 图灵派, 程序员, MTF, dress图库, 图片作者'
     },
     {
       name: 'author',
-      content: 'Dress API Team,nomdn'
+      content: 'Dress API Team, nomdn'
     },
     {
       name: 'robots',
@@ -113,26 +130,25 @@ useHead({
       content: '#242424'
     },
     {
-      name: 'og:title',
-      content: `Dress API`
+      property: 'og:title',
+      content: 'Dress API - 面向可爱男孩子的前端 | 随机图片API前端'
     },
     {
-      name: 'og:description',
-      content: "Dress API - 面向可爱蓝孩子的前端"
+      property: 'og:description',
+      content: 'Dress API是一个面向可爱男孩子的图片分享平台，基于Dress项目提供随机图片API服务。浏览海量图片作品、查看图片作者信息与版权声明。'
     },
     {
-      name: 'og:image',
-      content: requestURL.origin + '/favicon.png'
+      property: 'og:image',
+      content: config.siteUrl + 'favicon.png'
     },
     {
-      name: 'og:type',
+      property: 'og:type',
       content: 'website'
     },
     {
-      name: `og:url`,
+      property: 'og:url',
       content: requestURL.href
-    }
-
+    },
   ]
 });
 
@@ -192,6 +208,7 @@ useHead({
 
     </el-menu>
 
+    <h1 class="seo-heading">Dress API - 可爱男孩子图片分享平台</h1>
     <div class="display-area">
       <!-- 按作者分组的可折叠卡片 -->
       <RouterLink 
@@ -211,10 +228,10 @@ useHead({
           <div class="card-header">
             
               <el-avatar shape="circle" size="large" fit="fill" v-if="groupedImages[authorName]?.github_username" @click="'https://github.com/'+groupedImages[authorName].github_username" style="cursor: pointer;">
-                <el-image :src="groupedImages[authorName].avatar_url" fit="fill" lazy></el-image>
+                <el-image :src="groupedImages[authorName].avatar_url" fit="fill" lazy :alt="authorName + ' 的头像'"></el-image>
               </el-avatar>
 
-              <el-avatar shape="circle" size="large" fit="fill" :src="generateSvgAvatar(authorName)" loading="lazy" v-else ></el-avatar>
+              <el-avatar shape="circle" size="large" fit="fill" :src="generateSvgAvatar(authorName)" :alt="authorName + ' 的头像'" loading="lazy" v-else ></el-avatar>
             <span style="font-weight: bold; font-size: 18px;">
               {{ authorName }}
             </span>
@@ -243,7 +260,7 @@ useHead({
       </div>
       <footer>
       <a style="text-decoration:none;color:#e77c8e;margin-left: 20px;" href="https://travel.moe/go.html" title="异次元之旅-跃迁-我们一起去萌站成员的星球旅行吧！" target="_blank">
-        <img src="https://travel.moe/images/icon/icon64pink.png" style="width:24px;height:24px;">异次元之旅
+        <img src="https://travel.moe/images/icon/icon64pink.png" alt="异次元之旅图标" style="width:24px;height:24px;">异次元之旅
       </a>
       <div class="some-link"> 
         <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp&nbsp
@@ -257,6 +274,19 @@ useHead({
 <style scoped>
 
 @import '@/style.css';
+/* SEO标题：视觉隐藏但对搜索引擎和屏幕阅读器可见 */
+.seo-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* 全局布局 */
 .app-container {
   display: flex;

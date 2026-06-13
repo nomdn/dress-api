@@ -182,11 +182,11 @@ useHead({
         <div class="author-header">
           <a v-if="authorData.github_username" :href="'https://github.com/'+authorData.github_username" target="_blank">
             <el-avatar shape="circle" size="large" fit="fill">
-              <el-image :src="authorData.avatar_url" fit="fill" lazy></el-image>
+              <el-image :src="authorData.avatar_url" fit="fill" lazy :alt="authorname + ' 的头像'"></el-image>
             </el-avatar>
           </a>
           <a v-else href="https://github.com/404">
-            <el-avatar shape="circle" size="large" fit="fill" :src="generateSvgAvatar(authorname)" loading="lazy"></el-avatar>
+            <el-avatar shape="circle" size="large" fit="fill" :src="generateSvgAvatar(authorname)" :alt="authorname + ' 的头像'" loading="lazy"></el-avatar>
           </a>
           <h2>{{ authorname }}</h2>
         </div>
@@ -205,9 +205,10 @@ useHead({
               shadow="hover"
             >
 
-              <el-image 
-                :src="imgBaseURL + image.path" 
-                fit="cover" 
+              <el-image
+                :src="imgBaseURL + image.path"
+                :alt="authorname + ' 的图片 #' + (index + 1)"
+                fit="cover"
                 class="image-preview"
                 @error="handleImageError"
                 :preview-src-list="srcList"
@@ -232,7 +233,7 @@ useHead({
   </div>
     <footer>
       <a style="text-decoration:none;color:#e77c8e;margin-left: 20px;" href="https://travel.moe/go.html" title="异次元之旅-跃迁-我们一起去萌站成员的星球旅行吧！" target="_blank">
-        <img src="https://travel.moe/images/icon/icon64pink.png" style="width:24px;height:24px">异次元之旅
+        <img src="https://travel.moe/images/icon/icon64pink.png" alt="异次元之旅图标" style="width:24px;height:24px">异次元之旅
       </a>
       <div class="some-link"> 
         <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp&nbsp

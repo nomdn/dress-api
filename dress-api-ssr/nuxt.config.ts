@@ -5,6 +5,14 @@ export default defineNuxtConfig({
   routeRules: {
     '/**': { ssr: true },
   },
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+    },
+  },
   modules: ['@element-plus/nuxt'],
   vite: {
     optimizeDeps: {

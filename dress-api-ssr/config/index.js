@@ -11,7 +11,7 @@ const config = {
     // - true: 所有数据和图片均从 remote 或 rollback 指定的远程 URL 获取
     // - false: 可能尝试使用本地托管的资源（需配合后端非 lite_mode）
     useLite: false,
-
+    siteUrl: 'https://dress.wsmdn.top/',    // 前端站点 URL（用于生成图片访问链接等）
     // 主服务配置（生产环境推荐地址）
     remote: {
         remoteURL: 'https://api.wsmdn.top/',     // API 根地址
