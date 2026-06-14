@@ -1,0 +1,33 @@
+name: Build and Deploy to EdgeOne
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'dress-api-edgeone/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      # 部署时指定相对于仓库根目录的完整路径
+      - name: Deploy to EdgeOne Pages
+        uses: TencentEdgeOne/edgeone-pages-action@v1
+        with:
+          token: ${{ secrets.EDGEONE_API_TOKEN }}
+          project-name: "dress-api-edgeone"
+          build-path: "./dress-api-edgeone"  # 👈 关键：从根目录开始的路径
