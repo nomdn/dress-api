@@ -6,8 +6,9 @@
     "npm": ">=8"
   },
   "dependencies": {
+    "@edgeone/pages-blob": "^0.0.12",
     "@vercel/kv": "^2.0.0",
-    "hono": "^4.12.8",
+    "hono": "^4.12.25",
     "vercel": "^50.32.5",
     "vue-router": "^4.6.4"
   }
