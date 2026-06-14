@@ -2078,6 +2078,38 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/1558?v=4?size=500",
         "github_username": "ask"
     },
+    "asuka": {
+        "email": "88017003+Asuka-zzt@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "4ff13324d750bc995d652e9feade2e5edb435bed",
+                "path": "A/Asuka/IMG_8572.JPG",
+                "time": "2026-06-13T16:31:08+08:00"
+            },
+            {
+                "path": "A/Asuka/IMG_8573.JPG",
+                "time": "2026-06-13T16:31:08+08:00",
+                "hash": "4ff13324d750bc995d652e9feade2e5edb435bed"
+            },
+            {
+                "path": "A/Asuka/IMG_8574.JPG",
+                "time": "2026-06-13T16:31:08+08:00",
+                "hash": "4ff13324d750bc995d652e9feade2e5edb435bed"
+            },
+            {
+                "path": "A/Asuka/IMG_8575.JPG",
+                "time": "2026-06-13T16:31:08+08:00",
+                "hash": "4ff13324d750bc995d652e9feade2e5edb435bed"
+            },
+            {
+                "path": "A/Asuka/IMG_8576.JPG",
+                "time": "2026-06-13T16:31:08+08:00",
+                "hash": "4ff13324d750bc995d652e9feade2e5edb435bed"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/33421107?v=4?size=500",
+        "github_username": "asuka"
+    },
     "AtomAlpaca": {
         "email": "atal@tuta.io",
         "contribution": [
@@ -13739,6 +13771,23 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/68182691?v=4?size=500",
         "github_username": "Pigeon2333"
     },
+    "鱼雨": {
+        "email": "157675321+PixelRain255@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "2805d54455b08d49eee89d63e0fc10d546cacbce",
+                "path": "P/PixelRain255/a1.png",
+                "time": "2026-06-07T18:36:28+08:00"
+            },
+            {
+                "path": "P/PixelRain255/b2.png",
+                "time": "2026-06-07T18:36:28+08:00",
+                "hash": "2805d54455b08d49eee89d63e0fc10d546cacbce"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/157675321?v=4?size=500",
+        "github_username": "PixelRain255"
+    },
     "Planet6174": {
         "email": "ltq2002gcn@gmail.com",
         "contribution": [
@@ -18856,6 +18905,31 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/122589407?v=4?size=500",
         "github_username": "XiayiZhang"
+    },
+    "XyLuoDys": {
+        "email": "xiaowodys@gmail.com",
+        "contribution": [
+            {
+                "hash": "6f5598756f2a0624e46d9ab37d383ca7db89c67d",
+                "path": "X/XyLuoDYS/XyLuoDYS_dress1.jpg",
+                "time": "2026-06-09T22:18:01+08:00"
+            },
+            {
+                "path": "X/XyLuoDYS/XyLuoDYS_dress2.jpg",
+                "time": "2026-06-09T22:18:01+08:00",
+                "hash": "6f5598756f2a0624e46d9ab37d383ca7db89c67d"
+            },
+            {
+                "path": "X/XyLuoDYS/XyLuoDYS_dress3.jpg",
+                "time": "2026-06-09T22:18:01+08:00",
+                "hash": "6f5598756f2a0624e46d9ab37d383ca7db89c67d"
+            }
+        ],
+        "readme": [
+            "X/XyLuoDYS/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/273128439?v=4?size=500",
+        "github_username": "XyLuoDys"
     },
     "通晓宇宙": {
         "email": "2581011320@qq.com",
