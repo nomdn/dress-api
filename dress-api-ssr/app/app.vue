@@ -1,6 +1,5 @@
 <script setup>
 import config from '../config/index';
-import axios from 'axios';
 // 共享数据
 
 const remoteAPI = useState('remoteAPI', () => config.remote.remoteURL);
@@ -32,6 +31,18 @@ const loadJsonData = async () => {
   }
 };
 await loadJsonData();
+onMounted(() => {
+  useHead({
+    script: [
+        {
+          defer: true,
+          src: 'https://umami.wsmdn.top/sadfsdiq2.js',
+          'data-website-id': '2598245e-f1e7-4fdd-a964-36c1d8e9edf2'
+        },
+      
+      ]
+  })
+});
 </script>
 
 <template>
