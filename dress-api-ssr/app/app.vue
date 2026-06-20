@@ -36,8 +36,8 @@ onMounted(() => {
     script: [
         {
           defer: true,
-          src: 'https://umami.wsmdn.top/sadfsdiq2.js',
-          'data-website-id': '2598245e-f1e7-4fdd-a964-36c1d8e9edf2'
+          src: 'https://umami.wsmdn.top/zako.js',
+          'data-website-id': 'e08ba35c-e78a-439b-9e76-8cbfa4a2d91b',
         },
       
       ]
