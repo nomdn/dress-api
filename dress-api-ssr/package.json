@@ -15,7 +15,7 @@
     "@nuxtjs/robots": "^6.1.1",
     "@nuxtjs/sitemap": "^8.2.1",
     "@takumi-rs/core": "^1.8.4",
-    "axios": "^1.17.0",
+
     "element-plus": "^2.14.2",
     "markdown-it": "^14.2.0",
     "minidenticons": "^4.2.1",

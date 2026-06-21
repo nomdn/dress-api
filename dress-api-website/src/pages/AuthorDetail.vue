@@ -86,11 +86,13 @@ const loadAuthorData = async () => {
     
   } catch (err) {
     console.error('❌ loadAuthorData 主流程异常:', err);
-    alert('加载数据失败: ' + err.message);
+    if (typeof window !== 'undefined') {
+      alert('加载数据失败: ' + err.message);
+    }
   }
 };
 const md = new MarkdownIt({
-  html: true,        // <-- 允许渲染 HTML 标签
+  html: false,       // 禁用原始 HTML 渲染，防止 XSS（外部 README 内容不可信）
   linkify: true,     // 自动将 URL 转为链接
   typographer: true, // 启用智能排版（如 "--" -> "—")
   breaks: true
@@ -240,10 +242,10 @@ useHead({
         <img src="https://travel.moe/images/icon/icon64pink.png" style="width:24px;height:24px">异次元之旅
       </a>
       <div class="some-link"> 
-        <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp&nbsp
-        <a href="https://github.com/Cute-Dress">Dress</a>&nbsp&nbsp
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>&nbsp&nbsp
-        <a href="https://icp.gov.moe/?keyword=20260057" target="_blank">萌ICP备20260057号</a>&nbsp&nbsp
+        <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp;&nbsp;
+        <a href="https://github.com/Cute-Dress">Dress</a>&nbsp;&nbsp;
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>&nbsp;&nbsp;
+        <a href="https://icp.gov.moe/?keyword=20260057" target="_blank">萌ICP备20260057号</a>&nbsp;&nbsp;
       </div>
     </footer>
 </template>

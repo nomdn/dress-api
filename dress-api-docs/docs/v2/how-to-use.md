@@ -84,7 +84,7 @@ Content-Type: application/json
     "time": "2026-02-25T13:02:58+08:00",
     "url": "https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/Z/zzx/3.jpg",
     "notice": "Cute-Dress/Dress CC-BY-NC-SA 4.0"
-  },
+  }
 ```
 **多返回**
 ```http

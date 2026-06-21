@@ -30,15 +30,18 @@ async function getCachedIndex(env) {
 		
 		console.warn("Failed to read or parse cache:", e);
 	}
-	const { indexID, indexAuthor } = await getIndex();
+	const { indexID, indexAuthor, _error } = await getIndex();
 
-	// 更新缓存（即使为空也缓存，避免频繁请求）
+	// 更新缓存（出错时不缓存，避免将空结果缓存 24 小时）
 	const timestamp = Math.floor(Date.now() / 1000);
-	// 使用 expiration 选项设置绝对过期时间，确保过期时间准确
 	const expiration = timestamp + CACHE_TTL;
-	await env.DRESS_CACHE.put("indexID", JSON.stringify(indexID), { expiration });
-	await env.DRESS_CACHE.put("indexAuthor", JSON.stringify(indexAuthor), { expiration });
-	await env.DRESS_CACHE.put("indexTimestamp", timestamp.toString(), { expiration });
+	if (!_error) {
+		await env.DRESS_CACHE.put("indexID", JSON.stringify(indexID), { expiration });
+		await env.DRESS_CACHE.put("indexAuthor", JSON.stringify(indexAuthor), { expiration });
+		await env.DRESS_CACHE.put("indexTimestamp", timestamp.toString(), { expiration });
+	} else {
+		console.warn("Skipping cache update due to fetch error");
+	}
 
 	return { indexID, indexAuthor };
 
@@ -61,8 +64,8 @@ async function getIndex() {
 		return { indexID, indexAuthor };
 	} catch (error) {
 		console.error("Error in getIndex:", error);
-		// 即使出错也返回空数组，防止崩溃
-		return { indexID: {}, indexAuthor: {} };
+		// 返回空对象并标记为错误，避免缓存错误结果 24 小时
+		return { indexID: {}, indexAuthor: {}, _error: true };
 	}
 }
 
@@ -81,6 +84,7 @@ app.get('/', (c) => c.redirect('https://dress.wsmdn.top/', 302));
 async function handleDressRequest(c) {
 	// 从请求体或查询参数获取参数
 	let num = parseInt(c.req.query('num') || '1');
+	if (isNaN(num) || num < 1) num = 1;  // 校验 num 参数，防止 NaN 和负数
 	let authorParam = c.req.query('author');
 	let authors = [];
 	
@@ -106,7 +110,7 @@ async function handleDressRequest(c) {
 	try {
 		const { env } = c
 		const urlPrefix = env.URL_PREFIX || 'https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress/';
-		var { indexID, indexAuthor } = await getCachedIndex(env);
+		let { indexID, indexAuthor } = await getCachedIndex(env);
 		indexID = Object.values(indexID);
 		const idLength = indexID.length;
 		
@@ -130,17 +134,21 @@ async function handleDressRequest(c) {
 			maxNum = Math.min(num, authorAllCount);
 			
 			// 随机选择num个不同的图片
-			while (results.length < maxNum) {
+			// 限制最大尝试次数，防止去重导致死循环（CPU 超限会触发 1102 错误）
+			let maxAttempts = maxNum * 10;
+			let attempts = 0;
+			while (results.length < maxNum && attempts < maxAttempts) {
+				attempts++;
 				// 随机选择一个作者
 				const randomAuthor = authors[getRandomIntInclusive(0, authors.length - 1)];
 				const authorData = indexAuthor[randomAuthor];
 				const contributions = authorData["contribution"];
-				
+
 				if (contributions.length > 0) {
 					// 随机选择一个贡献
 					const randomIndex = getRandomIntInclusive(0, contributions.length - 1);
 					const entry = contributions[randomIndex];
-					
+
 					if (!usedPaths.has(entry["path"])) {
 						usedPaths.add(entry["path"]);
 						const author = randomAuthor;
@@ -148,7 +156,7 @@ async function handleDressRequest(c) {
 						const time = entry['time'] || '';
 						const pathVal = entry['path'] || '';
 						const path = `${urlPrefix}${pathVal}`;
-						
+
 						results.push({
 							author: author,
 							hash: hash,
@@ -161,7 +169,11 @@ async function handleDressRequest(c) {
 			}
 		} else {
 			// 随机选择num个不同的图片
-			while (results.length < maxNum) {
+			// 限制最大尝试次数，防止去重导致死循环
+			let maxAttempts = maxNum * 10;
+			let attempts = 0;
+			while (results.length < maxNum && attempts < maxAttempts) {
+				attempts++;
 				const randomIndex = getRandomIntInclusive(0, idLength - 1);
 				const data = indexID[randomIndex];
 				if (data && !usedPaths.has(data["path"])) {
@@ -171,7 +183,7 @@ async function handleDressRequest(c) {
 					const time = data['time'] || '';
 					const pathVal = data['path'] || '';
 					const path = `${urlPrefix}${pathVal}`;
-					
+
 					results.push({
 						author: author,
 						hash: hash,
@@ -230,14 +242,20 @@ app.post('/v2/index/:index', async (c) => {
 });
 
 app.get('/v2/author/:author', async (c) => {
-	const author = c.req.param('author'); 
-	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	const author = c.req.param('author');
+	const { indexAuthor } = await getCachedIndex(c.env)
+	if (!indexAuthor[author]) {
+		return c.json({ error: `Author ${author} not found` }, 404);
+	}
 	return c.json({ [author]: indexAuthor[author] });
 
 });
 app.post('/v2/author/:author', async (c) => {
-	const author = c.req.param('author'); 
-	const { indexID, indexAuthor } = await getCachedIndex(c.env)
+	const author = c.req.param('author');
+	const { indexAuthor } = await getCachedIndex(c.env)
+	if (!indexAuthor[author]) {
+		return c.json({ error: `Author ${author} not found` }, 404);
+	}
 	return c.json({ [author]: indexAuthor[author] });
 
 });

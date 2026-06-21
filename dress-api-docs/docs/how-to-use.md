@@ -161,7 +161,7 @@ GET https://dress.wsmdn.top/v1/dress/index/index_1.json
     "readme": "S/SnowyFox/README.md",
     "avatar_url": "https://avatars.githubusercontent.com/u/35415088?v=4?size=500",
     "github_username": "Vssblt"
-  },
+  }
 }
 ```
 

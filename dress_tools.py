@@ -11,7 +11,6 @@ import logging
 import httpx
 import colorama
 from datetime import datetime
-import logging
 from typing import List, Tuple, Union, Optional, Dict
 from colorama import Fore, Style
 import uvicorn
@@ -83,9 +82,10 @@ def run_git_pull():
         logging.error(f"Git pull 子进程错误: {e}")
     except Exception as e:
         logging.error(f"Git pull 未知错误: {e}")
-async def random_pick(index_id :list,img_base_url :str) -> dict:
+async def random_pick(index_id :dict,img_base_url :str) -> dict:
+    """从索引中随机选取一张图片，索引键为 "0" 到 "count-1" """
     count = len(index_id)
-    id = random.randint(1, count)
+    id = random.randint(0, count - 1)  # 索引从0开始，修复原来的 off-by-one 错误
     entry = index_id[str(id)]
     url = img_base_url + entry["path"]
     hash = entry["hash"]

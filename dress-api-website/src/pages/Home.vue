@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import { generateSvgAvatar } from '../scripts/avatar_utils.js';
 import { Sunny, Moon, Search } from '@element-plus/icons-vue';
 import { useDark, useToggle } from '@vueuse/core';
-import { vi } from 'element-plus/es/locale/index.mjs';
+
 
 
 const router = useRouter();
@@ -155,11 +155,10 @@ onMounted(() => {
       :to="'/author/'+authorName"
       class="author-link"
       >
-        <el-card 
+        <el-card
         class="author-card"
         shadow="hover"
         v-show="shouldShowAuthor(index)"
-        @click="navigateToAuthor(authorName)"
         style="cursor: pointer;"
       >
 
@@ -203,10 +202,10 @@ onMounted(() => {
         <img src="https://travel.moe/images/icon/icon64pink.png" style="width:24px;height:24px;">异次元之旅
       </a>
       <div class="some-link"> 
-        <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp&nbsp
-        <a href="https://github.com/Cute-Dress">Dress</a>&nbsp&nbsp
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>&nbsp&nbsp
-        <a href="https://icp.gov.moe/?keyword=20260057" target="_blank">萌ICP备20260057号</a>&nbsp&nbsp
+        <a href="https://github.com/nomdn/dress-api/">Dress-API</a>&nbsp;&nbsp;
+        <a href="https://github.com/Cute-Dress">Dress</a>&nbsp;&nbsp;
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>&nbsp;&nbsp;
+        <a href="https://icp.gov.moe/?keyword=20260057" target="_blank">萌ICP备20260057号</a>&nbsp;&nbsp;
       </div>
     </footer>
 </template>
@@ -300,7 +299,7 @@ html.dark .app-container {
 .pagination-container {
   margin: 0 auto;
   margin-top: 20px;
-  max-width: 10px;
+  max-width: 800px;
 }
 
 

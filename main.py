@@ -12,7 +12,6 @@ import logging
 from dotenv import load_dotenv
 from git import Repo
 import asyncio
-import json
 from fastapi import (
     FastAPI,
     Response,
@@ -216,7 +215,7 @@ async def auto_sync():
                     logging.debug(f"已从GitHub获取最新数据，共{len(index_id)}项数据)")
                 except Exception as e:
                     logging.error(f"远程数据同步失败: {e}")
-            await asyncio.sleep(auto_sync_time)  # 每10秒同步一次，便于观察
+            await asyncio.sleep(auto_sync_time)
     else:
         async with httpx.AsyncClient() as client:
             # Check GitHub
@@ -356,7 +355,7 @@ async def random_setu(request: Request,
                 max_count = len(index_id.keys())
             with open("public/index_1.json", "r", encoding="utf-8") as f:
                 index_author = json.load(f)
-        except:
+        except Exception:  # 不使用裸 except，避免吞掉 SystemExit/KeyboardInterrupt
         # 本地索引读失败立即开始一次同步
             await run_one_sync()
     
@@ -377,23 +376,25 @@ async def random_setu(request: Request,
             else:
                 raise HTTPException(status_code=404, detail=f"Author {one_author} Not Found")
         num = min(num, author_all_count)
-        while len(results) < num:
+        max_attempts = num * 10  # 限制最大尝试次数，防止 num 接近池大小时去重导致死循环
+        attempts = 0
+        while len(results) < num and attempts < max_attempts:
+            attempts += 1
             now_author = random.choice(author)
             entry = await random_pick_author(index_author, img_base_url, now_author)
             if entry["url"] not in used_paths:
                 used_paths.add(entry["url"])
                 results.append(entry)
-            else:
-                continue
     else:
         # 随机选择num个不同的图片
-        while len(results) < num:
+        max_attempts = num * 10  # 限制最大尝试次数，防止死循环
+        attempts = 0
+        while len(results) < num and attempts < max_attempts:
+            attempts += 1
             entry = await random_pick(index_id, img_base_url)
             if entry["url"] not in used_paths:
                 used_paths.add(entry["url"])
                 results.append(entry)
-            else:
-                continue
     # 如果只请求一个，返回单个对象，保持向后兼容
     if num == 1 and results:
         return results[0]

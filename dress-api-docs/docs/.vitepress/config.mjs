@@ -11,12 +11,26 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'V2', link: '/v2/' }
+      { text: 'V2文档', link: '/v2/' },
+      { text: '架构说明', link: '/architecture' }
     ],
 
     sidebar: [
       {
-        text: "v1文档",
+        text: "v2文档（推荐）",
+        items: [
+          {
+            text: "快速开始",
+            link: "/v2/"
+          },
+          {
+            text: "使用指南",
+            link: "/v2/how-to-use/"
+          }
+        ]
+      },
+      {
+        text: "v1文档（已停维）",
         items: [
           {
             text: "快速开始",
@@ -29,15 +43,11 @@ export default defineConfig({
         ]
       },
       {
-        text: "v2文档",
+        text: "其他",
         items: [
           {
-            text: "快速开始",
-            link: "/v2/"
-          },
-          {
-            text: "使用指南",
-            link: "/v2/how-to-use/"
+            text: "架构说明",
+            link: "/architecture"
           }
         ]
       }

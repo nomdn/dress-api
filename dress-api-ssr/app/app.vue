@@ -34,13 +34,12 @@ await loadJsonData();
 onMounted(() => {
   useHead({
     script: [
-        {
-          defer: true,
-          src: 'https://umami.wsmdn.top/zako.js',
-          'data-website-id': 'e08ba35c-e78a-439b-9e76-8cbfa4a2d91b',
-        },
-      
-      ]
+      {
+        defer: true,
+        src: 'https://umami.wsmdn.top/zako.js',
+        'data-website-id': 'e08ba35c-e78a-439b-9e76-8cbfa4a2d91b',
+      },
+    ]
   })
 });
 </script>
