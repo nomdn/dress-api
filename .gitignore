@@ -13,5 +13,6 @@ public/index.html
 public/assets/
 fuck-u-code-windows-amd64.exe
 .ruff_cache/
+.claude/
 dress-api-docs/docs/.vitepress/cache/
 dress-api-docs/docs/.vitepress/dist/
