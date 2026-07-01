@@ -27,11 +27,11 @@ Dress API 是一个基于Dress的随机图片API，提供**随机图片、图片
  
 > [!NOTE]
 > 请关注[柠檬博客](https://blog.wsmdn.dpdns.org)来获取服务变动信息！
-> https://blog.wsmdn.top
+> https://blog.iszako.top
 
 演示站点：  
-[前端](https://dress.wsmdn.top)  
-[v2后端](https://api.wsmdn.top/v2/health) 
+[前端](https://dress.iszako.top)  
+[v2后端](https://api.iszako.top/v2/health) 
 
 ## 快速开始
 
@@ -115,7 +115,7 @@ const config = {
 
     // 主服务配置（生产环境推荐地址）
     remote: {
-        remoteURL: 'https://api.wsmdn.top/',     // API 根地址
+        remoteURL: 'https://api.wsmdn.dpdns.org/',     // API 根地址
         imgURL: 'https://testingcf.jsdelivr.net/gh/Cute-Dress/Dress@master/'     // 本地托管图片的访问前缀（仅在非 minimal 模式下有效）
     },
 

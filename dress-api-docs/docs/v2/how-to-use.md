@@ -6,7 +6,7 @@ prev:
 # 调用示例
 API V2:  
 ````text
-https://api.wsmdn.top/v2/dress
+https://api.wsmdn.dpdns.org/v2/dress
 ````
 ## 获取随机图片
 ```http
