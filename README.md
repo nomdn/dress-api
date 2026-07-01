@@ -9,8 +9,8 @@
 
 
 这是一个基于[Dress](https://github.com/Cute-Dress/Dress)的随机图片API  
-演示API：https://dress.wsmdn.top  
-文档：https://docs.wsmdn.top
+演示API：https://dress.iszako.top  
+文档：https://docs.iszako.top
 
 
 
