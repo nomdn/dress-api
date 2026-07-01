@@ -10309,6 +10309,21 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/162338950?v=4?size=500",
         "github_username": "Kisechan"
     },
+    "Kissablecho": {
+        "email": "god_2077@outlook.com",
+        "contribution": [
+            {
+                "hash": "1a52d655327cf04801913b6c83f25bfdcc399dc6",
+                "path": "K/kissablecho/image-1.jpg",
+                "time": "2026-06-26T21:08:34+08:00"
+            }
+        ],
+        "readme": [
+            "K/kissablecho/readme.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/115924285?v=4?size=500",
+        "github_username": "God-2077"
+    },
     "cz726894926": {
         "email": "kimchen0401@gmail.com",
         "contribution": [
@@ -12856,6 +12871,31 @@
                 "path": "M/moemoequte/5.jpg",
                 "time": "2025-03-17T11:56:42+08:00",
                 "hash": "13f50fed8ff4765c541dd49f03ca903b31c767de"
+            },
+            {
+                "path": "M/moemoequte/DSCF7839.webp",
+                "time": "2026-06-22T21:28:19+08:00",
+                "hash": "87f32100b961f1f095dbc72dd0a42e16b42e8153"
+            },
+            {
+                "path": "M/moemoequte/DSCF7842.webp",
+                "time": "2026-06-22T21:28:19+08:00",
+                "hash": "87f32100b961f1f095dbc72dd0a42e16b42e8153"
+            },
+            {
+                "path": "M/moemoequte/DSCF7853.webp",
+                "time": "2026-06-22T21:28:19+08:00",
+                "hash": "87f32100b961f1f095dbc72dd0a42e16b42e8153"
+            },
+            {
+                "path": "M/moemoequte/IMG_3022.webp",
+                "time": "2026-06-22T21:28:19+08:00",
+                "hash": "87f32100b961f1f095dbc72dd0a42e16b42e8153"
+            },
+            {
+                "path": "M/moemoequte/IMG_3031.webp",
+                "time": "2026-06-22T21:28:19+08:00",
+                "hash": "87f32100b961f1f095dbc72dd0a42e16b42e8153"
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/70629889?v=4?size=500",
