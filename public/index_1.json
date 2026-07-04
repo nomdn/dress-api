@@ -1416,6 +1416,36 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/104363556?v=4?size=500",
         "github_username": "AmaoFox"
     },
+    "夕": {
+        "email": "icetar0719@gmail.com",
+        "contribution": [
+            {
+                "hash": "ddf2f03526fc2f4f293b7843afef7dbdc7a88ac6",
+                "path": "A/Amiartisan/1.jpeg",
+                "time": "2026-06-29T20:45:33+08:00"
+            },
+            {
+                "path": "A/Amiartisan/2.jpeg",
+                "time": "2026-06-29T20:45:33+08:00",
+                "hash": "ddf2f03526fc2f4f293b7843afef7dbdc7a88ac6"
+            },
+            {
+                "path": "A/Amiartisan/3.jpeg",
+                "time": "2026-06-29T20:45:33+08:00",
+                "hash": "ddf2f03526fc2f4f293b7843afef7dbdc7a88ac6"
+            },
+            {
+                "path": "A/Amiartisan/4.jpeg",
+                "time": "2026-06-29T20:45:33+08:00",
+                "hash": "ddf2f03526fc2f4f293b7843afef7dbdc7a88ac6"
+            }
+        ],
+        "readme": [
+            "A/Amiartisan/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/196735266?v=4?size=500",
+        "github_username": "Amiartisan"
+    },
     "lly": {
         "email": "lilinyang@xfdsx.com",
         "contribution": [
