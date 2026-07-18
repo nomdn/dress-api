@@ -1435,6 +1435,26 @@
                 "path": "A/Amiartisan/4.jpeg",
                 "time": "2026-06-29T20:45:33+08:00",
                 "hash": "ddf2f03526fc2f4f293b7843afef7dbdc7a88ac6"
+            },
+            {
+                "path": "A/Amiartisan/HM6b1SEaEAAD1S-.jpeg",
+                "time": "2026-07-13T18:01:24+08:00",
+                "hash": "f5d7fb039c34211ecc375767ff0a8e8e706a06b4"
+            },
+            {
+                "path": "A/Amiartisan/HM6b1SIbsAAr2XJ.jpeg",
+                "time": "2026-07-13T18:01:24+08:00",
+                "hash": "f5d7fb039c34211ecc375767ff0a8e8e706a06b4"
+            },
+            {
+                "path": "A/Amiartisan/HM6b1SLboAAVGky.jpeg",
+                "time": "2026-07-13T18:01:24+08:00",
+                "hash": "f5d7fb039c34211ecc375767ff0a8e8e706a06b4"
+            },
+            {
+                "path": "A/Amiartisan/HNGU2iKawAAtxKE.jpeg",
+                "time": "2026-07-13T18:01:24+08:00",
+                "hash": "f5d7fb039c34211ecc375767ff0a8e8e706a06b4"
             }
         ],
         "readme": [
@@ -3008,9 +3028,14 @@
         "email": "208216462+MSK-10032@users.noreply.github.com",
         "contribution": [
             {
-                "hash": "be878f8d1d473e525b12c35db09a43268a69e0a9",
+                "hash": "079e6f326e9f3fe5fa57259ed9799d521554ccb6",
+                "path": "B/BA4IHR/ah26712.jpg",
+                "time": "2026-07-13T18:00:03+08:00"
+            },
+            {
                 "path": "B/BA4IHR/f.jpg",
-                "time": "2026-02-23T15:28:00+08:00"
+                "time": "2026-02-23T15:28:00+08:00",
+                "hash": "be878f8d1d473e525b12c35db09a43268a69e0a9"
             },
             {
                 "path": "B/BA4IHR/h1.png",
@@ -6744,6 +6769,31 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/18256808?v=4?size=500",
         "github_username": "G4Y8u9"
     },
+    "GWDx": {
+        "email": "gwdx-dev@outlook.com",
+        "contribution": [
+            {
+                "hash": "44bce7bd3d38146eae9f05d79482d20761c5afbf",
+                "path": "G/GWDx/GWDx-BW2026.jpg",
+                "time": "2026-07-15T18:24:11+08:00"
+            },
+            {
+                "path": "G/GWDx/GWDx-coding.jpg",
+                "time": "2026-07-15T18:24:11+08:00",
+                "hash": "44bce7bd3d38146eae9f05d79482d20761c5afbf"
+            },
+            {
+                "path": "G/GWDx/debian-lesbians.jpg",
+                "time": "2026-07-15T18:24:11+08:00",
+                "hash": "44bce7bd3d38146eae9f05d79482d20761c5afbf"
+            }
+        ],
+        "readme": [
+            "G/GWDx/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/74227248?v=4?size=500",
+        "github_username": "GWDx"
+    },
     "Gaein nidb": {
         "email": "mail@gaein.cn",
         "contribution": [
@@ -9071,6 +9121,38 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/13696108?v=4?size=500",
         "github_username": "JerryCha"
+    },
+    "jiang-zhiang": {
+        "email": "161104477+jiang-zhiang@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "ce040b283f37fc7dc49b3ec351c159d540a5551e",
+                "path": "J/jiang-zhiang/IMG_20260203_205306.jpg",
+                "time": "2026-07-18T20:51:05+08:00"
+            },
+            {
+                "path": "J/jiang-zhiang/IMG_20260510_020734.jpg",
+                "time": "2026-07-18T20:51:05+08:00",
+                "hash": "ce040b283f37fc7dc49b3ec351c159d540a5551e"
+            },
+            {
+                "path": "J/jiang-zhiang/Image_1770128493505.jpg",
+                "time": "2026-07-18T20:51:05+08:00",
+                "hash": "ce040b283f37fc7dc49b3ec351c159d540a5551e"
+            },
+            {
+                "path": "J/jiang-zhiang/synthesis_b282a9bc-3f56-43e0-afd6-f3d1014c05ba_i.jpg",
+                "time": "2026-07-18T20:51:05+08:00",
+                "hash": "ce040b283f37fc7dc49b3ec351c159d540a5551e"
+            },
+            {
+                "path": "J/jiang-zhiang/synthesis_e9a967d0-2247-4531-9871-123722445ca0_i.jpg",
+                "time": "2026-07-18T20:51:05+08:00",
+                "hash": "ce040b283f37fc7dc49b3ec351c159d540a5551e"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/161104477?v=4?size=500",
+        "github_username": "jiang-zhiang"
     },
     "jiayouba233": {
         "email": "72449367+jiayouba233@users.noreply.github.com",
@@ -20034,6 +20116,18 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/1541083?v=4?size=500",
         "github_username": "yukichan"
+    },
+    "Yukin": {
+        "email": "yukin0721@proton.me",
+        "contribution": [
+            {
+                "hash": "530af56d86f0ae62583bf7b34ebcf544052df043",
+                "path": "Y/Yukin0721/IMG_6032.JPG",
+                "time": "2026-07-16T21:17:46+08:00"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/3434309?v=4?size=500",
+        "github_username": "yukin"
     },
     "xxYume": {
         "email": "172371764@qq.com",
