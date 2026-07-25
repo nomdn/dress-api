@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dress-api-docs",
+  "compatibility_date": "2026-07-25",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "docs/.vitepress/dist"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}

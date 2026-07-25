@@ -5,11 +5,14 @@
     "npm": ">=8"
   },
   "devDependencies": {
-    "vitepress": "^2.0.0-alpha.16"
+    "vitepress": "^2.0.0-alpha.16",
+    "wrangler": "^4.114.0"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "deploy": "pnpm run docs:build && wrangler deploy",
+    "preview": "pnpm run docs:build && wrangler dev"
   }
 }
