@@ -242,7 +242,6 @@ useHead({
         <a href="https://github.com/Cute-Dress">Dress</a>&nbsp;&nbsp;
         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">CC BY-NC-SA 4.0</a>&nbsp;&nbsp;
         <a href="https://icp.gov.moe/?keyword=20260057" target="_blank">萌ICP备20260057号</a>&nbsp;&nbsp;
-        <a href="https://beian.miit.gov.cn/" target="_blank">苏ICP备2026012471号</a>&nbsp;&nbsp;
       </div>
     </footer>
 </template>
