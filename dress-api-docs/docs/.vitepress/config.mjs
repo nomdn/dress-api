@@ -63,7 +63,7 @@ export default defineConfig({
       text: 'Edit this page on GitHub'
     },
     footer: {
-      message: 'MIT协议下发布 <a href="https://beian.miit.gov.cn/">苏ICP备2026012471号</a>',
+      message: 'MIT协议下发布',
       copyright: '版权所有 © 2026-现在 nomdn'
     },
     
