@@ -91,7 +91,7 @@ onMounted(() => {
   console.log("当前设备是否是窄屏：" + isNarrow.value);
 });
 useHead({
-  title: 'Dress API - 面向可爱男孩子的前端',
+  title: 'Dress API',
   script: [
     {
       type: 'application/ld+json',
