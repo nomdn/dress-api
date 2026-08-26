@@ -131,7 +131,7 @@ useHead({
     },
     {
       property: 'og:title',
-      content: 'Dress API - 面向可爱男孩子的前端 | 随机图片API前端'
+      content: 'Dress API'
     },
     {
       property: 'og:description',
