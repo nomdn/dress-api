@@ -725,6 +725,105 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/45261195?v=4?size=500",
         "github_username": "Aira-Sakuranomiya"
     },
+    "Airi": {
+        "email": "1621485327@qq.com",
+        "contribution": [
+            {
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40",
+                "path": "A/Airi/asset/MTY4ODg1NTYxNjc3NTQyNQ_723864_IvtX77PwICQ_QoMX_1784189089.png",
+                "time": "2026-08-31T22:12:27+08:00"
+            },
+            {
+                "path": "A/Airi/asset/image-20260831190134777.png",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/asset/image-20260831190348173.png",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/初音未来剧场版1（拍这张的时候因为找实习半年没女装了有点生疏QuQ）.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/初音未来剧场版2.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/化妆完成后散落一桌的化妆品.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/头发真好玩.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/拉普兰德1.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/拉普兰德2.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/拉普兰德3.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            },
+            {
+                "path": "A/Airi/拉普兰德4（下楼丢垃圾时的影子）.jpg",
+                "time": "2026-08-31T22:12:27+08:00",
+                "hash": "c191e77c3df519991568756434ea35a17ed40f40"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/661024?v=4?size=500",
+        "github_username": "airi"
+    },
+    "ArielleDynamic": {
+        "email": "137397992+CelestialDesolation7@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "961055698187faf266bbdd307c160fefe78963c4",
+                "path": "A/Airi/宵崎奏1.jpg",
+                "time": "2026-02-18T10:02:17+08:00"
+            },
+            {
+                "path": "A/Airi/宵崎奏2.jpg",
+                "time": "2026-02-18T10:02:17+08:00",
+                "hash": "961055698187faf266bbdd307c160fefe78963c4"
+            },
+            {
+                "path": "A/Airi/神乐七奈1.jpg",
+                "time": "2026-02-18T10:02:17+08:00",
+                "hash": "961055698187faf266bbdd307c160fefe78963c4"
+            },
+            {
+                "path": "A/Airi/神乐七奈2.jpg",
+                "time": "2026-02-18T10:02:17+08:00",
+                "hash": "961055698187faf266bbdd307c160fefe78963c4"
+            },
+            {
+                "path": "A/Airi/神乐七奈3.jpg",
+                "time": "2026-02-18T10:02:17+08:00",
+                "hash": "961055698187faf266bbdd307c160fefe78963c4"
+            },
+            {
+                "path": "A/Airi/莫斯提马1.jpg",
+                "time": "2026-02-18T10:02:17+08:00",
+                "hash": "961055698187faf266bbdd307c160fefe78963c4"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/137397992?v=4?size=500",
+        "github_username": "Airi-dynamic"
+    },
     "Akarizhang111": {
         "email": "168417204+Akarizhang111@users.noreply.github.com",
         "contribution": [
@@ -1799,93 +1898,123 @@
         "contribution": [
             {
                 "hash": "11fea0b3a902407b993391f2c71a01b75a623848",
-                "path": "A/Apang/1st  (已处理)  .jpeg",
+                "path": "A/Apang/2023/1st  (已处理)  .jpeg",
                 "time": "2023-07-07T17:42:35+08:00"
             },
             {
-                "path": "A/Apang/2026_10th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_11th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_12th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_13rd.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_14th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_15th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_16th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_1st.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_2nd.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_3rd.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_4th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_5th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_6th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_7th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_8th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2026_9th.jpg",
-                "time": "2026-03-25T09:55:42+08:00",
-                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
-            },
-            {
-                "path": "A/Apang/2nd（已处理）.jpeg",
+                "path": "A/Apang/2023/2nd  (已处理)  .jpeg",
                 "time": "2023-07-07T17:42:35+08:00",
                 "hash": "11fea0b3a902407b993391f2c71a01b75a623848"
+            },
+            {
+                "path": "A/Apang/2025/2026_10th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_11th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_12th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_13th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_14th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_15th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_16th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_1st.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_2nd.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_3rd.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_4th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_5th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_6th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_7th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_8th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2025/2026_9th.jpg",
+                "time": "2026-03-25T09:55:42+08:00",
+                "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
+            },
+            {
+                "path": "A/Apang/2026/0902 (1).jpg",
+                "time": "2026-09-02T17:18:26+08:00",
+                "hash": "1f7ef3c88635fb197ec0c9fed34e349702a73070"
+            },
+            {
+                "path": "A/Apang/2026/0902 (2).jpg",
+                "time": "2026-09-02T17:18:26+08:00",
+                "hash": "1f7ef3c88635fb197ec0c9fed34e349702a73070"
+            },
+            {
+                "path": "A/Apang/2026/0902 (3).jpg",
+                "time": "2026-09-02T17:18:26+08:00",
+                "hash": "1f7ef3c88635fb197ec0c9fed34e349702a73070"
+            },
+            {
+                "path": "A/Apang/2026/0902 (4).jpg",
+                "time": "2026-09-02T17:18:26+08:00",
+                "hash": "1f7ef3c88635fb197ec0c9fed34e349702a73070"
+            },
+            {
+                "path": "A/Apang/2026/0902 (5).jpg",
+                "time": "2026-09-02T17:18:26+08:00",
+                "hash": "1f7ef3c88635fb197ec0c9fed34e349702a73070"
+            },
+            {
+                "path": "A/Apang/2026/0902 (6).jpg",
+                "time": "2026-09-02T17:18:26+08:00",
+                "hash": "1f7ef3c88635fb197ec0c9fed34e349702a73070"
             },
             {
                 "path": "A/Apang/attachments/ehehe.jpg",
@@ -1946,43 +2075,6 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/44402657?v=4?size=500",
         "github_username": "Aratano-Eisei"
-    },
-    "ArielleDynamic": {
-        "email": "137397992+CelestialDesolation7@users.noreply.github.com",
-        "contribution": [
-            {
-                "hash": "961055698187faf266bbdd307c160fefe78963c4",
-                "path": "A/ArielleDynamic/宵崎奏1.jpg",
-                "time": "2026-02-18T10:02:17+08:00"
-            },
-            {
-                "path": "A/ArielleDynamic/宵崎奏2.jpg",
-                "time": "2026-02-18T10:02:17+08:00",
-                "hash": "961055698187faf266bbdd307c160fefe78963c4"
-            },
-            {
-                "path": "A/ArielleDynamic/神乐七奈1.jpg",
-                "time": "2026-02-18T10:02:17+08:00",
-                "hash": "961055698187faf266bbdd307c160fefe78963c4"
-            },
-            {
-                "path": "A/ArielleDynamic/神乐七奈2.jpg",
-                "time": "2026-02-18T10:02:17+08:00",
-                "hash": "961055698187faf266bbdd307c160fefe78963c4"
-            },
-            {
-                "path": "A/ArielleDynamic/神乐七奈3.jpg",
-                "time": "2026-02-18T10:02:17+08:00",
-                "hash": "961055698187faf266bbdd307c160fefe78963c4"
-            },
-            {
-                "path": "A/ArielleDynamic/莫斯提马1.jpg",
-                "time": "2026-02-18T10:02:17+08:00",
-                "hash": "961055698187faf266bbdd307c160fefe78963c4"
-            }
-        ],
-        "avatar_url": "https://avatars.githubusercontent.com/u/137397992?v=4?size=500",
-        "github_username": "Airi-dynamic"
     },
     "Mingye Wang": {
         "email": "arthur200126@gmail.com",
@@ -3096,6 +3188,16 @@
                 "path": "B/BA4IHR/h2.png",
                 "time": "2026-06-20T21:39:21+08:00",
                 "hash": "f123b2885525d04156f6a9aa18f5d10102c3f8f3"
+            },
+            {
+                "path": "B/BA4IHR/hsh_1.jpg",
+                "time": "2026-08-31T22:07:52+08:00",
+                "hash": "1c6fe4223d04a092496fdc47059641cde7580330"
+            },
+            {
+                "path": "B/BA4IHR/hsh_2.jpg",
+                "time": "2026-08-31T22:07:52+08:00",
+                "hash": "1c6fe4223d04a092496fdc47059641cde7580330"
             }
         ],
         "readme": [
@@ -11773,6 +11875,31 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/35419343?v=4?size=500",
         "github_username": "leostudiooo"
     },
+    "David Brown": {
+        "email": "57289801+lhz07@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "c824a5dce4b664aca34ff3594a96e6b9257ec891",
+                "path": "L/lhz07/1.jpg",
+                "time": "2026-09-05T20:14:33+08:00"
+            },
+            {
+                "path": "L/lhz07/2.jpg",
+                "time": "2026-09-05T20:14:33+08:00",
+                "hash": "c824a5dce4b664aca34ff3594a96e6b9257ec891"
+            },
+            {
+                "path": "L/lhz07/3.jpg",
+                "time": "2026-09-05T20:14:33+08:00",
+                "hash": "c824a5dce4b664aca34ff3594a96e6b9257ec891"
+            }
+        ],
+        "readme": [
+            "L/lhz07/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/57289801?v=4?size=500",
+        "github_username": "lhz07"
+    },
     "澪雪染喵喵": {
         "email": "71763795+Lyc030425@users.noreply.github.com",
         "contribution": [
@@ -12973,7 +13100,7 @@
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/58377051?v=4?size=500",
-        "github_username": "JaceWong666"
+        "github_username": "JasonWong18"
     },
     "root": {
         "email": "root@M4-Pi",
@@ -14827,7 +14954,7 @@
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/187655016?v=4?size=500",
-        "github_username": "prayer7777777"
+        "github_username": "riprayx"
     },
     "Inori520": {
         "email": "m18578751340@outlook.com",
@@ -20858,6 +20985,31 @@
                 "path": "Y/Yueosa/2026-8/lian_007.jpg",
                 "time": "2026-08-16T20:37:49+08:00",
                 "hash": "1ea8cb88c113d4783a34d43844713163c1ac03ef"
+            },
+            {
+                "path": "Y/Yueosa/2026-8/lian_008.jpg",
+                "time": "2026-08-30T13:28:26+08:00",
+                "hash": "3056c2693e28989aafcd0a6f1fae1cfdb3d3196b"
+            },
+            {
+                "path": "Y/Yueosa/2026-8/lian_009.jpg",
+                "time": "2026-08-30T13:28:26+08:00",
+                "hash": "3056c2693e28989aafcd0a6f1fae1cfdb3d3196b"
+            },
+            {
+                "path": "Y/Yueosa/2026-8/lian_010.jpg",
+                "time": "2026-08-30T13:28:26+08:00",
+                "hash": "3056c2693e28989aafcd0a6f1fae1cfdb3d3196b"
+            },
+            {
+                "path": "Y/Yueosa/2026-8/lian_011.jpg",
+                "time": "2026-08-30T13:28:26+08:00",
+                "hash": "3056c2693e28989aafcd0a6f1fae1cfdb3d3196b"
+            },
+            {
+                "path": "Y/Yueosa/2026-8/lian_012.jpg",
+                "time": "2026-08-30T13:28:26+08:00",
+                "hash": "3056c2693e28989aafcd0a6f1fae1cfdb3d3196b"
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/591356?v=4?size=500",
@@ -21226,10 +21378,23 @@
         "email": "yi_xiao_jiu@qq.com",
         "contribution": [
             {
-                "hash": "b74b2836ec3ef1a70e6a0c4b64d26462df5fbd75",
+                "hash": "986e17402de6c93674795604500e12f7044b0908",
+                "path": "Y/yixiaojiu/brown-skirt.jpg",
+                "time": "2026-09-04T22:35:28+08:00"
+            },
+            {
                 "path": "Y/yixiaojiu/kyouko.jpg",
-                "time": "2026-01-30T23:02:05+08:00"
+                "time": "2026-01-30T23:02:05+08:00",
+                "hash": "b74b2836ec3ef1a70e6a0c4b64d26462df5fbd75"
+            },
+            {
+                "path": "Y/yixiaojiu/sakura-kimono.jpg",
+                "time": "2026-09-04T22:35:28+08:00",
+                "hash": "986e17402de6c93674795604500e12f7044b0908"
             }
+        ],
+        "readme": [
+            "Y/yixiaojiu/README.md"
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/63455218?v=4?size=500",
         "github_username": "yixiaojiu"
