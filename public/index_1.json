@@ -19815,6 +19815,23 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/45730483?v=4?size=500",
         "github_username": "wuxianucw"
     },
+    "wuxin": {
+        "email": "124539352+wum206@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "57a94394622184e96f5f88518079c0ed5b78042b",
+                "path": "W/wuxin/新衣服到了.jpg",
+                "time": "2026-09-15T20:52:18+08:00"
+            },
+            {
+                "path": "W/wuxin/第一次穿不太会.jpeg",
+                "time": "2026-09-15T20:52:18+08:00",
+                "hash": "57a94394622184e96f5f88518079c0ed5b78042b"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/1156931?v=4?size=500",
+        "github_username": "wuxin"
+    },
     "WWYGOOD": {
         "email": "125117001+WWYGOOD@users.noreply.github.com",
         "contribution": [
@@ -21762,6 +21779,21 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/2318542?v=4?size=500",
         "github_username": "zc"
+    },
+    "zglls": {
+        "email": "149217909+zglls@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "bbe95f35dae1fdd7f777e6350dc8c3b3491a6e9a",
+                "path": "Z/zglls/171e3e05fd02f08db255d92a8da7e778.png",
+                "time": "2026-09-19T22:01:55+08:00"
+            }
+        ],
+        "readme": [
+            "Z/zglls/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/149217909?v=4?size=500",
+        "github_username": "zglls"
     },
     "志成🍥": {
         "email": "mczhicheng@outlook.com",
