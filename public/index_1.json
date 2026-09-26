@@ -3198,6 +3198,21 @@
                 "path": "B/BA4IHR/hsh_2.jpg",
                 "time": "2026-08-31T22:07:52+08:00",
                 "hash": "1c6fe4223d04a092496fdc47059641cde7580330"
+            },
+            {
+                "path": "B/BA4IHR/s-1.jpg",
+                "time": "2026-09-25T21:55:53+08:00",
+                "hash": "97f68ed83c3e3cb915fe712f0515a9705e5f81db"
+            },
+            {
+                "path": "B/BA4IHR/s-2.jpg",
+                "time": "2026-09-25T21:55:53+08:00",
+                "hash": "97f68ed83c3e3cb915fe712f0515a9705e5f81db"
+            },
+            {
+                "path": "B/BA4IHR/s-h-1.jpg",
+                "time": "2026-09-25T21:55:53+08:00",
+                "hash": "97f68ed83c3e3cb915fe712f0515a9705e5f81db"
             }
         ],
         "readme": [
@@ -10993,6 +11008,21 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/11987874?v=4?size=500",
         "github_username": "wkjsos"
     },
+    "Yx.L": {
+        "email": "dgdudbbg@gmail.com",
+        "contribution": [
+            {
+                "hash": "673e7ec7216dd3fa0ade853cb09ea2175f969a3a",
+                "path": "L/L1/hange-cosplay-makeup-under-1mb.jpg",
+                "time": "2026-09-21T22:04:56+08:00"
+            }
+        ],
+        "readme": [
+            "L/L1/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/190797114?v=4?size=500",
+        "github_username": "luyx666999"
+    },
     "“LF112”": {
         "email": "lf@lf112.net",
         "contribution": [
@@ -13495,6 +13525,18 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/70629889?v=4?size=500",
         "github_username": "moemoequte"
+    },
+    "momo": {
+        "email": "143152601+ourill@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "c4e0539c566532a21dfd3a4ffffc787b953421ba",
+                "path": "M/momo/test_jk.jpeg",
+                "time": "2026-09-22T19:51:27+08:00"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/508123?v=4?size=500",
+        "github_username": "momo"
     },
     "gmady520": {
         "email": "68905800+gmady520@users.noreply.github.com",
@@ -18303,6 +18345,21 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/265493341?v=4?size=500",
         "github_username": "tachy001"
     },
+    "Tachy": {
+        "email": "zzydhaoren@gmail.com",
+        "contribution": [
+            {
+                "hash": "060b12a1e811239a88a86a484ff2cc39a620f8f9",
+                "path": "T/Tachy/tachy02.jpg",
+                "time": "2026-09-20T23:07:15+08:00"
+            }
+        ],
+        "readme": [
+            "T/Tachy/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/2771003?v=4?size=500",
+        "github_username": "Tachy"
+    },
     "yzjdxfss": {
         "email": "chen.4207@osu.edu",
         "contribution": [
@@ -18633,6 +18690,38 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/16434801?v=4?size=500",
         "github_username": "TotooriaHyperion"
+    },
+    "Transcheer": {
+        "email": "2210641484@qq.com",
+        "contribution": [
+            {
+                "hash": "88af67d0df9d77fc7675ac94419befac65bc1999",
+                "path": "T/Transcheer/499740fae2c48c920805d35debfd3b25.jpg",
+                "time": "2026-09-23T21:30:45+08:00"
+            },
+            {
+                "path": "T/Transcheer/9727D6C7943309509600F5B997AF378F1.jpg",
+                "time": "2026-09-23T21:30:45+08:00",
+                "hash": "88af67d0df9d77fc7675ac94419befac65bc1999"
+            },
+            {
+                "path": "T/Transcheer/IMG_20260616_155925.jpg",
+                "time": "2026-09-23T21:30:45+08:00",
+                "hash": "88af67d0df9d77fc7675ac94419befac65bc1999"
+            },
+            {
+                "path": "T/Transcheer/IMG_20260616_155939.jpg",
+                "time": "2026-09-23T21:30:45+08:00",
+                "hash": "88af67d0df9d77fc7675ac94419befac65bc1999"
+            },
+            {
+                "path": "T/Transcheer/c34ebfab314a972451c8f9a9c705c876.jpg",
+                "time": "2026-09-23T21:30:45+08:00",
+                "hash": "88af67d0df9d77fc7675ac94419befac65bc1999"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/192801663?v=4?size=500",
+        "github_username": "Transcheer"
     },
     "Chtholly": {
         "email": "luogu_dnj@outlook.com",
