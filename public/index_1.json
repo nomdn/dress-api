@@ -1602,6 +1602,46 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/196735266?v=4?size=500",
         "github_username": "Amiartisan"
     },
+    "Aneko奇幻菌喵🐾": {
+        "email": "aneko.qhj@qq.com",
+        "contribution": [
+            {
+                "hash": "806202d1cca04101b6296b749b61b7a7972b0633",
+                "path": "A/Aneko/4314f373379a03e6c8c1814801535872.jpg",
+                "time": "2026-10-09T20:52:16+08:00"
+            },
+            {
+                "path": "A/Aneko/IMG_4591.jpg",
+                "time": "2026-10-09T20:52:16+08:00",
+                "hash": "806202d1cca04101b6296b749b61b7a7972b0633"
+            },
+            {
+                "path": "A/Aneko/IMG_4601.jpg",
+                "time": "2026-10-09T20:52:16+08:00",
+                "hash": "806202d1cca04101b6296b749b61b7a7972b0633"
+            },
+            {
+                "path": "A/Aneko/IMG_4846.jpg",
+                "time": "2026-10-09T20:52:16+08:00",
+                "hash": "806202d1cca04101b6296b749b61b7a7972b0633"
+            },
+            {
+                "path": "A/Aneko/IMG_4931.jpg",
+                "time": "2026-10-09T20:52:16+08:00",
+                "hash": "806202d1cca04101b6296b749b61b7a7972b0633"
+            },
+            {
+                "path": "A/Aneko/IMG_4935.jpg",
+                "time": "2026-10-09T20:52:16+08:00",
+                "hash": "806202d1cca04101b6296b749b61b7a7972b0633"
+            }
+        ],
+        "readme": [
+            "A/Aneko/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/61810942?v=4?size=500",
+        "github_username": "Aneko-QhJ"
+    },
     "lly": {
         "email": "lilinyang@xfdsx.com",
         "contribution": [
@@ -2300,6 +2340,16 @@
                 "hash": "6e6ce64017faee561abecdfc7bce972c25ee0a60",
                 "path": "A/Asuka-ni/1.jpg",
                 "time": "2026-01-06T20:49:11+08:00"
+            },
+            {
+                "path": "A/Asuka-ni/Image_1791388429422_114.jpg",
+                "time": "2026-10-08T03:10:47+08:00",
+                "hash": "97bd8d1f3372b6064bc60aa50eff5f04738226e9"
+            },
+            {
+                "path": "A/Asuka-ni/Image_1791388437895_225.jpg",
+                "time": "2026-10-08T03:10:47+08:00",
+                "hash": "97bd8d1f3372b6064bc60aa50eff5f04738226e9"
             }
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/1558?v=4?size=500",
@@ -4087,6 +4137,36 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/46715571?v=4?size=500",
         "github_username": "xuchenxu"
+    },
+    "ChengSixteen": {
+        "email": "91358709+xiaomowodeshijie@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "16c8d839f66e851fdf824f5513c64d33a1a8a41d",
+                "path": "C/ChengSixteen/1000011503_compressed.jpg",
+                "time": "2026-10-05T10:21:11+08:00"
+            },
+            {
+                "path": "C/ChengSixteen/Image_1765715012162.jpg",
+                "time": "2026-10-05T10:21:11+08:00",
+                "hash": "16c8d839f66e851fdf824f5513c64d33a1a8a41d"
+            },
+            {
+                "path": "C/ChengSixteen/Image_1765715060053.jpg",
+                "time": "2026-10-05T10:21:11+08:00",
+                "hash": "16c8d839f66e851fdf824f5513c64d33a1a8a41d"
+            },
+            {
+                "path": "C/ChengSixteen/Image_20261005(自拍喵).jpg",
+                "time": "2026-10-05T18:57:22+08:00",
+                "hash": "723d35e8edfe27a484f472ff3f2a46e8b66f7558"
+            }
+        ],
+        "readme": [
+            "C/ChengSixteen/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/91358709?v=4?size=500",
+        "github_username": "IceOrange16"
     },
     "zmq175": {
         "email": "zmq175@qq.com",
@@ -18362,6 +18442,11 @@
                 "path": "T/Tachy/tachy04.jpg",
                 "time": "2026-10-02T18:28:51+08:00",
                 "hash": "859f3f7799d5dfe4c287759d2b6d3073a13b8642"
+            },
+            {
+                "path": "T/Tachy/tachy05.jpg",
+                "time": "2026-10-07T20:19:15+08:00",
+                "hash": "f9dc4e664081151e4c648b9b386701fe9459d799"
             }
         ],
         "readme": [
@@ -19185,6 +19270,28 @@
         "avatar_url": "https://avatars.githubusercontent.com/u/167672594?v=4?size=500",
         "github_username": "tianxunup"
     },
+    "Liu Zongming": {
+        "email": "165783908+todimstar@users.noreply.github.com",
+        "contribution": [
+            {
+                "hash": "58e76706173e4aa5da9545e1db6015189d5bf669",
+                "path": "T/todimstar/是魔法少女呀_compressed.png",
+                "time": "2026-10-08T08:34:54+08:00"
+            },
+            {
+                "path": "T/todimstar/校裤.png",
+                "time": "2026-10-08T08:34:54+08:00",
+                "hash": "58e76706173e4aa5da9545e1db6015189d5bf669"
+            },
+            {
+                "path": "T/todimstar/蓝蓝版.png",
+                "time": "2026-10-08T08:34:54+08:00",
+                "hash": "58e76706173e4aa5da9545e1db6015189d5bf669"
+            }
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/165783908?v=4?size=500",
+        "github_username": "todimstar"
+    },
     "tpxxn": {
         "email": "351765204@qq.com",
         "contribution": [
@@ -19918,9 +20025,9 @@
         "email": "124539352+wum206@users.noreply.github.com",
         "contribution": [
             {
-                "hash": "57a94394622184e96f5f88518079c0ed5b78042b",
-                "path": "W/wuxin/新衣服到了.jpg",
-                "time": "2026-09-15T20:52:18+08:00"
+                "hash": "7b8a1ad9885d872a6611197052444597e13cde59",
+                "path": "W/wuxin/第一次家中有人偷穿.jpg",
+                "time": "2026-10-10T15:02:16+08:00"
             },
             {
                 "path": "W/wuxin/第一次穿不太会.jpeg",
