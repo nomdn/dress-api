@@ -1395,10 +1395,57 @@
                 "path": "A/Alittleshark-dev/src/6.jpg",
                 "time": "2026-07-19T20:15:47+08:00",
                 "hash": "f6fd81c77149e14b5c221fbb4abb298be863688d"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/新裙子/1.png",
+                "time": "2026-10-15T08:37:41+08:00",
+                "hash": "040fdb75f7c9493c8059d1080eb2e891d0333e03"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/新裙子/2.png",
+                "time": "2026-10-15T08:37:41+08:00",
+                "hash": "040fdb75f7c9493c8059d1080eb2e891d0333e03"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/新裙子/3.png",
+                "time": "2026-10-15T08:37:41+08:00",
+                "hash": "040fdb75f7c9493c8059d1080eb2e891d0333e03"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/第一次PR/1.jpg",
+                "time": "2026-07-19T20:15:47+08:00",
+                "hash": "f6fd81c77149e14b5c221fbb4abb298be863688d"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/第一次PR/2.jpg",
+                "time": "2026-07-19T20:15:47+08:00",
+                "hash": "f6fd81c77149e14b5c221fbb4abb298be863688d"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/第一次PR/3.jpg",
+                "time": "2026-07-19T20:15:47+08:00",
+                "hash": "f6fd81c77149e14b5c221fbb4abb298be863688d"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/第一次PR/4.jpg",
+                "time": "2026-07-19T20:15:47+08:00",
+                "hash": "f6fd81c77149e14b5c221fbb4abb298be863688d"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/第一次PR/5.jpg",
+                "time": "2026-07-19T20:15:47+08:00",
+                "hash": "f6fd81c77149e14b5c221fbb4abb298be863688d"
+            },
+            {
+                "path": "A/Alittleshark-dev/src/第一次PR/6.jpg",
+                "time": "2026-07-19T20:15:47+08:00",
+                "hash": "f6fd81c77149e14b5c221fbb4abb298be863688d"
             }
         ],
         "readme": [
-            "A/Alittleshark-dev/README.md"
+            "A/Alittleshark-dev/README.md",
+            "A/Alittleshark-dev/src/新裙子/README.md",
+            "A/Alittleshark-dev/src/第一次PR/README.md"
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/301120223?v=4?size=500",
         "github_username": "alittleshark-dev"
@@ -1947,6 +1994,11 @@
                 "hash": "11fea0b3a902407b993391f2c71a01b75a623848"
             },
             {
+                "path": "A/Apang/2023/2nd（已处理）.jpeg",
+                "time": "2023-07-07T17:42:35+08:00",
+                "hash": "11fea0b3a902407b993391f2c71a01b75a623848"
+            },
+            {
                 "path": "A/Apang/2025/2026_10th.jpg",
                 "time": "2026-03-25T09:55:42+08:00",
                 "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
@@ -2057,6 +2109,31 @@
                 "hash": "1f7ef3c88635fb197ec0c9fed34e349702a73070"
             },
             {
+                "path": "A/Apang/2026/1015 (1).jpg",
+                "time": "2026-10-15T08:38:24+08:00",
+                "hash": "f5f0df67e60636ca11647a20d8b2e0219b8533bc"
+            },
+            {
+                "path": "A/Apang/2026/1015 (2).jpg",
+                "time": "2026-10-15T08:38:24+08:00",
+                "hash": "f5f0df67e60636ca11647a20d8b2e0219b8533bc"
+            },
+            {
+                "path": "A/Apang/2026/1015 (3).jpg",
+                "time": "2026-10-15T08:38:24+08:00",
+                "hash": "f5f0df67e60636ca11647a20d8b2e0219b8533bc"
+            },
+            {
+                "path": "A/Apang/2026/1015 (4).jpg",
+                "time": "2026-10-15T08:38:24+08:00",
+                "hash": "f5f0df67e60636ca11647a20d8b2e0219b8533bc"
+            },
+            {
+                "path": "A/Apang/2026/1015 (5).jpg",
+                "time": "2026-10-15T08:38:24+08:00",
+                "hash": "f5f0df67e60636ca11647a20d8b2e0219b8533bc"
+            },
+            {
                 "path": "A/Apang/attachments/ehehe.jpg",
                 "time": "2026-03-25T09:55:42+08:00",
                 "hash": "a8d213b0c0043c3c969be86c95daa5a3bdf7e59a"
@@ -2115,6 +2192,21 @@
         ],
         "avatar_url": "https://avatars.githubusercontent.com/u/44402657?v=4?size=500",
         "github_username": "Aratano-Eisei"
+    },
+    "summer": {
+        "email": "qq2869529114@outlook.com",
+        "contribution": [
+            {
+                "hash": "6a58a1f2344ec9bff9b5955f5287b66bd4ce7b50",
+                "path": "A/Aris_summer/image.jpg",
+                "time": "2026-10-17T14:30:03+08:00"
+            }
+        ],
+        "readme": [
+            "A/Aris_summer/README.md"
+        ],
+        "avatar_url": "https://avatars.githubusercontent.com/u/39880813?v=4?size=500",
+        "github_username": "summer"
     },
     "Mingye Wang": {
         "email": "arthur200126@gmail.com",
@@ -20025,9 +20117,14 @@
         "email": "124539352+wum206@users.noreply.github.com",
         "contribution": [
             {
-                "hash": "7b8a1ad9885d872a6611197052444597e13cde59",
+                "hash": "6fd8fd5968d2a9e94ad0fef551c2ed4ea5c0e95c",
+                "path": "W/wuxin/穿不懂大概弄了下.jpg",
+                "time": "2026-10-15T17:51:11+08:00"
+            },
+            {
                 "path": "W/wuxin/第一次家中有人偷穿.jpg",
-                "time": "2026-10-10T15:02:16+08:00"
+                "time": "2026-10-10T15:02:16+08:00",
+                "hash": "7b8a1ad9885d872a6611197052444597e13cde59"
             },
             {
                 "path": "W/wuxin/第一次穿不太会.jpeg",
